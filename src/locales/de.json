@@ -1,0 +1,22 @@
+{
+	"app_name": "Notizen",
+	"app_description": "Geben Sie hier Ihre Markdown-Notizen ein. Sie werden in der URL gespeichert, was das Lesezeichensetzen oder Teilen mit anderen erleichtert. Sie können sie auch in Ihrem Browser speichern.",
+	"textarea_placeholder": "Beginnen Sie hier mit der Eingabe Ihrer Notizen",
+	"current_url_label": "Aktuelle Notiz-URL:",
+	"copy_button": "URL kopieren",
+	"copy_success": "URL kopiert",
+	"copy_fail": "URL konnte nicht kopiert werden.",
+	"share_instruction": "Teilen Sie diese URL, um Ihre Notizen sofort zu teilen.",
+	"locale_selector_label": "Sprache:",
+	"dark_mode_label": "Dunkler Modus",
+	"save_button": "Im Browser speichern",
+	"save_success": "Notiz im Browser gespeichert",
+	"note_loaded_from_browser": "Notiz aus dem Browser geladen",
+	"save_fail": "Notizen konnten nicht im Browser gespeichert werden",
+	"clear_button": "Notizen löschen",
+	"clear_confirm": "Sind Sie sicher, dass Sie alle Notizen löschen möchten? Dadurch werden sie aus dem Browser und der URL gelöscht.",
+	"clear_success": "Notizen gelöscht",
+	"clear_fail": "Notizen konnten nicht gelöscht werden",
+	"view_button": "Ansicht",
+	"edit_button": "Bearbeiten"
+}

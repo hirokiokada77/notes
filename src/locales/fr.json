@@ -1,0 +1,22 @@
+{
+	"app_name": "Notes",
+	"app_description": "Tapez vos notes Markdown ici. Elles sont enregistrées dans l'URL, ce qui les rend faciles à mettre en signet ou à partager avec d'autres. Vous pouvez également les enregistrer dans votre navigateur.",
+	"textarea_placeholder": "Commencez à taper vos notes ici",
+	"current_url_label": "URL de la note actuelle :",
+	"copy_button": "Copier l'URL",
+	"copy_success": "URL copiée",
+	"copy_fail": "Échec de la copie de l'URL.",
+	"share_instruction": "Partagez cette URL pour partager instantanément vos notes.",
+	"locale_selector_label": "Langue :",
+	"dark_mode_label": "Mode sombre",
+	"save_button": "Enregistrer dans le navigateur",
+	"save_success": "Note enregistrée dans le navigateur",
+	"note_loaded_from_browser": "Note chargée depuis le navigateur",
+	"save_fail": "Échec de l'enregistrement des notes dans le navigateur",
+	"clear_button": "Effacer les notes",
+	"clear_confirm": "Êtes-vous sûr de vouloir effacer toutes les notes ? Cela les supprimera du navigateur et de l'URL.",
+	"clear_success": "Notes effacées",
+	"clear_fail": "Échec de l'effacement des notes",
+	"view_button": "Voir",
+	"edit_button": "Modifier"
+}

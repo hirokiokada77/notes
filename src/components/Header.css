@@ -1,0 +1,41 @@
+body.dark-mode {
+	--primary-heading-color: #ffffff;
+}
+
+body.light-mode {
+	--primary-heading-color: #2c3e50;
+}
+
+.app-name {
+	color: var(--primary-heading-color);
+	font-size: 2.2em;
+	font-weight: 700;
+	text-align: center;
+}
+
+.app-description {
+	color: var(--secondary-text-color);
+	font-size: 1.1em;
+	line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+	.app-name {
+		font-size: 1.8em;
+	}
+
+	.app-description {
+		font-size: 1em;
+		margin-bottom: 0;
+	}
+}
+
+@media (max-width: 480px) {
+	.app-name {
+		font-size: 1.6em;
+	}
+
+	.app-description {
+		font-size: 0.95em;
+	}
+}

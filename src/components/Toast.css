@@ -1,0 +1,47 @@
+body.dark-mode {
+	--toast-bg-color: #eee;
+	--toast-text-color: #333;
+}
+
+body.light-mode {
+	--toast-bg-color: #333;
+	--toast-text-color: white;
+}
+
+.toast {
+	bottom: 20px;
+	left: 20px;
+	position: fixed;
+	z-index: 1000;
+	pointer-events: none;
+	background-color: var(--toast-bg-color);
+	border-radius: 8px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	color: var(--toast-text-color);
+	font-size: 16px;
+	height: 16px;
+	line-height: 16px;
+	max-width: 300px;
+	padding: 18px 20px;
+	transform: translateY(72px);
+	opacity: 0;
+	transition:
+		transform 0.2s ease,
+		opacity 0.2s ease;
+
+	@media print {
+		display: none;
+	}
+}
+
+.toast.show {
+	transform: translateY(0);
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.toast.hide {
+	transform: translateY(72px);
+	opacity: 0;
+	pointer-events: none;
+}

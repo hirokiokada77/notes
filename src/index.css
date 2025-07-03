@@ -1,0 +1,334 @@
+:root {
+	--font-family-default:
+		"Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+		"Droid Sans", "Helvetica Neue", sans-serif;
+	--font-family-textarea:
+		Consolas, "Menlo", "Droid Sans Mono", "Courier New", monospace;
+}
+
+body.dark-mode {
+	--bg-color: #282c34;
+	--border-color: #555;
+	--clear-button-bg: #e74c3c;
+	--clear-button-hover-bg: #c0392b;
+	--code-bg: #22252a;
+	--container-bg: #3c414c;
+	--copy-button-bg: #4caf50;
+	--copy-button-hover-bg: #388e3c;
+	--focus-border-color: #61dafb;
+	--focus-shadow-color: rgba(97, 218, 251, 0.3);
+	--info-box-bg: #4f5666;
+	--info-box-border: #6a737f;
+	--info-box-text: #c0c0c0;
+	--locale-select-bg: #4f5666;
+	--locale-select-color: #e0e0e0;
+	--save-button-bg: #1e88e5;
+	--save-button-hover-bg: #1565c0;
+	--secondary-text-color: #bbb;
+	--text-color: #e0e0e0;
+}
+
+body.light-mode {
+	--bg-color: #f0f2f5;
+	--border-color: #ccc;
+	--clear-button-bg: #dc3545;
+	--clear-button-hover-bg: #c82333;
+	--code-bg: #f0f0f0;
+	--container-bg: #ffffff;
+	--copy-button-bg: #28a745;
+	--copy-button-hover-bg: #218838;
+	--focus-border-color: #3498db;
+	--focus-shadow-color: rgba(52, 152, 219, 0.3);
+	--info-box-bg: #e8f7fe;
+	--info-box-border: #cceeff;
+	--info-box-text: #4a6a8b;
+	--locale-select-bg: #f9f9f9;
+	--locale-select-color: #333;
+	--save-button-bg: #007bff;
+	--save-button-hover-bg: #0056b3;
+	--secondary-text-color: #555;
+	--text-color: #333;
+}
+
+body {
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	background-color: var(--bg-color);
+	box-sizing: border-box;
+	color: var(--text-color);
+	display: block;
+	font-family:
+		"Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+		"Droid Sans", "Helvetica Neue", sans-serif;
+	margin: 0;
+	min-height: 100vh;
+	padding: 10px;
+}
+
+* {
+	overflow-wrap: break-word;
+}
+
+.sr-only {
+	border: 0;
+	clip: rect(0, 0, 0, 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+.main {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.main-section {
+	box-sizing: border-box;
+	margin: 0 auto;
+	max-width: 760px;
+	padding: 20px;
+	width: 100%;
+}
+
+.button-group {
+	display: flex;
+	gap: 15px;
+	justify-content: center;
+}
+
+.save-button,
+.clear-button,
+.copy-button {
+	border: none;
+	border-radius: 5px;
+	color: white;
+	cursor: pointer;
+	font-size: 1em;
+	padding: 10px 20px;
+	transition:
+		background-color 0.3s ease,
+		transform 0.1s ease;
+}
+
+.save-button {
+	background-color: var(--save-button-bg);
+}
+
+.save-button:hover {
+	background-color: var(--save-button-hover-bg);
+}
+
+.clear-button {
+	background-color: var(--clear-button-bg);
+}
+
+.clear-button:hover {
+	background-color: var(--clear-button-hover-bg);
+}
+
+.save-button:active,
+.clear-button:active,
+.copy-button:active {
+	transform: translateY(1px);
+}
+
+.info-box {
+	background-color: var(--info-box-bg);
+	border: 1px solid var(--info-box-border);
+	border-radius: 8px;
+	color: var(--info-box-text);
+	font-size: 0.95em;
+	padding: 20px;
+}
+
+.info-box-main {
+	align-items: center;
+	display: flex;
+	gap: 10px;
+	margin: 15px 0;
+}
+
+.info-box-url {
+	background-color: var(--code-bg);
+	font-size: inherit;
+	border-radius: 6px;
+	flex-grow: 1;
+	font-family:
+		"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+	padding: 12px;
+	color: inherit;
+	min-width: 0;
+	border: none;
+	line-height: inherit;
+
+	@media print {
+		max-height: 100000px;
+	}
+}
+
+.copy-button {
+	background-color: var(--copy-button-bg);
+	flex-shrink: 0;
+}
+
+.copy-button:hover {
+	background-color: var(--copy-button-hover-bg);
+}
+
+.share-instruction {
+	color: var(--secondary-text-color);
+	font-style: italic;
+}
+
+.settings-panel {
+	border-top: 1px solid var(--border-color);
+	display: flex;
+	flex-wrap: wrap;
+	padding: 20px 0;
+	width: 100%;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.locale-selector {
+	align-items: center;
+	display: flex;
+	gap: 10px;
+	margin-bottom: 0;
+	text-align: left;
+}
+
+.locale-selector label {
+	color: var(--secondary-text-color);
+	font-weight: 600;
+}
+
+.locale-selector select {
+	background-color: var(--locale-select-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	color: var(--locale-select-color);
+	cursor: pointer;
+	font-size: 0.95em;
+	outline: none;
+	padding: 8px 12px;
+}
+
+.locale-selector select:hover,
+.locale-selector select:focus {
+	border-color: var(--focus-border-color);
+}
+
+.theme-toggle {
+	align-items: center;
+	display: flex;
+	gap: 10px;
+	margin-bottom: 0;
+	text-align: right;
+}
+
+.theme-switch {
+	display: inline-block;
+	flex-shrink: 0;
+	height: 24px;
+	position: relative;
+	width: 48px;
+}
+
+.theme-switch input {
+	height: 0;
+	opacity: 0;
+	width: 0;
+}
+
+.slider {
+	background-color: #ccc;
+	border-radius: 24px;
+	bottom: 0;
+	cursor: pointer;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.slider:before {
+	background-color: white;
+	border-radius: 50%;
+	bottom: 3px;
+	content: "";
+	height: 18px;
+	left: 3px;
+	position: absolute;
+	width: 18px;
+}
+
+input:checked + .slider {
+	background-color: #3498db;
+}
+
+input:focus + .slider {
+	box-shadow: 0 0 1px #3498db;
+}
+
+input:checked + .slider:before {
+	transform: translateX(24px);
+}
+
+.theme-text {
+	color: var(--secondary-text-color);
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+	.main-section {
+		max-width: 100%;
+	}
+
+	.info-box {
+		font-size: 0.9em;
+		padding: 10px 15px;
+	}
+
+	.locale-selector,
+	.theme-toggle {
+		justify-content: center;
+		margin-bottom: 0;
+		width: 100%;
+	}
+
+	.settings-panel {
+		align-items: stretch;
+		flex-direction: column;
+		gap: 15px;
+	}
+
+	.theme-text {
+		font-size: 0.95em;
+	}
+
+	.info-box-url {
+		font-size: 0.9em;
+		padding: 10px;
+	}
+}
+
+@media (max-width: 480px) {
+	.copy-button,
+	.locale-selector select,
+	.theme-switch,
+	.theme-text,
+	.info-box-url {
+		font-size: 0.9em;
+	}
+
+	.main-section {
+		padding: 15px 10px;
+	}
+}

@@ -1,0 +1,22 @@
+{
+	"app_name": "Notas",
+	"app_description": "Digite suas notas Markdown aqui. Elas são salvas na URL, facilitando o bookmark ou o compartilhamento com outras pessoas. Você também pode salvá-las em seu navegador.",
+	"textarea_placeholder": "Comece a digitar suas notas aqui",
+	"current_url_label": "URL da nota atual:",
+	"copy_button": "Copiar URL",
+	"copy_success": "URL copiada",
+	"copy_fail": "Falha ao copiar a URL.",
+	"share_instruction": "Compartilhe esta URL para compartilhar suas notas instantaneamente.",
+	"locale_selector_label": "Idioma:",
+	"dark_mode_label": "Modo escuro",
+	"save_button": "Salvar no navegador",
+	"save_success": "Nota salva no navegador",
+	"note_loaded_from_browser": "Nota carregada do navegador",
+	"save_fail": "Falha ao salvar as notas no navegador",
+	"clear_button": "Limpar notas",
+	"clear_confirm": "Tem certeza de que deseja limpar todas as notas? Isso as excluirá do navegador e da URL.",
+	"clear_success": "Notas limpas",
+	"clear_fail": "Falha ao limpar as notas",
+	"view_button": "Ver",
+	"edit_button": "Editar"
+}
