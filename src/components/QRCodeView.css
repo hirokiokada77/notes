@@ -2,3 +2,7 @@
 	margin: 1em 0;
 	text-align: center;
 }
+
+.qr-code img {
+	max-width: 100%;
+}
