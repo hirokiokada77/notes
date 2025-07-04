@@ -18,7 +18,7 @@ export function Toast() {
 	const [toastIsHiding, setToastIsHiding] = useAtom(toastIsHidingAtom);
 
 	const displayDuration = 4000;
-	const animationDuration = 200;
+	const animationDuration = 100;
 
 	const toastDisplayTimeoutRef = useRef<number | null>(null);
 	const toastHideTimeoutRef = useRef<number | null>(null);
