@@ -69,6 +69,10 @@ body {
 	overflow-wrap: break-word;
 }
 
+summary {
+	cursor: pointer;
+}
+
 .sr-only {
 	border: 0;
 	clip: rect(0, 0, 0, 0);
