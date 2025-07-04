@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { useId } from "react";
+import { useId, useRef } from "react";
 import { messagesAtom } from "../atoms/messagesAtom";
 import { urlAtom } from "../atoms/urlAtom";
 import { QRCodeView } from "./QRCodeView";
@@ -8,6 +8,8 @@ export function InfoBox() {
 	const messages = useAtomValue(messagesAtom);
 
 	const url = useAtomValue(urlAtom);
+
+	const infoBoxUrlRef = useRef<HTMLInputElement>(null);
 
 	const copyUrlToClipboard = async () => {
 		try {
@@ -22,6 +24,12 @@ export function InfoBox() {
 			if (window.registerToastMessage) {
 				window.registerToastMessage("copy_fail");
 			}
+		}
+	};
+
+	const handleFocus = () => {
+		if (infoBoxUrlRef.current) {
+			infoBoxUrlRef.current.select();
 		}
 	};
 
@@ -40,6 +48,8 @@ export function InfoBox() {
 						aria-labelledby={infoBoxLabelId}
 						value={url.toString()}
 						readOnly
+						ref={infoBoxUrlRef}
+						onFocus={handleFocus}
 					/>
 
 					<button
