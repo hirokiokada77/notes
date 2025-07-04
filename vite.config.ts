@@ -23,6 +23,18 @@ export default defineConfig({
 				short_name: app_name,
 				description: app_description,
 				theme_color: "#ffffff",
+				icons: [
+					{
+						src: "icon-192x192.png",
+						sizes: "192x192",
+						type: "image/png",
+					},
+					{
+						src: "icon-512x512.png",
+						sizes: "512x512",
+						type: "image/png",
+					},
+				],
 			},
 		}),
 		{
@@ -100,7 +112,7 @@ export default defineConfig({
 							`<meta http-equiv="Content-Security-Policy" content="` +
 								[
 									["default-src", "'none'"],
-									["img-src", "data:"],
+									["img-src", "data: 'self'"],
 									["manifest-src", "'self'"],
 									["require-trusted-types-for", "'script'"],
 									["trusted-types", "app-service-worker-policy"],
