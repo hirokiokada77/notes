@@ -44,6 +44,7 @@ export default defineConfig({
 						? `<meta http-equiv="Content-Security-Policy" content="` +
 								[
 									["default-src", "'none'"],
+									["img-src", "data:"],
 									["manifest-src", "'self'"],
 									["require-trusted-types-for", "'script'"],
 									["trusted-types", "app-service-worker-policy"],
