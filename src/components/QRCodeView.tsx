@@ -63,14 +63,12 @@ export function QRCodeView() {
 
 	return (
 		<div className="qr-code">
-			<details ref={detailsRef} open={displayQrCode ? true : undefined}>
-				{qrCodeUrl && (
-					<>
-						<summary>See QR code for this URL</summary> {/* TODO: i18n */}
-						<img src={qrCodeUrl} alt="QR code" />
-					</>
-				)}
-			</details>
+			{qrCodeUrl && (
+				<details ref={detailsRef} open={displayQrCode ? true : undefined}>
+					<summary>See QR code for this URL</summary> {/* TODO: i18n */}
+					<img src={qrCodeUrl} alt="QR code" />
+				</details>
+			)}
 		</div>
 	);
 }
