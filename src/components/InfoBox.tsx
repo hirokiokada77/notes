@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { useLocale } from "../contexts/LocaleContext";
 import { useUrl } from "../hooks/useUrl";
+import { QRCodeView } from "./QRCodeView";
 
 export function InfoBox() {
 	const { messages } = useLocale();
@@ -33,6 +34,8 @@ export function InfoBox() {
 						{messages.copy_button}
 					</button>
 				</div>
+
+				<QRCodeView />
 
 				<p className="share-instruction">{messages.share_instruction}</p>
 			</div>
