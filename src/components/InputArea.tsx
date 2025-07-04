@@ -1,16 +1,15 @@
+import "./InputArea.css";
+import { useAtom, useAtomValue } from "jotai";
 import { type ChangeEvent, useId } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-
-import "./InputArea.css";
-
-import { useLocale } from "../contexts/LocaleContext";
-import { useText } from "../hooks/useText";
+import { messagesAtom } from "../atoms/messagesAtom";
+import { textAtom } from "../atoms/textAtom";
 
 export function InputArea() {
-	const { messages } = useLocale();
+	const messages = useAtomValue(messagesAtom);
 
-	const { text, setText } = useText();
+	const [text, setText] = useAtom(textAtom);
 
 	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);

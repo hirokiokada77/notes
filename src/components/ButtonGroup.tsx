@@ -1,10 +1,44 @@
-import { useLocale } from "../contexts/LocaleContext";
-import { useText } from "../hooks/useText";
+import { useAtom, useAtomValue } from "jotai";
+import { messagesAtom } from "../atoms/messagesAtom";
+import { textAtom } from "../atoms/textAtom";
 
 export function ButtonGroup() {
-	const { messages } = useLocale();
+	const messages = useAtomValue(messagesAtom);
 
-	const { saveTextToBrowser, clearText } = useText();
+	const [text, setText] = useAtom(textAtom);
+
+	const saveTextToBrowser = () => {
+		try {
+			localStorage.setItem("notesAppText", text ?? "");
+
+			if (window.registerToastMessage) {
+				window.registerToastMessage("save_success");
+			}
+		} catch (err) {
+			console.error("Error saving to local storage:", err);
+
+			if (window.registerToastMessage) {
+				window.registerToastMessage("save_fail");
+			}
+		}
+	};
+
+	const clearText = () => {
+		if (window.confirm(messages.clear_confirm)) {
+			try {
+				setText("");
+				localStorage.removeItem("notesAppText");
+
+				if (window.registerToastMessage) {
+					window.registerToastMessage("clear_success");
+				}
+			} catch {
+				if (window.registerToastMessage) {
+					window.registerToastMessage("clear_fail");
+				}
+			}
+		}
+	};
 
 	return (
 		<div className="main-section">

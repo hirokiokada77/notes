@@ -1,11 +1,12 @@
+import { useAtom, useAtomValue } from "jotai";
 import { useId } from "react";
-import { useLocale } from "../contexts/LocaleContext";
-import { useTheme } from "../contexts/ThemeContext";
+import { messagesAtom } from "../atoms/messagesAtom";
+import { themeAtom } from "../atoms/themeAtom";
 
 export function ThemeToggle() {
-	const { theme, setTheme } = useTheme();
+	const [theme, setTheme] = useAtom(themeAtom);
 
-	const { messages } = useLocale();
+	const messages = useAtomValue(messagesAtom);
 
 	const toggleTheme = () => {
 		setTheme(theme === "light" ? "dark" : "light");

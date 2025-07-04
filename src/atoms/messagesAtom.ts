@@ -1,5 +1,4 @@
-import { createContext, useContext } from "react";
-
+import { atom } from "jotai";
 import de from "../locales/de.json";
 import en from "../locales/en.json";
 import es from "../locales/es.json";
@@ -10,8 +9,29 @@ import ko from "../locales/ko.json";
 import pt from "../locales/pt.json";
 import ru from "../locales/ru.json";
 import zh from "../locales/zh.json";
+import { type Locale, localeAtom } from "./localeAtom";
 
-export const LOCALE_STORAGE_KEY = "notesAppLocale";
+export type MessageKeys =
+	| "app_name"
+	| "app_description"
+	| "textarea_placeholder"
+	| "current_url_label"
+	| "copy_button"
+	| "copy_success"
+	| "copy_fail"
+	| "share_instruction"
+	| "locale_selector_label"
+	| "dark_mode_label"
+	| "save_button"
+	| "save_success"
+	| "note_loaded_from_browser"
+	| "save_fail"
+	| "clear_button"
+	| "clear_confirm"
+	| "clear_success"
+	| "clear_fail"
+	| "view_button"
+	| "edit_button";
 
 export interface Messages {
 	app_name: string;
@@ -36,18 +56,6 @@ export interface Messages {
 	edit_button: string;
 }
 
-export type Locale =
-	| "de"
-	| "en"
-	| "es"
-	| "fr"
-	| "it"
-	| "ja"
-	| "ko"
-	| "pt"
-	| "ru"
-	| "zh";
-
 export const messagesByLocale: { [K in Locale]: Messages } = {
 	de,
 	en,
@@ -61,22 +69,8 @@ export const messagesByLocale: { [K in Locale]: Messages } = {
 	zh,
 };
 
-export const supportedLocales = Object.keys(messagesByLocale) as Locale[];
+export const messagesAtom = atom((get) => {
+	const locale = get(localeAtom);
 
-export interface LocaleContextType {
-	locale: Locale;
-	messages: Messages;
-	changeLocale: (newLocale: Locale) => void;
-}
-
-export const LocaleContext = createContext<LocaleContextType | undefined>(
-	undefined,
-);
-
-export const useLocale = () => {
-	const context = useContext(LocaleContext);
-	if (context === undefined) {
-		throw new Error("useLocale must be used within a LocaleProvider");
-	}
-	return context;
-};
+	return messagesByLocale[locale];
+});

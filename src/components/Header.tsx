@@ -1,9 +1,9 @@
 import "./Header.css";
-
-import { useLocale } from "../contexts/LocaleContext";
+import { useAtomValue } from "jotai";
+import { messagesAtom } from "../atoms/messagesAtom";
 
 export function Header() {
-	const { messages } = useLocale();
+	const messages = useAtomValue(messagesAtom);
 
 	return (
 		<div className="main-section">

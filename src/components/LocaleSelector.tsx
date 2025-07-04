@@ -1,11 +1,15 @@
+import { useAtom, useAtomValue } from "jotai";
 import { type ChangeEvent, useId } from "react";
-import { type Locale, useLocale } from "../contexts/LocaleContext";
+import { type Locale, localeAtom } from "../atoms/localeAtom";
+import { messagesAtom } from "../atoms/messagesAtom";
 
 export function LocaleSelector() {
-	const { locale, messages, changeLocale } = useLocale();
+	const [locale, setLocale] = useAtom(localeAtom);
+
+	const messages = useAtomValue(messagesAtom);
 
 	const handleLocaleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-		changeLocale(event.target.value as Locale);
+		setLocale(event.target.value as Locale);
 	};
 
 	const localeSelectorContainerId = useId();

@@ -1,20 +1,27 @@
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
+import { localeAtom } from "./atoms/localeAtom";
+import { messagesAtom } from "./atoms/messagesAtom";
+import { textAtom } from "./atoms/textAtom";
+import { themeAtom } from "./atoms/themeAtom";
+import { urlAtom } from "./atoms/urlAtom";
 import { ButtonGroup } from "./components/ButtonGroup";
 import { Header } from "./components/Header";
 import { InfoBox } from "./components/InfoBox";
 import { InputArea } from "./components/InputArea";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { Toast } from "./components/Toast";
-import { useLocale } from "./contexts/LocaleContext";
-import { useTheme } from "./contexts/ThemeContext";
-import { useText } from "./hooks/useText";
 
 export function App() {
-	const { locale, messages } = useLocale();
+	const locale = useAtomValue(localeAtom);
 
-	const { theme } = useTheme();
+	const messages = useAtomValue(messagesAtom);
 
-	const { text } = useText();
+	const theme = useAtomValue(themeAtom);
+
+	const setUrl = useSetAtom(urlAtom);
+
+	const [text, setText] = useAtom(textAtom);
 
 	useEffect(() => {
 		const firstLine = (text ?? "").split("\n")[0].trim();
@@ -47,6 +54,40 @@ export function App() {
 		document.body.classList.remove("dark-mode", "light-mode");
 		document.body.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
 	}, [theme]);
+
+	useEffect(() => {
+		const listener = () => {
+			setUrl(new URL(location.href));
+		};
+
+		window.addEventListener("hashchange", listener);
+
+		return () => window.removeEventListener("hashchange", listener);
+	}, [setUrl]);
+
+	useEffect(() => {
+		const updateTextFromHashChange = () => {
+			const fragment = window.location.hash.substring(1);
+			try {
+				setText(decodeURIComponent(fragment ?? ""));
+			} catch (error) {
+				console.error("Error decoding URL fragment on hashchange:", error);
+				setText("");
+			}
+		};
+
+		window.addEventListener("hashchange", updateTextFromHashChange);
+		return () =>
+			window.removeEventListener("hashchange", updateTextFromHashChange);
+	}, [setText]);
+
+	useEffect(() => {
+		const encodedText = encodeURIComponent(text);
+		const newHash = encodedText ? `#${encodedText}` : "";
+		if (window.location.hash !== newHash) {
+			window.location.hash = newHash;
+		}
+	}, [text]);
 
 	return (
 		<div className="main">

@@ -1,12 +1,29 @@
+import { useAtomValue } from "jotai";
 import { useId } from "react";
-import { useLocale } from "../contexts/LocaleContext";
-import { useUrl } from "../hooks/useUrl";
+import { messagesAtom } from "../atoms/messagesAtom";
+import { urlAtom } from "../atoms/urlAtom";
 import { QRCodeView } from "./QRCodeView";
 
 export function InfoBox() {
-	const { messages } = useLocale();
+	const messages = useAtomValue(messagesAtom);
 
-	const { url, copyUrlToClipboard } = useUrl();
+	const url = useAtomValue(urlAtom);
+
+	const copyUrlToClipboard = async () => {
+		try {
+			await navigator.clipboard.writeText(url.toString());
+
+			if (window.registerToastMessage) {
+				window.registerToastMessage("copy_success");
+			}
+		} catch (err) {
+			console.error("Error copying to clipboard:", err);
+
+			if (window.registerToastMessage) {
+				window.registerToastMessage("copy_fail");
+			}
+		}
+	};
 
 	const infoBoxLabelId = useId();
 
@@ -21,7 +38,7 @@ export function InfoBox() {
 					<input
 						className="info-box-url"
 						aria-labelledby={infoBoxLabelId}
-						value={url}
+						value={url.toString()}
 						readOnly
 					/>
 
