@@ -1,6 +1,6 @@
 {
 	"app_name": "メモ",
-	"app_description": "ここにMarkdown形式でメモを入力してください。URLに保存されるため、簡単にブックマークしたり、他の人と共有したりできます。ブラウザに保存することもできます。",
+	"app_description": "ここにMarkdown形式でメモを入力してください。URLに保存されるため、簡単にブックマークしたり、他の人と共有したりできます。ブラウザにも保存できます。",
 	"textarea_placeholder": "ここにメモを入力してください",
 	"current_url_label": "現在のメモのURL:",
 	"copy_button": "URLをコピー",
@@ -18,5 +18,7 @@
 	"clear_success": "メモがクリアされました",
 	"clear_fail": "メモをクリアできませんでした",
 	"view_button": "表示",
-	"edit_button": "編集"
+	"edit_button": "編集",
+	"qr_code_view_summary": "このURLのQRコードを見る",
+	"qr_code_img_alt": "QRコード"
 }

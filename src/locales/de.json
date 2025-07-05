@@ -18,5 +18,7 @@
 	"clear_success": "Notizen gelöscht",
 	"clear_fail": "Notizen konnten nicht gelöscht werden",
 	"view_button": "Ansicht",
-	"edit_button": "Bearbeiten"
+	"edit_button": "Bearbeiten",
+	"qr_code_view_summary": "QR-Code für diese URL anzeigen",
+	"qr_code_img_alt": "QR-Code"
 }

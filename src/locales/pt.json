@@ -18,5 +18,7 @@
 	"clear_success": "Notas limpas",
 	"clear_fail": "Falha ao limpar as notas",
 	"view_button": "Ver",
-	"edit_button": "Editar"
+	"edit_button": "Editar",
+	"qr_code_view_summary": "Ver código QR para esta URL",
+	"qr_code_img_alt": "Código QR"
 }

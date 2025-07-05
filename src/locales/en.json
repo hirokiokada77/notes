@@ -18,5 +18,7 @@
 	"clear_success": "Notes cleared",
 	"clear_fail": "Failed to clear notes",
 	"view_button": "View",
-	"edit_button": "Edit"
+	"edit_button": "Edit",
+	"qr_code_view_summary": "See QR code for this URL",
+	"qr_code_img_alt": "QR code"
 }

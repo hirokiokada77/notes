@@ -18,5 +18,7 @@
 	"clear_success": "笔记已清除",
 	"clear_fail": "清除笔记失败",
 	"view_button": "查看",
-	"edit_button": "编辑"
+	"edit_button": "编辑",
+	"qr_code_view_summary": "查看此 URL 的二维码",
+	"qr_code_img_alt": "二维码"
 }

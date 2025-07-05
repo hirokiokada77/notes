@@ -31,7 +31,9 @@ export type MessageKeys =
 	| "clear_success"
 	| "clear_fail"
 	| "view_button"
-	| "edit_button";
+	| "edit_button"
+	| "qr_code_view_summary"
+	| "qr_code_img_alt";
 
 export interface Messages {
 	app_name: string;
@@ -54,6 +56,8 @@ export interface Messages {
 	clear_fail: string;
 	view_button: string;
 	edit_button: string;
+	qr_code_view_summary: string;
+	qr_code_img_alt: string;
 }
 
 export const messagesByLocale: { [K in Locale]: Messages } = {

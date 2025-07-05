@@ -18,5 +18,7 @@
 	"clear_success": "Notes effacées",
 	"clear_fail": "Échec de l'effacement des notes",
 	"view_button": "Voir",
-	"edit_button": "Modifier"
+	"edit_button": "Modifier",
+	"qr_code_view_summary": "Voir le code QR pour cette URL",
+	"qr_code_img_alt": "Code QR"
 }

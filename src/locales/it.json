@@ -18,5 +18,7 @@
 	"clear_success": "Note cancellate",
 	"clear_fail": "Impossibile cancellare le note",
 	"view_button": "Visualizza",
-	"edit_button": "Modifica"
+	"edit_button": "Modifica",
+	"qr_code_view_summary": "Vedi codice QR per questo URL",
+	"qr_code_img_alt": "Codice QR"
 }

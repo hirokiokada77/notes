@@ -2,6 +2,7 @@ import "./QRCodeView.css";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useRef } from "react";
 import { displayQrCodeAtom } from "../atoms/displayQrCodeAtom";
+import { messagesAtom } from "../atoms/messagesAtom";
 import { qrCodeAtom } from "../atoms/qrCodeAtom";
 
 export function QRCodeView() {
@@ -10,6 +11,8 @@ export function QRCodeView() {
 	const detailsRef = useRef<HTMLDetailsElement>(null);
 
 	const [displayQrCode, setDisplayQrCode] = useAtom(displayQrCodeAtom);
+
+	const messages = useAtomValue(messagesAtom);
 
 	useEffect(() => {
 		const detailsElement = detailsRef.current;
@@ -31,8 +34,8 @@ export function QRCodeView() {
 		<div className="qr-code">
 			{qrCode && (
 				<details ref={detailsRef} open={displayQrCode ? true : undefined}>
-					<summary>See QR code for this URL</summary> {/* TODO: i18n */}
-					<img src={qrCode} alt="QR code" />
+					<summary>{messages.qr_code_view_summary}</summary>
+					<img src={qrCode} alt={messages.qr_code_img_alt} />
 				</details>
 			)}
 		</div>
