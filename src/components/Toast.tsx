@@ -1,21 +1,16 @@
 import "./Toast.css";
-import { useAtom, useAtomValue } from "jotai";
-import { useEffect, useRef } from "react";
+import { useAtomValue } from "jotai";
+import { useEffect, useRef, useState } from "react";
 import { type MessageKeys, messagesAtom } from "../atoms/messagesAtom";
-import {
-	showToastAtom,
-	toastIsHidingAtom,
-	toastMessageAtom,
-} from "../atoms/toastAtom";
 
 export function Toast() {
 	const messages = useAtomValue(messagesAtom);
 
-	const [toastMessage, setToastMessage] = useAtom(toastMessageAtom);
+	const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-	const [showToast, setShowToast] = useAtom(showToastAtom);
+	const [showToast, setShowToast] = useState(false);
 
-	const [toastIsHiding, setToastIsHiding] = useAtom(toastIsHidingAtom);
+	const [toastIsHiding, setToastIsHiding] = useState(false);
 
 	const displayDuration = 4000;
 	const animationDuration = 100;
