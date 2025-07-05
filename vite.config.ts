@@ -117,18 +117,19 @@ export default defineConfig({
 									["require-trusted-types-for", "'script'"],
 									["trusted-types", "app-service-worker-policy"],
 									[
-										"script-src",
+										"script-src-elem",
 										Array.from(scriptHashMap.values())
 											.map((hash) => `'${hash}'`)
 											.concat("'strict-dynamic'")
 											.join(" "),
 									],
 									[
-										"style-src",
+										"style-src-elem",
 										Array.from(stylesheetHashMap.values())
 											.map((hash) => `'${hash}'`)
 											.join(" "),
 									],
+									["worker-src", "'self'"],
 								]
 									.map(([key, value]) => `${key} ${value}`)
 									.join("; ") +
