@@ -1,3 +1,3 @@
 interface Window {
-	registerToastMessage: ((newToastMessageKey: MessageKeys) => void) | null;
+	registerToastMessage: ((newToastMessageKey: MessageKeys) => void) | undefined;
 }
