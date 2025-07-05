@@ -111,27 +111,29 @@ export default defineConfig({
 						const cspElement = $(
 							`<meta http-equiv="Content-Security-Policy" content="` +
 								[
-									["default-src", "'none'"],
-									["img-src", "data: 'self'"],
-									["manifest-src", "'self'"],
-									["require-trusted-types-for", "'script'"],
-									["trusted-types", "app-service-worker-policy"],
+									["default-src", ["'none'"]],
+									["img-src", ["'self'", "data:"]],
+									["manifest-src", ["'self'"]],
+									["require-trusted-types-for", ["'script'"]],
+									["trusted-types", ["app-service-worker-policy"]],
 									[
 										"script-src-elem",
 										Array.from(scriptHashMap.values())
 											.map((hash) => `'${hash}'`)
-											.concat("'strict-dynamic'")
-											.join(" "),
+											.concat("'strict-dynamic'"),
 									],
 									[
 										"style-src-elem",
-										Array.from(stylesheetHashMap.values())
-											.map((hash) => `'${hash}'`)
-											.join(" "),
+										Array.from(stylesheetHashMap.values()).map(
+											(hash) => `'${hash}'`,
+										),
 									],
-									["worker-src", "'self'"],
+									["worker-src", ["'self'"]],
 								]
-									.map(([key, value]) => `${key} ${value}`)
+									.map(
+										([key, values]) =>
+											`${key} ${(values as string[]).join(" ")}`,
+									)
 									.join("; ") +
 								`;">`,
 						);
