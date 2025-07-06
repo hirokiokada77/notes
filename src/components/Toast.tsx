@@ -36,7 +36,7 @@ export function Toast() {
 		}, displayDuration);
 	};
 
-	window.registerToastMessage = (newToastMessageKey: MessageKeys) => {
+	globalThis.registerToastMessage = (newToastMessageKey: MessageKeys) => {
 		if (showToast) {
 			setToastIsHiding(true);
 

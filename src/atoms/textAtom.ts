@@ -16,9 +16,7 @@ const getInitialText = () => {
 
 	if (savedText) {
 		setTimeout(() => {
-			if (window.registerToastMessage) {
-				window.registerToastMessage("note_loaded_from_browser");
-			}
+			globalThis.registerToastMessage("note_loaded_from_browser");
 		}, 100);
 
 		return savedText;

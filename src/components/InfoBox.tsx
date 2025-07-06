@@ -15,15 +15,11 @@ export function InfoBox() {
 		try {
 			await navigator.clipboard.writeText(url.toString());
 
-			if (window.registerToastMessage) {
-				window.registerToastMessage("copy_success");
-			}
+			globalThis.registerToastMessage("copy_success");
 		} catch (err) {
 			console.error("Error copying to clipboard:", err);
 
-			if (window.registerToastMessage) {
-				window.registerToastMessage("copy_fail");
-			}
+			globalThis.registerToastMessage("copy_fail");
 		}
 	};
 

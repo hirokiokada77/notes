@@ -11,15 +11,11 @@ export function ButtonGroup() {
 		try {
 			localStorage.setItem("notesAppText", text ?? "");
 
-			if (window.registerToastMessage) {
-				window.registerToastMessage("save_success");
-			}
+			globalThis.registerToastMessage("save_success");
 		} catch (err) {
 			console.error("Error saving to local storage:", err);
 
-			if (window.registerToastMessage) {
-				window.registerToastMessage("save_fail");
-			}
+			globalThis.registerToastMessage("save_fail");
 		}
 	};
 
@@ -29,13 +25,9 @@ export function ButtonGroup() {
 				setText("");
 				localStorage.removeItem("notesAppText");
 
-				if (window.registerToastMessage) {
-					window.registerToastMessage("clear_success");
-				}
+				globalThis.registerToastMessage("clear_success");
 			} catch {
-				if (window.registerToastMessage) {
-					window.registerToastMessage("clear_fail");
-				}
+				globalThis.registerToastMessage("clear_fail");
 			}
 		}
 	};
