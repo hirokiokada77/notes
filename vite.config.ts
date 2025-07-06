@@ -122,12 +122,7 @@ export default defineConfig({
 											.map((hash) => `'${hash}'`)
 											.concat("'strict-dynamic'"),
 									],
-									[
-										"style-src-elem",
-										Array.from(stylesheetHashMap.values()).map(
-											(hash) => `'${hash}'`,
-										),
-									],
+									["style-src-elem", ["'self'"]],
 									["worker-src", ["'self'"]],
 								]
 									.map(
