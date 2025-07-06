@@ -16,7 +16,7 @@ export default defineConfig({
 			registerType: "autoUpdate",
 			injectRegister: null,
 			workbox: {
-				globPatterns: ["**/*.{js,css,ico,png,svg,webp,json}"],
+				globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,json}"],
 			},
 			manifest: {
 				name: app_name,
