@@ -113,7 +113,8 @@ summary {
 	color: white;
 	cursor: pointer;
 	font-size: 1em;
-	padding: 12px 20px;
+	line-height: 1;
+	padding: 14px 20px;
 	transition:
 		background-color 0.3s ease,
 		transform 0.1s ease;
@@ -151,7 +152,6 @@ summary {
 }
 
 .info-box-main {
-	align-items: center;
 	display: flex;
 	gap: 10px;
 	margin: 15px 0;
