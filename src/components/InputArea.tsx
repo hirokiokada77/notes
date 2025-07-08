@@ -34,13 +34,18 @@ export function InputArea() {
 			setStatus("viewing");
 		}, 300);
 
-		setNote({
-			...note,
-			text: await (await prettier).format(note.text, {
-				parser: "markdown",
-				plugins: [(await prettierPluginMarkdown).default],
-			}),
+		const formattedText = await (await prettier).format(note.text, {
+			parser: "markdown",
+			plugins: [(await prettierPluginMarkdown).default],
 		});
+
+		if (note.text !== formattedText) {
+			setNote({
+				...note,
+				text: formattedText,
+				dateLastModified: Date.now(),
+			});
+		}
 	};
 
 	const noteInputId = useId();
