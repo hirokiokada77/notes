@@ -53,14 +53,11 @@ export default defineConfig({
 			let config: ResolvedConfig;
 
 			return {
-				name: "inject-csp-and-sri",
+				name: "inject-sri",
 				configResolved(resolvedConfig) {
 					config = resolvedConfig;
 				},
 				writeBundle(options, bundle) {
-					const scriptHashMap = new Map();
-					const stylesheetHashMap = new Map();
-
 					const htmls = Object.keys(bundle)
 						.filter((fileName) => fileName.endsWith(".html"))
 						.filter((fileName) => bundle[fileName].type === "asset")
@@ -86,8 +83,6 @@ export default defineConfig({
 								.toString("base64")}`;
 
 							script.attribs.integrity = integrity;
-
-							scriptHashMap.set(script.attribs.src, integrity);
 						}
 
 						for (const stylesheet of stylesheets) {
@@ -104,41 +99,43 @@ export default defineConfig({
 								.toString("base64")}`;
 
 							stylesheet.attribs.integrity = integrity;
-
-							stylesheetHashMap.set(stylesheet.attribs.href, integrity);
 						}
-
-						const cspElement = $(
-							`<meta http-equiv="Content-Security-Policy" content="` +
-								[
-									["default-src", ["'none'"]],
-									["img-src", ["'self'", "data:"]],
-									["manifest-src", ["'self'"]],
-									["require-trusted-types-for", ["'script'"]],
-									["trusted-types", ["app-service-worker-policy"]],
-									[
-										"script-src-elem",
-										Array.from(scriptHashMap.values())
-											.map((hash) => `'${hash}'`)
-											.concat("'strict-dynamic'"),
-									],
-									["style-src-elem", ["'self'"]],
-									["worker-src", ["'self'"]],
-								]
-									.map(
-										([key, values]) =>
-											`${key} ${(values as string[]).join(" ")}`,
-									)
-									.join("; ") +
-								`;">`,
-						);
-
-						$("head").append(cspElement);
 
 						writeFileSync(resolve(options.dir ?? "", html.fileName), $.html());
 					}
 				},
 			};
 		})(),
+		{
+			name: "insert-csp",
+			transformIndexHtml(html) {
+				if (process.env.NODE_ENV === "production") {
+					const $ = cheerio.load(html);
+
+					const cspElement = $(
+						`<meta http-equiv="Content-Security-Policy" content="` +
+							[
+								["default-src", ["'none'"]],
+								["img-src", ["'self'", "data:"]],
+								["manifest-src", ["'self'"]],
+								["require-trusted-types-for", ["'script'"]],
+								["trusted-types", ["app-service-worker-policy"]],
+								["script-src-elem", ["'self'"]],
+								["style-src-elem", ["'self'"]],
+								["worker-src", ["'self'"]],
+							]
+								.map(
+									([key, values]) => `${key} ${(values as string[]).join(" ")}`,
+								)
+								.join("; ") +
+							`;">`,
+					);
+
+					$("head").append(cspElement);
+
+					return $.html();
+				}
+			},
+		},
 	],
 });

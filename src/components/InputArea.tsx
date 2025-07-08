@@ -1,13 +1,14 @@
 import "./InputArea.css";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { format } from "prettier";
-import * as prettierPluginMarkdown from "prettier/plugins/markdown";
 import { type ChangeEvent, useId } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { messagesAtom } from "../atoms/messagesAtom";
 import { noteAtom } from "../atoms/noteAtom";
 import { statusAtom } from "../atoms/statusAtom";
+
+const prettier = import("prettier");
+const prettierPluginMarkdown = import("prettier/plugins/markdown");
 
 export function InputArea() {
 	const messages = useAtomValue(messagesAtom);
@@ -29,17 +30,17 @@ export function InputArea() {
 	};
 
 	const handleBlur = async () => {
-		setNote({
-			...note,
-			text: await format(note.text, {
-				parser: "markdown",
-				plugins: [prettierPluginMarkdown],
-			}),
-		});
-
 		setTimeout(() => {
 			setStatus("viewing");
 		}, 300);
+
+		setNote({
+			...note,
+			text: await (await prettier).format(note.text, {
+				parser: "markdown",
+				plugins: [(await prettierPluginMarkdown).default],
+			}),
+		});
 	};
 
 	const noteInputId = useId();
