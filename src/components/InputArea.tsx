@@ -1,15 +1,18 @@
 import "./InputArea.css";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { type ChangeEvent, useId } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { messagesAtom } from "../atoms/messagesAtom";
 import { noteAtom } from "../atoms/noteAtom";
+import { statusAtom } from "../atoms/statusAtom";
 
 export function InputArea() {
 	const messages = useAtomValue(messagesAtom);
 
 	const [note, setNote] = useAtom(noteAtom);
+
+	const setStatus = useSetAtom(statusAtom);
 
 	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
 		setNote({
@@ -17,6 +20,14 @@ export function InputArea() {
 			text: event.target.value,
 			dateLastModified: Date.now(),
 		});
+	};
+
+	const handleFocus = () => {
+		setStatus("editing");
+	};
+
+	const handleBlur = () => {
+		setStatus("viewing");
 	};
 
 	const noteInputId = useId();
@@ -32,6 +43,8 @@ export function InputArea() {
 				className="note-input"
 				value={note.text ?? ""}
 				onChange={handleChange}
+				onFocus={handleFocus}
+				onBlur={handleBlur}
 				placeholder={messages.textarea_placeholder}
 				rows={10}
 				aria-label={messages.textarea_placeholder}
