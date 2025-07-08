@@ -1,5 +1,7 @@
 import "./InputArea.css";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { format } from "prettier";
+import * as prettierPluginMarkdown from "prettier/plugins/markdown";
 import { type ChangeEvent, useId } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -26,7 +28,15 @@ export function InputArea() {
 		setStatus("editing");
 	};
 
-	const handleBlur = () => {
+	const handleBlur = async () => {
+		setNote({
+			...note,
+			text: await format(note.text, {
+				parser: "markdown",
+				plugins: [prettierPluginMarkdown],
+			}),
+		});
+
 		setTimeout(() => {
 			setStatus("viewing");
 		}, 300);
