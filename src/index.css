@@ -167,10 +167,6 @@ summary {
 	min-width: 0;
 	border: none;
 	line-height: inherit;
-
-	@media print {
-		max-height: 100000px;
-	}
 }
 
 .copy-button {
