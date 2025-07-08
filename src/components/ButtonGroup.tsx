@@ -1,15 +1,15 @@
 import { useAtom, useAtomValue } from "jotai";
 import { messagesAtom } from "../atoms/messagesAtom";
-import { textAtom } from "../atoms/textAtom";
+import { createNewNote, noteAtom } from "../atoms/noteAtom";
 
 export function ButtonGroup() {
 	const messages = useAtomValue(messagesAtom);
 
-	const [text, setText] = useAtom(textAtom);
+	const [note, setNote] = useAtom(noteAtom);
 
 	const saveTextToBrowser = () => {
 		try {
-			localStorage.setItem("notesAppText", text ?? "");
+			localStorage.setItem("notesAppSavedNote", JSON.stringify(note));
 
 			globalThis.registerToastMessage("save_success");
 		} catch (err) {
@@ -22,8 +22,8 @@ export function ButtonGroup() {
 	const clearText = () => {
 		if (window.confirm(messages.clear_confirm)) {
 			try {
-				setText("");
-				localStorage.removeItem("notesAppText");
+				setNote(createNewNote());
+				localStorage.removeItem("notesAppSavedNote");
 
 				globalThis.registerToastMessage("clear_success");
 			} catch {

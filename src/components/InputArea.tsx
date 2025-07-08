@@ -4,15 +4,19 @@ import { type ChangeEvent, useId } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { messagesAtom } from "../atoms/messagesAtom";
-import { textAtom } from "../atoms/textAtom";
+import { noteAtom } from "../atoms/noteAtom";
 
 export function InputArea() {
 	const messages = useAtomValue(messagesAtom);
 
-	const [text, setText] = useAtom(textAtom);
+	const [note, setNote] = useAtom(noteAtom);
 
 	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-		setText(event.target.value);
+		setNote({
+			...note,
+			text: event.target.value,
+			dateLastModified: Date.now(),
+		});
 	};
 
 	const noteInputId = useId();
@@ -26,7 +30,7 @@ export function InputArea() {
 			<textarea
 				id={noteInputId}
 				className="note-input"
-				value={text ?? ""}
+				value={note.text ?? ""}
 				onChange={handleChange}
 				placeholder={messages.textarea_placeholder}
 				rows={10}
@@ -39,7 +43,7 @@ export function InputArea() {
 						disallowedElements={["img"]}
 						remarkPlugins={[remarkGfm]}
 					>
-						{text}
+						{note.text}
 					</ReactMarkdown>
 				</div>
 			</div>

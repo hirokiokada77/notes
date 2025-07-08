@@ -2,7 +2,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { localeAtom } from "./atoms/localeAtom";
 import { messagesAtom } from "./atoms/messagesAtom";
-import { textAtom } from "./atoms/textAtom";
+import { createNewNote, noteAtom } from "./atoms/noteAtom";
 import { themeAtom } from "./atoms/themeAtom";
 import { urlAtom } from "./atoms/urlAtom";
 import { ButtonGroup } from "./components/ButtonGroup";
@@ -21,10 +21,10 @@ export function App() {
 
 	const setUrl = useSetAtom(urlAtom);
 
-	const [text, setText] = useAtom(textAtom);
+	const [note, setNote] = useAtom(noteAtom);
 
 	useEffect(() => {
-		const firstLine = (text ?? "").split("\n")[0].trim();
+		const firstLine = (note.text ?? "").split("\n")[0].trim();
 		const maxTitleLength = 140;
 		let newTitle = messages.app_name;
 
@@ -36,7 +36,7 @@ export function App() {
 			newTitle = `${messages.app_name} – ${truncatedTitle}`;
 		}
 		document.title = newTitle;
-	}, [text, messages.app_name]);
+	}, [note, messages.app_name]);
 
 	useEffect(() => {
 		const description = document.querySelector("meta[name=description]");
@@ -69,25 +69,25 @@ export function App() {
 		const updateTextFromHashChange = () => {
 			const fragment = window.location.hash.substring(1);
 			try {
-				setText(decodeURIComponent(fragment ?? ""));
+				setNote(JSON.parse(decodeURIComponent(fragment)));
 			} catch (error) {
 				console.error("Error decoding URL fragment on hashchange:", error);
-				setText("");
+				setNote(createNewNote());
 			}
 		};
 
 		window.addEventListener("hashchange", updateTextFromHashChange);
 		return () =>
 			window.removeEventListener("hashchange", updateTextFromHashChange);
-	}, [setText]);
+	}, [setNote]);
 
 	useEffect(() => {
-		const encodedText = encodeURIComponent(text);
-		const newHash = encodedText ? `#${encodedText}` : "";
+		const encodedNote = encodeURIComponent(JSON.stringify(note));
+		const newHash = encodedNote ? `#${encodedNote}` : "";
 		if (window.location.hash !== newHash) {
 			window.location.hash = newHash;
 		}
-	}, [text]);
+	}, [note]);
 
 	return (
 		<div className="main">
