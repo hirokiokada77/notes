@@ -2,11 +2,14 @@ import "./StatusView.css";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { noteAtom } from "../atoms/noteAtom";
+import { savedNoteAtom } from "../atoms/savedNoteAtom";
 import { statusAtom } from "../atoms/statusAtom";
 import { formatTimeAgo } from "../utils";
 
 export function StatusView() {
 	const note = useAtomValue(noteAtom);
+
+	const savedNote = useAtomValue(savedNoteAtom);
 
 	const [_, setLastRenderTime] = useState(Date.now());
 
@@ -27,6 +30,16 @@ export function StatusView() {
 			<div className="status">
 				<ul className="status-list">
 					<li>{formatTimeAgo(note.dateLastModified)}</li>
+
+					{savedNote && note.id === savedNote.id && (
+						<>
+							{note.text !== savedNote.text && (
+								<li>You have unsaved changes</li>
+							)}
+
+							{note.text === savedNote.text && <li>Saved to browser</li>}
+						</>
+					)}
 				</ul>
 			</div>
 		)

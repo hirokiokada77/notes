@@ -31,11 +31,15 @@ function getInitialNote(): Note {
 		const savedNote = localStorage.getItem("notesAppSavedNote");
 
 		if (savedNote) {
-			setTimeout(() => {
-				globalThis.registerToastMessage("note_loaded_from_browser");
-			}, 100);
+			const parsedSavedNote = JSON.parse(savedNote);
 
-			note = JSON.parse(decodeURIComponent(savedNote));
+			if (parsedSavedNote) {
+				setTimeout(() => {
+					globalThis.registerToastMessage("note_loaded_from_browser");
+				}, 100);
+
+				note = JSON.parse(decodeURIComponent(savedNote));
+			}
 		}
 	}
 

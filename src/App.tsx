@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { localeAtom } from "./atoms/localeAtom";
 import { messagesAtom } from "./atoms/messagesAtom";
 import { createNewNote, noteAtom } from "./atoms/noteAtom";
+import { savedNoteAtom } from "./atoms/savedNoteAtom";
 import { themeAtom } from "./atoms/themeAtom";
 import { urlAtom } from "./atoms/urlAtom";
 import { ButtonGroup } from "./components/ButtonGroup";
@@ -23,6 +24,8 @@ export function App() {
 	const setUrl = useSetAtom(urlAtom);
 
 	const [note, setNote] = useAtom(noteAtom);
+
+	const savedNote = useAtomValue(savedNoteAtom);
 
 	useEffect(() => {
 		const firstLine = (note.text ?? "").split("\n")[0].trim();
@@ -89,6 +92,24 @@ export function App() {
 			window.location.hash = newHash;
 		}
 	}, [note]);
+
+	useEffect(() => {
+		const listener = (event: BeforeUnloadEvent) => {
+			if (
+				savedNote &&
+				note.id === savedNote.id &&
+				note.text !== savedNote.text
+			) {
+				event.preventDefault(); // Warn about unsaved changes
+			}
+		};
+
+		window.addEventListener("beforeunload", listener);
+
+		return () => {
+			window.removeEventListener("beforeunload", listener);
+		};
+	}, [note, savedNote]);
 
 	return (
 		<div className="main">

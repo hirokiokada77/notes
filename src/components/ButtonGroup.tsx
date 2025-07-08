@@ -1,15 +1,18 @@
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { messagesAtom } from "../atoms/messagesAtom";
 import { createNewNote, noteAtom } from "../atoms/noteAtom";
+import { savedNoteAtom } from "../atoms/savedNoteAtom";
 
 export function ButtonGroup() {
 	const messages = useAtomValue(messagesAtom);
 
 	const [note, setNote] = useAtom(noteAtom);
 
+	const setSavedNote = useSetAtom(savedNoteAtom);
+
 	const saveTextToBrowser = () => {
 		try {
-			localStorage.setItem("notesAppSavedNote", JSON.stringify(note));
+			setSavedNote(note);
 
 			globalThis.registerToastMessage("save_success");
 		} catch (err) {
@@ -23,7 +26,7 @@ export function ButtonGroup() {
 		if (window.confirm(messages.clear_confirm)) {
 			try {
 				setNote(createNewNote());
-				localStorage.removeItem("notesAppSavedNote");
+				setSavedNote(null);
 
 				globalThis.registerToastMessage("clear_success");
 			} catch {
