@@ -1,0 +1,30 @@
+.status {
+	width: 760px;
+	max-width: 100%;
+	margin: 0 auto;
+	opacity: 0.5;
+	font-size: 0.8em;
+}
+
+.status-list {
+	margin: 0;
+	padding: 10px;
+	list-style-type: none;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.status-list li {
+	display: inline-block;
+	padding: 0 10px;
+	position: relative;
+}
+
+.status-list li:not(:last-child)::after {
+	content: "・";
+	position: absolute;
+	right: -0.5em;
+	top: 50%;
+	transform: translateY(-50%);
+}

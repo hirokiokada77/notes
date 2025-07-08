@@ -10,6 +10,7 @@ import { Header } from "./components/Header";
 import { InfoBox } from "./components/InfoBox";
 import { InputArea } from "./components/InputArea";
 import { SettingsPanel } from "./components/SettingsPanel";
+import { StatusView } from "./components/StatusView";
 import { Toast } from "./components/Toast";
 
 export function App() {
@@ -96,6 +97,8 @@ export function App() {
 			<Header />
 
 			<InputArea />
+
+			<StatusView />
 
 			<ButtonGroup />
 
