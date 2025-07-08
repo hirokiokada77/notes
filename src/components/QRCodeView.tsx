@@ -1,18 +1,24 @@
 import "./QRCodeView.css";
 import { useAtom, useAtomValue } from "jotai";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { displayQrCodeAtom } from "../atoms/displayQrCodeAtom";
 import { messagesAtom } from "../atoms/messagesAtom";
-import { qrCodeAtom } from "../atoms/qrCodeAtom";
+import { urlAtom } from "../atoms/urlAtom";
+
+const QRCode = import("qrcode");
 
 export function QRCodeView() {
-	const qrCode = useAtomValue(qrCodeAtom);
+	const [qrCode, setQrCode] = useState<string | null>(null);
 
 	const detailsRef = useRef<HTMLDetailsElement>(null);
 
 	const [displayQrCode, setDisplayQrCode] = useAtom(displayQrCodeAtom);
 
 	const messages = useAtomValue(messagesAtom);
+
+	const url = useAtomValue(urlAtom);
+
+	const [currentUrl, setCurrentUrl] = useState(url);
 
 	useEffect(() => {
 		const detailsElement = detailsRef.current;
@@ -30,12 +36,46 @@ export function QRCodeView() {
 		};
 	}, [setDisplayQrCode]);
 
+	useEffect(() => {
+		const timeoutId = setTimeout(async () => {
+			try {
+				const dataUrl = await (await QRCode).toDataURL(url.toString(), {
+					errorCorrectionLevel: "low",
+				});
+
+				setQrCode(dataUrl);
+				setCurrentUrl(url);
+			} catch {
+				// The URL is too long to be represented by a single QR code
+				// (see
+				// https://en.wikipedia.org/wiki/QR_code#Information_capacity).
+
+				setQrCode(null);
+			}
+		}, 300);
+
+		return () => {
+			clearTimeout(timeoutId);
+		};
+	}, [url]);
+
+	const waitingForUpdate = url !== currentUrl;
+
 	return (
-		<div className="qr-code">
+		<div
+			className={["qr-code", waitingForUpdate ? "busy" : ""]
+				.filter((className) => className.length > 0)
+				.join(" ")}
+		>
 			{qrCode && (
 				<details ref={detailsRef} open={displayQrCode ? true : undefined}>
 					<summary>{messages.qr_code_view_summary}</summary>
-					<img src={qrCode} alt={messages.qr_code_img_alt} />
+
+					<img
+						src={qrCode}
+						alt={messages.qr_code_img_alt}
+						aria-busy={waitingForUpdate}
+					/>
 				</details>
 			)}
 		</div>
