@@ -27,7 +27,9 @@ export function InputArea() {
 	};
 
 	const handleBlur = () => {
-		setStatus("viewing");
+		setTimeout(() => {
+			setStatus("viewing");
+		}, 300);
 	};
 
 	const noteInputId = useId();
