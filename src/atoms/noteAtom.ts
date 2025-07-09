@@ -1,5 +1,6 @@
 import { atom } from "jotai";
 import { v4 as uuidv4 } from "uuid";
+import { notesAppSavedNote } from "../constants";
 
 export interface Note {
 	id: string;
@@ -28,7 +29,7 @@ function getInitialNote(): Note {
 			console.error("Error decoding URL fragment on initial load:", error);
 		}
 	} else {
-		const savedNote = localStorage.getItem("notesAppSavedNote");
+		const savedNote = localStorage.getItem(notesAppSavedNote);
 
 		if (savedNote) {
 			const parsedSavedNote = JSON.parse(savedNote);

@@ -1,4 +1,5 @@
 import { atomWithStorage } from "jotai/utils";
+import { notesAppLocale } from "../constants";
 import { messagesByLocale } from "./messagesAtom";
 
 export type Locale =
@@ -29,4 +30,7 @@ const getinitialLocale = () => {
 	return "en" as Locale;
 };
 
-export const localeAtom = atomWithStorage<Locale>("locale", getinitialLocale());
+export const localeAtom = atomWithStorage<Locale>(
+	notesAppLocale,
+	getinitialLocale(),
+);
