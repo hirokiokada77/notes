@@ -85,10 +85,10 @@ export function Toast() {
 		<div
 			className={[
 				"toast",
-				showToast && !toastIsHiding ? "show" : "",
-				toastIsHiding ? "hide" : "",
+				showToast && !toastIsHiding ? "show" : [],
+				toastIsHiding ? "hide" : [],
 			]
-				.filter((className) => className.length > 0)
+				.flat()
 				.join(" ")}
 			role="status"
 			aria-live={showToast && !toastIsHiding ? "polite" : "off"}

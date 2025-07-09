@@ -63,9 +63,7 @@ export function QRCodeView() {
 
 	return (
 		<div
-			className={["qr-code", waitingForUpdate ? "busy" : ""]
-				.filter((className) => className.length > 0)
-				.join(" ")}
+			className={["qr-code", waitingForUpdate ? "busy" : []].flat().join(" ")}
 		>
 			{qrCode && (
 				<details ref={detailsRef} open={displayQrCode ? true : undefined}>
