@@ -1,5 +1,6 @@
 import "./InputArea.css";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import type { MouseEvent } from "react";
 import { type ChangeEvent, useId } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -48,6 +49,20 @@ export function InputArea() {
 
 	const noteInputId = useId();
 
+	const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+		const target = event.target as HTMLElement;
+
+		if (target.tagName === "A" && target.hasAttribute("href")) {
+			event.preventDefault();
+
+			const href = target.getAttribute("href");
+
+			if (href) {
+				window.open(href, "_blank", "noopener,noreferrer");
+			}
+		}
+	};
+
 	return (
 		<div className="input-area">
 			<label htmlFor={noteInputId} className="sr-only">
@@ -66,7 +81,9 @@ export function InputArea() {
 				aria-label={messages.textarea_placeholder}
 			/>
 
-			<div className="note-preview" aria-live="polite">
+			{/** biome-ignore lint/a11y/noStaticElementInteractions: expected behavior */}
+			{/** biome-ignore lint/a11y/useKeyWithClickEvents: expected behavior */}
+			<div className="note-preview" onClick={handleClick} aria-live="polite">
 				<div className="note-preview-container">
 					<ReactMarkdown
 						disallowedElements={["img"]}
