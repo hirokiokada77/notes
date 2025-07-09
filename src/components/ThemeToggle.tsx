@@ -1,7 +1,6 @@
 import { useAtom, useAtomValue } from "jotai";
 import { useId } from "react";
-import { messagesAtom } from "../atoms/messagesAtom";
-import { themeAtom } from "../atoms/themeAtom";
+import { messagesAtom, themeAtom } from "../atoms";
 
 export function ThemeToggle() {
 	const [theme, setTheme] = useAtom(themeAtom);

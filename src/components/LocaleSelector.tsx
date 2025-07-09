@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai";
 import { type ChangeEvent, useId } from "react";
-import { type Locale, localeAtom } from "../atoms/localeAtom";
-import { messagesAtom } from "../atoms/messagesAtom";
+import { localeAtom, messagesAtom } from "../atoms";
+import type { Locale } from "../utils";
 
 export function LocaleSelector() {
 	const [locale, setLocale] = useAtom(localeAtom);

@@ -1,11 +1,13 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
-import { localeAtom } from "./atoms/localeAtom";
-import { messagesAtom } from "./atoms/messagesAtom";
-import { createNewNote, noteAtom } from "./atoms/noteAtom";
-import { savedNoteAtom } from "./atoms/savedNoteAtom";
-import { themeAtom } from "./atoms/themeAtom";
-import { urlAtom } from "./atoms/urlAtom";
+import {
+	localeAtom,
+	messagesAtom,
+	noteAtom,
+	savedNoteAtom,
+	themeAtom,
+	urlAtom,
+} from "./atoms";
 import { ButtonGroup } from "./components/ButtonGroup";
 import { Header } from "./components/Header";
 import { InfoBox } from "./components/InfoBox";
@@ -13,6 +15,7 @@ import { InputArea } from "./components/InputArea";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { StatusView } from "./components/StatusView";
 import { Toast } from "./components/Toast";
+import { createNewNote } from "./utils";
 
 export function App() {
 	const locale = useAtomValue(localeAtom);

@@ -1,7 +1,8 @@
 import "./Toast.css";
 import { useAtomValue } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { type MessageKeys, messagesAtom } from "../atoms/messagesAtom";
+import { messagesAtom } from "../atoms";
+import type { MessageKeys } from "../utils";
 
 export function Toast() {
 	const messages = useAtomValue(messagesAtom);

@@ -1,9 +1,7 @@
 import "./StatusView.css";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
-import { noteAtom } from "../atoms/noteAtom";
-import { savedNoteAtom } from "../atoms/savedNoteAtom";
-import { statusAtom } from "../atoms/statusAtom";
+import { noteAtom, savedNoteAtom, statusAtom } from "../atoms";
 import { formatTimeAgo } from "../utils";
 
 export function StatusView() {

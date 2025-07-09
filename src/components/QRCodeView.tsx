@@ -1,9 +1,7 @@
 import "./QRCodeView.css";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { displayQrCodeAtom } from "../atoms/displayQrCodeAtom";
-import { messagesAtom } from "../atoms/messagesAtom";
-import { urlAtom } from "../atoms/urlAtom";
+import { displayQrCodeAtom, messagesAtom, urlAtom } from "../atoms";
 
 const QRCode = import("qrcode");
 

@@ -1,7 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { messagesAtom } from "../atoms/messagesAtom";
-import { createNewNote, noteAtom } from "../atoms/noteAtom";
-import { savedNoteAtom } from "../atoms/savedNoteAtom";
+import { messagesAtom, noteAtom, savedNoteAtom } from "../atoms";
+import { createNewNote } from "../utils";
 
 export function ButtonGroup() {
 	const messages = useAtomValue(messagesAtom);

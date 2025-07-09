@@ -1,7 +1,6 @@
 import { useAtomValue } from "jotai";
 import { useId, useRef } from "react";
-import { messagesAtom } from "../atoms/messagesAtom";
-import { urlAtom } from "../atoms/urlAtom";
+import { messagesAtom, urlAtom } from "../atoms";
 import { QRCodeView } from "./QRCodeView";
 
 export function InfoBox() {

@@ -3,9 +3,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { type ChangeEvent, useId } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { messagesAtom } from "../atoms/messagesAtom";
-import { noteAtom } from "../atoms/noteAtom";
-import { statusAtom } from "../atoms/statusAtom";
+import { messagesAtom, noteAtom, statusAtom } from "../atoms";
 
 const prettier = import("prettier");
 const prettierPluginMarkdown = import("prettier/plugins/markdown");

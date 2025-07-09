@@ -1,3 +1,16 @@
+import { v4 as uuidv4 } from "uuid";
+import { notesAppSavedNote } from "./constants";
+import de from "./locales/de.json";
+import en from "./locales/en.json";
+import es from "./locales/es.json";
+import fr from "./locales/fr.json";
+import it from "./locales/it.json";
+import ja from "./locales/ja.json";
+import ko from "./locales/ko.json";
+import pt from "./locales/pt.json";
+import ru from "./locales/ru.json";
+import zh from "./locales/zh.json";
+
 export function formatTimeAgo(unixMilliseconds: number) {
 	const now = Date.now();
 	const seconds = Math.floor((now - unixMilliseconds) / 1000);
@@ -32,3 +45,118 @@ export function formatTimeAgo(unixMilliseconds: number) {
 		return `${years} year${years === 1 ? "" : "s"} ago`;
 	}
 }
+
+export type Locale =
+	| "de"
+	| "en"
+	| "es"
+	| "fr"
+	| "it"
+	| "ja"
+	| "ko"
+	| "pt"
+	| "ru"
+	| "zh";
+
+export const messagesByLocale: { [K in Locale]: Messages } = {
+	de,
+	en,
+	es,
+	fr,
+	it,
+	ja,
+	ko,
+	pt,
+	ru,
+	zh,
+};
+
+const supportedLocales = Object.keys(messagesByLocale) as Locale[];
+
+export function getInitialLocale() {
+	const browserLocale = navigator.language.split("-")[0];
+
+	if ((supportedLocales as string[]).includes(browserLocale)) {
+		return browserLocale as Locale;
+	}
+
+	if (browserLocale === "zh" && (supportedLocales as string[]).includes("zh")) {
+		return "zh" as Locale;
+	}
+
+	return "en" as Locale;
+}
+
+export type { MessageKeys } from "./global";
+
+export interface Messages {
+	app_name: string;
+	app_description: string;
+	textarea_placeholder: string;
+	current_url_label: string;
+	copy_button: string;
+	copy_success: string;
+	copy_fail: string;
+	share_instruction: string;
+	locale_selector_label: string;
+	dark_mode_label: string;
+	save_button: string;
+	save_success: string;
+	note_loaded_from_browser: string;
+	save_fail: string;
+	clear_button: string;
+	clear_confirm: string;
+	clear_success: string;
+	clear_fail: string;
+	view_button: string;
+	edit_button: string;
+	qr_code_view_summary: string;
+	qr_code_img_alt: string;
+}
+
+export interface Note {
+	id: string;
+	text: string;
+	dateCreated: number;
+	dateLastModified: number;
+}
+
+export function createNewNote(): Note {
+	return {
+		id: uuidv4(),
+		text: "",
+		dateCreated: Date.now(),
+		dateLastModified: Date.now(),
+	};
+}
+
+export function getInitialNote(): Note {
+	const fragment = window.location.hash.substring(1);
+	let note: Note = createNewNote();
+
+	if (fragment) {
+		try {
+			note = JSON.parse(decodeURIComponent(fragment));
+		} catch (error) {
+			console.error("Error decoding URL fragment on initial load:", error);
+		}
+	} else {
+		const savedNote = localStorage.getItem(notesAppSavedNote);
+
+		if (savedNote) {
+			const parsedSavedNote = JSON.parse(savedNote);
+
+			if (parsedSavedNote) {
+				setTimeout(() => {
+					globalThis.registerToastMessage("note_loaded_from_browser");
+				}, 100);
+
+				note = JSON.parse(decodeURIComponent(savedNote));
+			}
+		}
+	}
+
+	return note;
+}
+
+export type Status = "viewing" | "editing";
