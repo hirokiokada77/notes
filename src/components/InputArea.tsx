@@ -2,9 +2,8 @@ import "./InputArea.css";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type { MouseEvent } from "react";
 import { type ChangeEvent, useId } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { messagesAtom, noteAtom, statusAtom } from "../atoms";
+import { NotePreview } from "./NotePreview";
 
 const prettier = import("prettier");
 const prettierPluginMarkdown = import("prettier/plugins/markdown");
@@ -85,12 +84,7 @@ export function InputArea() {
 			{/** biome-ignore lint/a11y/useKeyWithClickEvents: expected behavior */}
 			<div className="note-preview" onClick={handleClick} aria-live="polite">
 				<div className="note-preview-container">
-					<ReactMarkdown
-						disallowedElements={["img"]}
-						remarkPlugins={[remarkGfm]}
-					>
-						{note.text}
-					</ReactMarkdown>
+					<NotePreview />
 				</div>
 			</div>
 		</div>

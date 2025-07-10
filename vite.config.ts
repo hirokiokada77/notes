@@ -14,7 +14,6 @@ export default defineConfig({
 		react(),
 		VitePWA({
 			registerType: "autoUpdate",
-			injectRegister: null,
 			workbox: {
 				globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,json}"],
 			},
@@ -116,11 +115,11 @@ export default defineConfig({
 						`<meta http-equiv="Content-Security-Policy" content="` +
 							[
 								["default-src", ["'none'"]],
+								["font-src", ["'self'", "data:"]],
 								["img-src", ["'self'", "data:"]],
 								["manifest-src", ["'self'"]],
-								["require-trusted-types-for", ["'script'"]],
-								["trusted-types", ["app-service-worker-policy"]],
 								["script-src-elem", ["'self'"]],
+								["style-src-attr", ["'unsafe-inline'"]],
 								["style-src-elem", ["'self'"]],
 								["worker-src", ["'self'"]],
 							]
