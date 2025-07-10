@@ -63,17 +63,20 @@ export function QRCodeView() {
 		<div
 			className={["qr-code", waitingForUpdate ? "busy" : []].flat().join(" ")}
 		>
-			{qrCode && (
-				<details ref={detailsRef} open={displayQrCode ? true : undefined}>
-					<summary>{messages.qr_code_view_summary}</summary>
+			<details
+				ref={detailsRef}
+				open={displayQrCode ? true : undefined}
+				hidden={!qrCode}
+				aria-hidden={!qrCode}
+			>
+				<summary>{messages.qr_code_view_summary}</summary>
 
-					<img
-						src={qrCode}
-						alt={messages.qr_code_img_alt}
-						aria-busy={waitingForUpdate}
-					/>
-				</details>
-			)}
+				<img
+					src={qrCode ?? undefined}
+					alt={messages.qr_code_img_alt}
+					aria-busy={waitingForUpdate}
+				/>
+			</details>
 		</div>
 	);
 }
