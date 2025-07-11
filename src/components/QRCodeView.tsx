@@ -6,7 +6,10 @@ import { displayQrCodeAtom, messagesAtom, urlAtom } from "../atoms";
 const QRCode = import("qrcode");
 
 export function QRCodeView() {
-	const [qrCode, setQrCode] = useState<string | null>(null);
+	const [qrCode, setQrCode] = useState<{
+		version: number;
+		content: string;
+	} | null>(null);
 
 	const detailsRef = useRef<HTMLDetailsElement>(null);
 
@@ -34,23 +37,33 @@ export function QRCodeView() {
 		};
 	}, [setDisplayQrCode]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
 	useEffect(() => {
-		const timeoutId = setTimeout(async () => {
-			try {
-				const dataUrl = await (await QRCode).toDataURL(url.toString(), {
-					errorCorrectionLevel: "low",
-				});
+		const nextQrCodeVersion = qrCode ? qrCode?.version + 1 : 1;
+		const initialLoad = nextQrCodeVersion === 1;
 
-				setQrCode(dataUrl);
-				setCurrentUrl(url);
-			} catch {
-				// The URL is too long to be represented by a single QR code
-				// (see
-				// https://en.wikipedia.org/wiki/QR_code#Information_capacity).
+		const timeoutId = setTimeout(
+			async () => {
+				try {
+					const dataUrl = await (await QRCode).toDataURL(url.toString(), {
+						errorCorrectionLevel: "low",
+					});
 
-				setQrCode(null);
-			}
-		}, 300);
+					setQrCode({
+						version: nextQrCodeVersion,
+						content: dataUrl,
+					});
+					setCurrentUrl(url);
+				} catch {
+					// The URL is too long to be represented by a single
+					// QR code (see
+					// https://en.wikipedia.org/wiki/QR_code#Information_capacity).
+
+					setQrCode(null);
+				}
+			},
+			initialLoad ? 0 : 300,
+		);
 
 		return () => {
 			clearTimeout(timeoutId);
@@ -72,7 +85,7 @@ export function QRCodeView() {
 				<summary>{messages.qr_code_view_summary}</summary>
 
 				<img
-					src={qrCode ?? undefined}
+					src={qrCode?.content}
 					alt={messages.qr_code_img_alt}
 					aria-busy={waitingForUpdate}
 				/>
