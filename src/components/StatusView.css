@@ -6,6 +6,11 @@
 	font-size: 0.8em;
 }
 
+.status:not(:has(*:focus)).hide {
+	height: 0;
+	overflow: hidden;
+}
+
 .status-list {
 	margin: 0;
 	padding: 10px;

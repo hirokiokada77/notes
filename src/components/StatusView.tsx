@@ -1,11 +1,11 @@
 import "./StatusView.css";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { noteAtom, savedNoteAtom, statusAtom } from "../atoms";
 import { formatTimeAgo } from "../utils";
 
 export function StatusView() {
-	const note = useAtomValue(noteAtom);
+	const [note, setNote] = useAtom(noteAtom);
 
 	const savedNote = useAtomValue(savedNoteAtom);
 
@@ -23,23 +23,51 @@ export function StatusView() {
 		return () => clearInterval(intervalId);
 	}, []);
 
+	const restoreNoteFromBrowser = () => {
+		if (savedNote) {
+			setNote(savedNote);
+
+			globalThis.registerToastMessage("note_loaded_from_browser");
+		}
+	};
+
 	return (
-		shouldDisplayStatus && (
-			<div className="status">
-				<ul className="status-list">
-					<li>{formatTimeAgo(note.dateLastModified)}</li>
+		<div
+			className={["status", shouldDisplayStatus ? [] : "hide"].flat().join(" ")}
+		>
+			<ul className="status-list">
+				<li>{formatTimeAgo(note.dateLastModified)}</li>
 
-					{savedNote && note.id === savedNote.id && (
-						<>
-							{note.text !== savedNote.text && (
-								<li>You have unsaved changes</li>
-							)}
+				{savedNote && note.id === savedNote.id && (
+					<>
+						{note.text === savedNote.text && <li>Saved to browser</li>}
 
-							{note.text === savedNote.text && <li>Saved to browser</li>}
-						</>
-					)}
-				</ul>
-			</div>
-		)
+						{note.text !== savedNote.text && (
+							<>
+								{note.dateLastModified >= savedNote.dateLastModified && (
+									<li>You have unsaved changes</li>
+								)}
+
+								{note.dateLastModified < savedNote.dateLastModified && (
+									<>
+										<li>A newer version of your note is in your browser</li>
+
+										<li>
+											<button
+												type="button"
+												className="text-button"
+												onClick={restoreNoteFromBrowser}
+											>
+												Restore
+											</button>
+										</li>
+									</>
+								)}
+							</>
+						)}
+					</>
+				)}
+			</ul>
+		</div>
 	);
 }

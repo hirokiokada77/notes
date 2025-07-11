@@ -69,6 +69,22 @@ body {
 	overflow-wrap: break-word;
 }
 
+button {
+	padding: 0;
+	border: 0;
+	background: inherit;
+	color: inherit;
+}
+
+.text-button {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.text-button:hover {
+	text-decoration: none;
+}
+
 summary {
 	cursor: pointer;
 }
