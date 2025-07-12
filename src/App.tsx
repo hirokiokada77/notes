@@ -4,6 +4,7 @@ import {
 	localeAtom,
 	messagesAtom,
 	noteAtom,
+	rerenderAtom,
 	savedNoteAtom,
 	themeAtom,
 	urlAtom,
@@ -29,6 +30,8 @@ export function App() {
 	const [note, setNote] = useAtom(noteAtom);
 
 	const savedNote = useAtomValue(savedNoteAtom);
+
+	const setRerender = useSetAtom(rerenderAtom);
 
 	useEffect(() => {
 		const firstLine = (note.text ?? "").split("\n")[0].trim();
@@ -113,6 +116,28 @@ export function App() {
 			window.removeEventListener("beforeunload", listener);
 		};
 	}, [note, savedNote]);
+
+	useEffect(() => {
+		const listener = () => {
+			if (document.visibilityState === "visible") {
+				setRerender(Date.now());
+			}
+		};
+
+		document.addEventListener("visibilitychange", listener);
+
+		return () => {
+			document.removeEventListener("visibilitychange", listener);
+		};
+	}, [setRerender]);
+
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			setRerender(Date.now());
+		}, 60000);
+
+		return () => clearInterval(intervalId);
+	}, [setRerender]);
 
 	return (
 		<div className="main">

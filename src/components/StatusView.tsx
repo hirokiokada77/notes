@@ -1,7 +1,6 @@
 import "./StatusView.css";
 import { useAtom, useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
-import { noteAtom, savedNoteAtom, statusAtom } from "../atoms";
+import { noteAtom, rerenderAtom, savedNoteAtom, statusAtom } from "../atoms";
 import { formatTimeAgo } from "../utils";
 
 export function StatusView() {
@@ -9,19 +8,11 @@ export function StatusView() {
 
 	const savedNote = useAtomValue(savedNoteAtom);
 
-	const [_, setLastRenderTime] = useState(Date.now());
-
 	const status = useAtomValue(statusAtom);
 
 	const shouldDisplayStatus = status !== "editing" && note.text.length > 0;
 
-	useEffect(() => {
-		const intervalId = setInterval(() => {
-			setLastRenderTime(Date.now()); // Force rerender
-		}, 60000);
-
-		return () => clearInterval(intervalId);
-	}, []);
+	useAtomValue(rerenderAtom);
 
 	const restoreNoteFromBrowser = () => {
 		if (savedNote) {

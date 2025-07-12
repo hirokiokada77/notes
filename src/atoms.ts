@@ -30,6 +30,8 @@ export const messagesAtom = atom((get) => {
 
 export const noteAtom = atom<Note>(getInitialNote());
 
+export const rerenderAtom = atom(0);
+
 export const savedNoteAtom = atomWithStorage<Note | null>(
 	notesAppSavedNote,
 	null,
