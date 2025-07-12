@@ -1,10 +1,18 @@
 import "./StatusView.css";
-import { useAtom, useAtomValue } from "jotai";
-import { noteAtom, rerenderAtom, savedNoteAtom, statusAtom } from "../atoms";
-import { formatTimeAgo } from "../utils";
+import { useAtomValue, useSetAtom } from "jotai";
+import {
+	noteAtom,
+	noteFormattedLastUpdatedAtom,
+	rerenderAtom,
+	restoreSavedNoteAtom,
+	savedNoteAtom,
+	statusAtom,
+} from "../atoms";
 
 export function StatusView() {
-	const [note, setNote] = useAtom(noteAtom);
+	const note = useAtomValue(noteAtom);
+	const noteFormattedLastUpdated = useAtomValue(noteFormattedLastUpdatedAtom);
+	const restoreSavedNote = useSetAtom(restoreSavedNoteAtom);
 
 	const savedNote = useAtomValue(savedNoteAtom);
 
@@ -17,7 +25,7 @@ export function StatusView() {
 
 	const restoreNoteFromBrowser = () => {
 		if (savedNote) {
-			setNote(savedNote);
+			restoreSavedNote();
 
 			globalThis.registerToastMessage("note_loaded_from_browser");
 		}
@@ -30,7 +38,7 @@ export function StatusView() {
 			<ul className="status-list">
 				{note && (
 					<>
-						<li>{formatTimeAgo(note.lastUpdated)}</li>
+						<li>{noteFormattedLastUpdated}</li>
 
 						{savedNote && note.id === savedNote.id && (
 							<>

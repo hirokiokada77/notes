@@ -1,13 +1,15 @@
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import {
+	documentTitleAtom,
+	forceRerenderAtom,
 	localeAtom,
 	messagesAtom,
 	noteAtom,
-	rerenderAtom,
+	restoreNoteFromHashAtom,
 	savedNoteAtom,
 	themeAtom,
-	urlAtom,
+	updateUrlAtom,
 } from "./atoms";
 import { ButtonGroup } from "./components/ButtonGroup";
 import { Header } from "./components/Header";
@@ -24,28 +26,20 @@ export function App() {
 
 	const theme = useAtomValue(themeAtom);
 
-	const setUrl = useSetAtom(urlAtom);
+	const updateUrl = useSetAtom(updateUrlAtom);
 
-	const [note, setNote] = useAtom(noteAtom);
+	const note = useAtomValue(noteAtom);
+	const restoreNoteFromHash = useSetAtom(restoreNoteFromHashAtom);
 
 	const savedNote = useAtomValue(savedNoteAtom);
 
-	const setRerender = useSetAtom(rerenderAtom);
+	const forceRerender = useSetAtom(forceRerenderAtom);
+
+	const documentTitle = useAtomValue(documentTitleAtom);
 
 	useEffect(() => {
-		const firstLine = (note?.text ?? "").split("\n")[0].trim();
-		const maxTitleLength = 140;
-		let newTitle = messages.app_name;
-
-		if (firstLine) {
-			const truncatedTitle =
-				firstLine.length > maxTitleLength
-					? `${firstLine.substring(0, maxTitleLength)}...`
-					: firstLine;
-			newTitle = `${messages.app_name} – ${truncatedTitle}`;
-		}
-		document.title = newTitle;
-	}, [note, messages.app_name]);
+		document.title = documentTitle;
+	}, [documentTitle]);
 
 	useEffect(() => {
 		const description = document.querySelector("meta[name=description]");
@@ -66,28 +60,24 @@ export function App() {
 
 	useEffect(() => {
 		const listener = () => {
-			setUrl(new URL(location.href));
+			updateUrl(location.href);
 		};
 
 		window.addEventListener("hashchange", listener);
 
 		return () => window.removeEventListener("hashchange", listener);
-	}, [setUrl]);
+	}, [updateUrl]);
 
 	useEffect(() => {
 		const updateTextFromHashChange = () => {
-			const fragment = window.location.hash.substring(1);
-			try {
-				setNote(JSON.parse(decodeURIComponent(fragment)));
-			} catch {
-				setNote(null);
-			}
+			restoreNoteFromHash(location.hash);
 		};
 
 		window.addEventListener("hashchange", updateTextFromHashChange);
+
 		return () =>
 			window.removeEventListener("hashchange", updateTextFromHashChange);
-	}, [setNote]);
+	}, [restoreNoteFromHash]);
 
 	useEffect(() => {
 		if (note) {
@@ -123,7 +113,7 @@ export function App() {
 	useEffect(() => {
 		const listener = () => {
 			if (document.visibilityState === "visible") {
-				setRerender(Date.now());
+				forceRerender();
 			}
 		};
 
@@ -132,15 +122,15 @@ export function App() {
 		return () => {
 			document.removeEventListener("visibilitychange", listener);
 		};
-	}, [setRerender]);
+	}, [forceRerender]);
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
-			setRerender(Date.now());
+			forceRerender();
 		}, 60000);
 
 		return () => clearInterval(intervalId);
-	}, [setRerender]);
+	}, [forceRerender]);
 
 	return (
 		<div className="main">

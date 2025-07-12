@@ -7,6 +7,8 @@ import {
 	notesAppTheme,
 } from "./constants";
 import {
+	createNewNote,
+	formatTimeAgo,
 	getInitialLocale,
 	getInitialNote,
 	type Locale,
@@ -28,14 +30,78 @@ export const messagesAtom = atom((get) => {
 	return messagesByLocale[locale];
 });
 
-export const noteAtom = atom<Note | null>(getInitialNote());
+const _noteAtom = atom<Note | null>(getInitialNote());
 
-export const rerenderAtom = atom(0);
+export const noteAtom = atom((get) => get(_noteAtom));
 
-export const savedNoteAtom = atomWithStorage<Note | null>(
-	notesAppSavedNote,
-	null,
-);
+export const noteFormattedLastUpdatedAtom = atom((get) => {
+	const note = get(noteAtom);
+
+	if (note) {
+		return formatTimeAgo(note.lastUpdated);
+	}
+
+	return null;
+});
+
+export const clearNoteAtom = atom(null, (_get, set) => {
+	set(_noteAtom, null);
+});
+
+export const restoreNoteFromHashAtom = atom(null, (_get, set, hash: string) => {
+	const fragment = hash.substring(1);
+
+	try {
+		set(_noteAtom, JSON.parse(decodeURIComponent(fragment)));
+	} catch {
+		set(clearNoteAtom);
+	}
+});
+
+export const updateNoteTextAtom = atom(null, (get, set, newText: string) => {
+	const currentNote = get(noteAtom);
+
+	if (currentNote) {
+		set(_noteAtom, {
+			...currentNote,
+			text: newText,
+			lastUpdated: Date.now(),
+		});
+	} else {
+		set(_noteAtom, {
+			...createNewNote(),
+			text: newText,
+		});
+	}
+});
+
+export const restoreSavedNoteAtom = atom(null, (get, set) => {
+	const savedNote = get(savedNoteAtom);
+
+	set(_noteAtom, savedNote);
+});
+
+const _rerenderAtom = atom(0);
+
+export const rerenderAtom = atom((get) => get(_rerenderAtom));
+
+export const forceRerenderAtom = atom(null, (_get, set) => {
+	set(_rerenderAtom, Date.now());
+});
+
+const _savedNoteAtom = atomWithStorage<Note | null>(notesAppSavedNote, null);
+
+export const savedNoteAtom = atom((get) => get(_savedNoteAtom));
+
+export const clearSavedNoteAtom = atom(null, (_get, set) => {
+	set(_savedNoteAtom, null);
+});
+
+export const syncSavedNoteAtom = atom(null, (get, set) => {
+	const note = get(noteAtom);
+
+	set(_savedNoteAtom, note);
+});
 
 export const statusAtom = atom<Status>("viewing");
 
@@ -44,4 +110,28 @@ export const themeAtom = atomWithStorage<"light" | "dark">(
 	window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
 );
 
-export const urlAtom = atom(new URL(location.href));
+const _urlAtom = atom(new URL(location.href));
+
+export const urlAtom = atom((get) => get(_urlAtom));
+
+export const updateUrlAtom = atom(null, (_get, set, newUrl: string) =>
+	set(_urlAtom, new URL(newUrl)),
+);
+
+export const documentTitleAtom = atom((get) => {
+	const messages = get(messagesAtom);
+	const note = get(noteAtom);
+
+	const noteFirstLine = (note?.text ?? "").split("\n")[0].trim();
+	const maxTitleLength = 140;
+
+	if (noteFirstLine) {
+		const truncatedTitle =
+			noteFirstLine.length > maxTitleLength
+				? `${noteFirstLine.substring(0, maxTitleLength)}...`
+				: noteFirstLine;
+		return `${messages.app_name} – ${truncatedTitle}`;
+	}
+
+	return messages.app_name;
+});

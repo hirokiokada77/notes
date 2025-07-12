@@ -1,9 +1,13 @@
 import "./InputArea.css";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import type { MouseEvent } from "react";
 import { type ChangeEvent, useId } from "react";
-import { messagesAtom, noteAtom, statusAtom } from "../atoms";
-import { createNewNote } from "../utils";
+import {
+	messagesAtom,
+	noteAtom,
+	statusAtom,
+	updateNoteTextAtom,
+} from "../atoms";
 import { NotePreview } from "./NotePreview";
 
 const prettier = import("prettier");
@@ -12,25 +16,15 @@ const prettierPluginMarkdown = import("prettier/plugins/markdown");
 export function InputArea() {
 	const messages = useAtomValue(messagesAtom);
 
-	const [note, setNote] = useAtom(noteAtom);
+	const note = useAtomValue(noteAtom);
+	const updateNoteText = useSetAtom(updateNoteTextAtom);
 
 	const setStatus = useSetAtom(statusAtom);
 
 	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-		const text = event.target.value;
+		const newText = event.target.value;
 
-		if (note) {
-			setNote({
-				...note,
-				text,
-				lastUpdated: Date.now(),
-			});
-		} else {
-			setNote({
-				...createNewNote(),
-				text,
-			});
-		}
+		updateNoteText(newText);
 	};
 
 	const handleFocus = () => {
@@ -49,11 +43,7 @@ export function InputArea() {
 			});
 
 			if (note.text !== formattedText) {
-				setNote({
-					...note,
-					text: formattedText,
-					lastUpdated: Date.now(),
-				});
+				updateNoteText(formattedText);
 			}
 		}
 	};
