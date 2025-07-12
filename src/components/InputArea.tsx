@@ -23,7 +23,7 @@ export function InputArea() {
 			setNote({
 				...note,
 				text,
-				dateLastModified: Date.now(),
+				lastUpdated: Date.now(),
 			});
 		} else {
 			setNote({
@@ -52,7 +52,7 @@ export function InputArea() {
 				setNote({
 					...note,
 					text: formattedText,
-					dateLastModified: Date.now(),
+					lastUpdated: Date.now(),
 				});
 			}
 		}

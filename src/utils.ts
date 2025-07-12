@@ -117,16 +117,16 @@ export interface Messages {
 export interface Note {
 	id: string;
 	text: string;
-	dateCreated: number;
-	dateLastModified: number;
+	created: number;
+	lastUpdated: number;
 }
 
 export function createNewNote(): Note {
 	return {
 		id: uuidv4(),
 		text: "",
-		dateCreated: Date.now(),
-		dateLastModified: Date.now(),
+		created: Date.now(),
+		lastUpdated: Date.now(),
 	};
 }
 

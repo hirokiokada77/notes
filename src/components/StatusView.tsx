@@ -30,7 +30,7 @@ export function StatusView() {
 			<ul className="status-list">
 				{note && (
 					<>
-						<li>{formatTimeAgo(note.dateLastModified)}</li>
+						<li>{formatTimeAgo(note.lastUpdated)}</li>
 
 						{savedNote && note.id === savedNote.id && (
 							<>
@@ -38,11 +38,11 @@ export function StatusView() {
 
 								{note.text !== savedNote.text && (
 									<>
-										{note.dateLastModified >= savedNote.dateLastModified && (
+										{note.lastUpdated >= savedNote.lastUpdated && (
 											<li>You have unsaved changes</li>
 										)}
 
-										{note.dateLastModified < savedNote.dateLastModified && (
+										{note.lastUpdated < savedNote.lastUpdated && (
 											<>
 												<li>A newer version of your note is in your browser</li>
 
