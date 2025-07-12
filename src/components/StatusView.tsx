@@ -10,7 +10,8 @@ export function StatusView() {
 
 	const status = useAtomValue(statusAtom);
 
-	const shouldDisplayStatus = status !== "editing" && note.text.length > 0;
+	const shouldDisplayStatus =
+		status !== "editing" && note && note.text.length > 0;
 
 	useAtomValue(rerenderAtom);
 
@@ -27,31 +28,35 @@ export function StatusView() {
 			className={["status", shouldDisplayStatus ? [] : "hide"].flat().join(" ")}
 		>
 			<ul className="status-list">
-				<li>{formatTimeAgo(note.dateLastModified)}</li>
-
-				{savedNote && note.id === savedNote.id && (
+				{note && (
 					<>
-						{note.text === savedNote.text && <li>Saved to browser</li>}
+						<li>{formatTimeAgo(note.dateLastModified)}</li>
 
-						{note.text !== savedNote.text && (
+						{savedNote && note.id === savedNote.id && (
 							<>
-								{note.dateLastModified >= savedNote.dateLastModified && (
-									<li>You have unsaved changes</li>
-								)}
+								{note.text === savedNote.text && <li>Saved to browser</li>}
 
-								{note.dateLastModified < savedNote.dateLastModified && (
+								{note.text !== savedNote.text && (
 									<>
-										<li>A newer version of your note is in your browser</li>
+										{note.dateLastModified >= savedNote.dateLastModified && (
+											<li>You have unsaved changes</li>
+										)}
 
-										<li>
-											<button
-												type="button"
-												className="text-button"
-												onClick={restoreNoteFromBrowser}
-											>
-												Restore
-											</button>
-										</li>
+										{note.dateLastModified < savedNote.dateLastModified && (
+											<>
+												<li>A newer version of your note is in your browser</li>
+
+												<li>
+													<button
+														type="button"
+														className="text-button"
+														onClick={restoreNoteFromBrowser}
+													>
+														Restore
+													</button>
+												</li>
+											</>
+										)}
 									</>
 								)}
 							</>

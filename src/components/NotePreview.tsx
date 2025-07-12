@@ -30,7 +30,7 @@ export function NotePreview() {
 			remarkPlugins={[remarkGfm, remarkMath]}
 			{...plugins}
 		>
-			{note.text}
+			{note?.text}
 		</ReactMarkdown>
 	);
 }

@@ -16,7 +16,6 @@ import { InputArea } from "./components/InputArea";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { StatusView } from "./components/StatusView";
 import { Toast } from "./components/Toast";
-import { createNewNote } from "./utils";
 
 export function App() {
 	const locale = useAtomValue(localeAtom);
@@ -34,7 +33,7 @@ export function App() {
 	const setRerender = useSetAtom(rerenderAtom);
 
 	useEffect(() => {
-		const firstLine = (note.text ?? "").split("\n")[0].trim();
+		const firstLine = (note?.text ?? "").split("\n")[0].trim();
 		const maxTitleLength = 140;
 		let newTitle = messages.app_name;
 
@@ -80,9 +79,8 @@ export function App() {
 			const fragment = window.location.hash.substring(1);
 			try {
 				setNote(JSON.parse(decodeURIComponent(fragment)));
-			} catch (error) {
-				console.error("Error decoding URL fragment on hashchange:", error);
-				setNote(createNewNote());
+			} catch {
+				setNote(null);
 			}
 		};
 
@@ -92,16 +90,21 @@ export function App() {
 	}, [setNote]);
 
 	useEffect(() => {
-		const encodedNote = encodeURIComponent(JSON.stringify(note));
-		const newHash = encodedNote ? `#${encodedNote}` : "";
-		if (window.location.hash !== newHash) {
-			window.location.hash = newHash;
+		if (note) {
+			const encodedNote = encodeURIComponent(JSON.stringify(note));
+			const newHash = encodedNote ? `#${encodedNote}` : "";
+			if (window.location.hash !== newHash) {
+				window.location.hash = newHash;
+			}
+		} else {
+			window.location.hash = "";
 		}
 	}, [note]);
 
 	useEffect(() => {
 		const listener = (event: BeforeUnloadEvent) => {
 			if (
+				note &&
 				savedNote &&
 				note.id === savedNote.id &&
 				note.text !== savedNote.text

@@ -1,6 +1,5 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { messagesAtom, noteAtom, savedNoteAtom } from "../atoms";
-import { createNewNote } from "../utils";
 
 export function ButtonGroup() {
 	const messages = useAtomValue(messagesAtom);
@@ -24,7 +23,7 @@ export function ButtonGroup() {
 	const clearText = () => {
 		if (window.confirm(messages.clear_confirm)) {
 			try {
-				setNote(createNewNote());
+				setNote(null);
 				setSavedNote(null);
 
 				globalThis.registerToastMessage("clear_success");

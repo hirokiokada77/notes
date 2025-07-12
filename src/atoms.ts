@@ -28,7 +28,7 @@ export const messagesAtom = atom((get) => {
 	return messagesByLocale[locale];
 });
 
-export const noteAtom = atom<Note>(getInitialNote());
+export const noteAtom = atom<Note | null>(getInitialNote());
 
 export const rerenderAtom = atom(0);
 

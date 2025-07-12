@@ -130,9 +130,9 @@ export function createNewNote(): Note {
 	};
 }
 
-export function getInitialNote(): Note {
+export function getInitialNote(): Note | null {
 	const fragment = window.location.hash.substring(1);
-	let note: Note = createNewNote();
+	let note: Note | null = null;
 
 	if (fragment) {
 		try {
