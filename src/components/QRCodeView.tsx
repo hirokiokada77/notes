@@ -1,15 +1,16 @@
 import "./QRCodeView.css";
 import { useAtom, useAtomValue } from "jotai";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { displayQrCodeAtom, messagesAtom, urlAtom } from "../atoms";
 
 const QRCode = import("qrcode");
 
 export function QRCodeView() {
-	const [qrCode, setQrCode] = useState<{
-		version: number;
-		content: string;
-	} | null>(null);
+	const [qrCode, setQrCode] = useState<string | null>(null);
+
+	const [initialized, setInitialized] = useState(false);
+
+	const [isPending, startTransition] = useTransition();
 
 	const detailsRef = useRef<HTMLDetailsElement>(null);
 
@@ -18,8 +19,6 @@ export function QRCodeView() {
 	const messages = useAtomValue(messagesAtom);
 
 	const url = useAtomValue(urlAtom);
-
-	const [currentUrl, setCurrentUrl] = useState(url);
 
 	useEffect(() => {
 		const detailsElement = detailsRef.current;
@@ -37,58 +36,34 @@ export function QRCodeView() {
 		};
 	}, [setDisplayQrCode]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
 	useEffect(() => {
-		const nextQrCodeVersion = qrCode ? qrCode?.version + 1 : 1;
-		const initialLoad = nextQrCodeVersion === 1;
+		startTransition(async () => {
+			setInitialized(true);
 
-		const timeoutId = setTimeout(
-			async () => {
-				try {
-					const dataUrl = await (await QRCode).toDataURL(url.toString(), {
-						errorCorrectionLevel: "low",
-					});
+			try {
+				const dataUrl = await (await QRCode).toDataURL(url.toString(), {
+					errorCorrectionLevel: "low",
+				});
 
-					setQrCode({
-						version: nextQrCodeVersion,
-						content: dataUrl,
-					});
-					setCurrentUrl(url);
-				} catch {
-					// The URL is too long to be represented by a single
-					// QR code (see
-					// https://en.wikipedia.org/wiki/QR_code#Information_capacity).
-
-					setQrCode(null);
-				}
-			},
-			initialLoad ? 0 : 300,
-		);
-
-		return () => {
-			clearTimeout(timeoutId);
-		};
+				setQrCode(dataUrl);
+			} catch {
+				setQrCode(null); // The URL is too long
+			}
+		});
 	}, [url]);
 
-	const waitingForUpdate = url !== currentUrl;
-
 	return (
-		<div
-			className={["qr-code", waitingForUpdate ? "busy" : []].flat().join(" ")}
-		>
+		<div className={["qr-code", isPending ? "busy" : []].flat().join(" ")}>
 			<details
 				ref={detailsRef}
 				open={displayQrCode ? true : undefined}
-				hidden={!qrCode}
-				aria-hidden={!qrCode}
+				hidden={initialized && !qrCode}
+				aria-hidden={initialized && !qrCode}
+				aria-busy={isPending}
 			>
 				<summary>{messages.qr_code_view_summary}</summary>
 
-				<img
-					src={qrCode?.content}
-					alt={messages.qr_code_img_alt}
-					aria-busy={waitingForUpdate}
-				/>
+				{qrCode && <img src={qrCode} alt={messages.qr_code_img_alt} />}
 			</details>
 		</div>
 	);
