@@ -7,7 +7,7 @@
 	"copy_success": "URL copiato",
 	"copy_fail": "Impossibile copiare l'URL.",
 	"share_instruction": "Condividi questo URL per condividere le tue note istantaneamente.",
-	"locale_selector_label": "Lingua:",
+	"locale_selector_label": "Lingua",
 	"dark_mode_label": "Modalità scura",
 	"save_button": "Salva nel browser",
 	"save_success": "Nota salvata nel browser",

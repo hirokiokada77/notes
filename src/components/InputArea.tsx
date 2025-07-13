@@ -32,9 +32,7 @@ export function InputArea() {
 	};
 
 	const handleBlur = async () => {
-		setTimeout(() => {
-			setStatus("viewing");
-		}, 300);
+		setStatus("viewing");
 
 		if (note) {
 			const formattedText = await (await prettier).format(note.text, {
@@ -70,17 +68,18 @@ export function InputArea() {
 				{messages.textarea_placeholder}
 			</label>
 
-			<textarea
-				id={noteInputId}
-				className="note-input"
-				value={note ? note.text : ""}
-				onChange={handleChange}
-				onFocus={handleFocus}
-				onBlur={handleBlur}
-				placeholder={messages.textarea_placeholder}
-				rows={10}
-				aria-label={messages.textarea_placeholder}
-			/>
+			<div className="note-input">
+				<textarea
+					id={noteInputId}
+					className="note-input-container"
+					value={note ? note.text : ""}
+					onChange={handleChange}
+					onFocus={handleFocus}
+					onBlur={handleBlur}
+					placeholder={messages.textarea_placeholder}
+					aria-label={messages.textarea_placeholder}
+				/>
+			</div>
 
 			{/** biome-ignore lint/a11y/noStaticElementInteractions: expected behavior */}
 			{/** biome-ignore lint/a11y/useKeyWithClickEvents: expected behavior */}

@@ -2,18 +2,14 @@
 	width: 760px;
 	max-width: 100%;
 	margin: 0 auto;
-	opacity: 0.75;
+	color: var(--secondary-text-color);
 	font-size: 0.8em;
-}
-
-.status:not(:has(*:focus)).hide {
-	height: 0;
-	overflow: hidden;
 }
 
 .status-list {
 	margin: 0;
-	padding: 10px;
+	padding: 0;
+	line-height: 1.5;
 	list-style-type: none;
 	display: flex;
 	flex-wrap: wrap;

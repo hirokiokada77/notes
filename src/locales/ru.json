@@ -7,7 +7,7 @@
 	"copy_success": "URL скопирован",
 	"copy_fail": "Не удалось скопировать URL.",
 	"share_instruction": "Поделитесь этим URL, чтобы мгновенно поделиться своими заметками.",
-	"locale_selector_label": "Язык:",
+	"locale_selector_label": "Язык",
 	"dark_mode_label": "Темный режим",
 	"save_button": "Сохранить в браузере",
 	"save_success": "Заметка сохранена в браузере",

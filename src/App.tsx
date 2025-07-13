@@ -140,9 +140,9 @@ export function App() {
 
 			<InputArea />
 
-			<StatusView />
-
 			<ButtonGroup />
+
+			<StatusView />
 
 			<InfoBox />
 

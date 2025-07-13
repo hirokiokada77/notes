@@ -7,7 +7,7 @@
 	"copy_success": "URL 복사됨",
 	"copy_fail": "URL 복사에 실패했습니다.",
 	"share_instruction": "이 URL을 공유하여 노트를 즉시 공유하세요.",
-	"locale_selector_label": "언어:",
+	"locale_selector_label": "언어",
 	"dark_mode_label": "다크 모드",
 	"save_button": "브라우저에 저장",
 	"save_success": "노트가 브라우저에 저장되었습니다",

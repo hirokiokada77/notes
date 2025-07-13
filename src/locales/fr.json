@@ -7,7 +7,7 @@
 	"copy_success": "URL copiée",
 	"copy_fail": "Échec de la copie de l'URL.",
 	"share_instruction": "Partagez cette URL pour partager instantanément vos notes.",
-	"locale_selector_label": "Langue :",
+	"locale_selector_label": "Langue",
 	"dark_mode_label": "Mode sombre",
 	"save_button": "Enregistrer dans le navigateur",
 	"save_success": "Note enregistrée dans le navigateur",

@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { useId, useRef } from "react";
+import { useRef } from "react";
 import { messagesAtom, urlAtom } from "../atoms";
 import { QRCodeView } from "./QRCodeView";
 
@@ -28,19 +28,12 @@ export function InfoBox() {
 		}
 	};
 
-	const infoBoxLabelId = useId();
-
 	return (
 		<div className="main-section">
 			<div className="info-box">
-				<p id={infoBoxLabelId} className="info-box-label">
-					{messages.current_url_label}
-				</p>
-
 				<div className="info-box-main">
 					<input
 						className="info-box-url"
-						aria-labelledby={infoBoxLabelId}
 						value={url.toString()}
 						readOnly
 						ref={infoBoxUrlRef}
@@ -58,8 +51,6 @@ export function InfoBox() {
 				</div>
 
 				<QRCodeView />
-
-				<p className="share-instruction">{messages.share_instruction}</p>
 			</div>
 		</div>
 	);

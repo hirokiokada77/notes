@@ -17,19 +17,19 @@ export function StatusView() {
 		status !== "editing" && note && note.text.length > 0;
 
 	return (
-		<div
-			className={["status", shouldDisplayStatus ? [] : "hide"].flat().join(" ")}
-		>
-			<ul className="status-list">
-				<LastUpdatedIndicator />
+		shouldDisplayStatus && (
+			<div className="status">
+				<ul className="status-list">
+					<LastUpdatedIndicator />
 
-				<SavedChangesIndicator />
+					<SavedChangesIndicator />
 
-				<UnsavedChangesIndicator />
+					<UnsavedChangesIndicator />
 
-				<NewNoteVersionAvailableIndicator />
-			</ul>
-		</div>
+					<NewNoteVersionAvailableIndicator />
+				</ul>
+			</div>
+		)
 	);
 }
 

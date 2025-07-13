@@ -7,7 +7,7 @@
 	"copy_success": "URL kopiert",
 	"copy_fail": "URL konnte nicht kopiert werden.",
 	"share_instruction": "Teilen Sie diese URL, um Ihre Notizen sofort zu teilen.",
-	"locale_selector_label": "Sprache:",
+	"locale_selector_label": "Sprache",
 	"dark_mode_label": "Dunkler Modus",
 	"save_button": "Im Browser speichern",
 	"save_success": "Notiz im Browser gespeichert",

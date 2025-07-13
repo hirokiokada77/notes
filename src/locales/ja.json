@@ -7,7 +7,7 @@
 	"copy_success": "URLがコピーされました",
 	"copy_fail": "URLのコピーに失敗しました。",
 	"share_instruction": "このURLを共有すると、すぐにメモを共有できます。",
-	"locale_selector_label": "言語:",
+	"locale_selector_label": "言語",
 	"dark_mode_label": "ダークモード",
 	"save_button": "ブラウザに保存",
 	"save_success": "メモがブラウザに保存されました",

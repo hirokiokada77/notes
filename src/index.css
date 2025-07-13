@@ -7,47 +7,25 @@
 }
 
 body.dark-mode {
-	--bg-color: #282c34;
-	--border-color: #555;
-	--clear-button-bg: #e74c3c;
-	--clear-button-hover-bg: #c0392b;
-	--code-bg: #22252a;
-	--container-bg: #3c414c;
-	--copy-button-bg: #4caf50;
-	--copy-button-hover-bg: #388e3c;
-	--focus-border-color: #61dafb;
-	--focus-shadow-color: rgba(97, 218, 251, 0.3);
-	--info-box-bg: #4f5666;
-	--info-box-border: #6a737f;
-	--info-box-text: #c0c0c0;
-	--locale-select-bg: #4f5666;
-	--locale-select-color: #e0e0e0;
-	--save-button-bg: #1e88e5;
-	--save-button-hover-bg: #1565c0;
-	--secondary-text-color: #bbb;
-	--text-color: #e0e0e0;
+	--bg-color: #1b1c1d;
+	--border-color: #4a5050;
+	--code-bg-color: #333537;
+	--code-text-color: #a2a9b0;
+	--primary-active-bg: #a8c7fa;
+	--primary-active-color: #062e6f;
+	--primary-text-color: #fff;
+	--secondary-text-color: #a2a9b0;
 }
 
 body.light-mode {
 	--bg-color: #f0f2f5;
-	--border-color: #ccc;
-	--clear-button-bg: #dc3545;
-	--clear-button-hover-bg: #c82333;
-	--code-bg: #f0f0f0;
-	--container-bg: #ffffff;
-	--copy-button-bg: #28a745;
-	--copy-button-hover-bg: #218838;
-	--focus-border-color: #3498db;
-	--focus-shadow-color: rgba(52, 152, 219, 0.3);
-	--info-box-bg: #e8f7fe;
-	--info-box-border: #cceeff;
-	--info-box-text: #4a6a8b;
-	--locale-select-bg: #f9f9f9;
-	--locale-select-color: #333;
-	--save-button-bg: #007bff;
-	--save-button-hover-bg: #0056b3;
-	--secondary-text-color: #555;
-	--text-color: #333;
+	--border-color: #c4c7c5;
+	--code-bg-color: #e9eef6;
+	--code-text-color: #575b5f;
+	--primary-active-bg: #0b57d0;
+	--primary-active-color: #fff;
+	--primary-text-color: #1b1c1d;
+	--secondary-text-color: #575b5f;
 }
 
 body {
@@ -55,14 +33,14 @@ body {
 	-webkit-font-smoothing: antialiased;
 	background-color: var(--bg-color);
 	box-sizing: border-box;
-	color: var(--text-color);
+	color: var(--primary-text-color);
 	display: block;
 	font-family:
 		"Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
 		"Droid Sans", "Helvetica Neue", sans-serif;
 	margin: 0;
 	min-height: 100vh;
-	padding: 10px;
+	padding: 48px 24px;
 }
 
 * {
@@ -74,6 +52,19 @@ button {
 	border: 0;
 	background: inherit;
 	color: inherit;
+}
+
+input,
+select,
+textarea {
+	background: transparent;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+summary:focus {
+	outline: 1px solid var(--primary-active-bg);
 }
 
 .text-button {
@@ -105,19 +96,19 @@ summary {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
+	gap: 48px;
 }
 
 .main-section {
 	box-sizing: border-box;
 	margin: 0 auto;
 	max-width: 760px;
-	padding: 20px;
 	width: 100%;
 }
 
 .button-group {
 	display: flex;
-	gap: 15px;
+	gap: 24px;
 	justify-content: center;
 }
 
@@ -125,85 +116,61 @@ summary {
 .clear-button,
 .copy-button {
 	border: none;
-	border-radius: 5px;
+	border-radius: 99px;
 	color: white;
 	cursor: pointer;
 	font-size: 1em;
 	line-height: 1;
-	padding: 14px 20px;
+	padding: 16px 24px;
 }
 
 .save-button {
-	background-color: var(--save-button-bg);
+	background-color: var(--primary-active-bg);
+	color: var(--primary-active-color);
 }
 
-.save-button:hover {
-	background-color: var(--save-button-hover-bg);
-}
-
-.clear-button {
-	background-color: var(--clear-button-bg);
-}
-
-.clear-button:hover {
-	background-color: var(--clear-button-hover-bg);
+.clear-button,
+.copy-button {
+	color: var(--primary-active-bg);
 }
 
 .info-box {
-	background-color: var(--info-box-bg);
-	border: 1px solid var(--info-box-border);
-	border-radius: 8px;
+	border-radius: 16px;
 	color: var(--info-box-text);
 	font-size: 0.95em;
-	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
 }
 
 .info-box-main {
 	display: flex;
-	gap: 10px;
-	margin: 15px 0;
+	gap: 12px;
 }
 
 .info-box-url {
-	background-color: var(--code-bg);
+	border-radius: 99px;
+	border: 1px solid var(--border-color);
+	color: var(--secondary-text-color);
 	font-size: inherit;
-	border-radius: 6px;
 	flex-grow: 1;
-	padding: 12px;
-	color: inherit;
+	padding: 0 24px;
 	min-width: 0;
-	border: none;
 	line-height: inherit;
 }
 
-.copy-button {
-	background-color: var(--copy-button-bg);
-	flex-shrink: 0;
-}
-
-.copy-button:hover {
-	background-color: var(--copy-button-hover-bg);
-}
-
-.share-instruction {
-	color: var(--secondary-text-color);
-	font-style: italic;
-}
-
 .settings-panel {
-	border-top: 1px solid var(--border-color);
 	display: flex;
 	flex-wrap: wrap;
-	padding: 20px 0;
 	width: 100%;
 	flex-direction: column;
-	gap: 15px;
+	gap: 24px;
 }
 
 .locale-selector {
 	align-items: center;
 	display: flex;
-	gap: 10px;
+	gap: 12px;
 	margin-bottom: 0;
 	text-align: left;
 }
@@ -214,25 +181,18 @@ summary {
 }
 
 .locale-selector select {
-	background-color: var(--locale-select-bg);
 	border: 1px solid var(--border-color);
-	border-radius: 6px;
-	color: var(--locale-select-color);
+	border-radius: 99px;
+	color: var(--secondary-text-color);
 	cursor: pointer;
 	font-size: 0.95em;
-	outline: none;
-	padding: 8px 12px;
-}
-
-.locale-selector select:hover,
-.locale-selector select:focus {
-	border-color: var(--focus-border-color);
+	padding: 12px 18px;
 }
 
 .theme-toggle {
 	align-items: center;
 	display: flex;
-	gap: 10px;
+	gap: 12px;
 	margin-bottom: 0;
 	text-align: right;
 }
@@ -274,11 +234,7 @@ summary {
 }
 
 input:checked + .slider {
-	background-color: #3498db;
-}
-
-input:focus + .slider {
-	box-shadow: 0 0 1px #3498db;
+	background-color: var(--primary-active-bg);
 }
 
 input:checked + .slider:before {
@@ -288,52 +244,11 @@ input:checked + .slider:before {
 .theme-text {
 	color: var(--secondary-text-color);
 	font-weight: 600;
-	white-space: nowrap;
 }
 
 @media (max-width: 768px) {
-	.main-section {
-		max-width: 100%;
-	}
-
-	.info-box {
-		font-size: 0.9em;
-		padding: 10px 15px;
-	}
-
 	.locale-selector,
 	.theme-toggle {
 		justify-content: center;
-		margin-bottom: 0;
-		width: 100%;
-	}
-
-	.settings-panel {
-		align-items: stretch;
-		flex-direction: column;
-		gap: 15px;
-	}
-
-	.theme-text {
-		font-size: 0.95em;
-	}
-
-	.info-box-url {
-		font-size: 0.9em;
-		padding: 10px;
-	}
-}
-
-@media (max-width: 480px) {
-	.copy-button,
-	.locale-selector select,
-	.theme-switch,
-	.theme-text,
-	.info-box-url {
-		font-size: 0.9em;
-	}
-
-	.main-section {
-		padding: 15px 10px;
 	}
 }

@@ -1,24 +1,22 @@
 .input-area {
-	border-radius: 12px;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column-reverse;
-	gap: 20px;
-	margin-bottom: 0;
-	margin-top: 0;
-	min-height: 200px;
-	padding: 20px;
-	width: 100%;
+	gap: 24px;
+	min-height: 30vh;
 }
 
 .note-input,
 .note-preview {
-	background-color: var(--container-bg);
-	border: none;
-	border-radius: 8px;
-	box-shadow: none;
-	color: var(--text-color);
 	flex: 1;
+}
+
+.note-input-container,
+.note-preview {
+	border: 1px solid var(--border-color);
+	border-radius: 16px;
+	box-shadow: none;
+	color: var(--primary-text-color);
 	font-size: 16px;
 	line-height: 1.5;
 	min-height: 200px;
@@ -30,53 +28,31 @@
 
 .note-input {
 	box-sizing: border-box;
-	font-family: var(--font-family-textarea);
-	padding: 20px;
-	resize: vertical;
-	width: 100%;
 
 	@media print {
 		display: none;
 	}
 }
 
-.note-input::placeholder {
-	font-family: var(--font-family-default);
+.note-input-container {
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	padding: 20px;
+	resize: vertical;
+	font-family: var(--font-family-textarea);
 }
 
-.note-input:focus {
-	border-color: var(--focus-border-color);
-	box-shadow: 0 0 0 3px var(--focus-shadow-color);
-	outline: none;
+.note-input-container::placeholder {
+	font-family: var(--font-family-default);
 }
 
 .note-preview-container {
 	margin: 20px;
 }
 
-.note-preview h1,
-.note-preview h2,
-.note-preview h3,
-.note-preview h4,
-.note-preview h5,
-.note-preview h6 {
-	color: var(--primary-heading-color);
-	margin-bottom: 0.5em;
-	margin-top: 1em;
-}
-
-.note-preview p {
-	line-height: 1.6;
-	margin-bottom: 1em;
-}
-
-.note-preview ul,
-.note-preview ol {
-	margin-bottom: 1em;
-}
-
 .note-preview a {
-	color: var(--focus-border-color);
+	color: var(--primary-active-bg);
 	text-decoration: none;
 }
 
@@ -84,16 +60,31 @@
 	text-decoration: underline;
 }
 
+.note-preview h1,
+.note-preview h2,
+.note-preview h3,
+.note-preview h4,
+.note-preview h5,
+.note-preview h6,
+.note-preview hr,
+.note-preview ol,
+.note-preview p,
+.note-preview table,
+.note-preview ul {
+	margin: 20px 0;
+}
+
 .note-preview code {
-	background-color: var(--code-bg);
-	border-radius: 4px;
+	background-color: var(--code-bg-color);
+	color: var(--code-text-color);
+	border-radius: 6px;
 	font-family:
 		"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-	padding: 2px 4px;
+	padding: 1px 6px;
 }
 
 .note-preview pre {
-	background-color: var(--code-bg);
+	background-color: var(--code-bg-color);
 	border-radius: 8px;
 	margin-bottom: 1em;
 	overflow-x: auto;
@@ -114,19 +105,18 @@
 
 .note-preview table {
 	border-collapse: collapse;
-	margin-bottom: 1em;
 	width: 100%;
 }
 
 .note-preview th,
 .note-preview td {
 	border: 1px solid var(--border-color);
-	padding: 8px;
+	padding: 6px 12px;
 	text-align: left;
 }
 
 .note-preview th {
-	background-color: var(--code-bg);
+	background-color: var(--code-bg-color);
 	color: var(--primary-heading-color);
 }
 
@@ -149,10 +139,6 @@
 }
 
 @media (max-width: 480px) {
-	.input-area {
-		padding: 15px 10px;
-	}
-
 	.note-input,
 	.note-preview {
 		font-size: 14px;
