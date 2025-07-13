@@ -35,6 +35,8 @@ const _noteAtom = atom<Note | null>(getInitialNote());
 export const noteAtom = atom((get) => get(_noteAtom));
 
 export const noteFormattedLastUpdatedAtom = atom((get) => {
+	get(rerenderAtom);
+
 	const note = get(noteAtom);
 
 	if (note) {
