@@ -131,9 +131,6 @@ summary {
 	font-size: 1em;
 	line-height: 1;
 	padding: 14px 20px;
-	transition:
-		background-color 0.3s ease,
-		transform 0.1s ease;
 }
 
 .save-button {
@@ -150,12 +147,6 @@ summary {
 
 .clear-button:hover {
 	background-color: var(--clear-button-hover-bg);
-}
-
-.save-button:active,
-.clear-button:active,
-.copy-button:active {
-	transform: translateY(1px);
 }
 
 .info-box {
