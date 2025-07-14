@@ -1,6 +1,8 @@
 import "./StatusView.css";
 import { useAtomValue, useSetAtom } from "jotai";
+import { useEffect } from "react";
 import {
+	forceRerenderAtom,
 	noteAtom,
 	noteFormattedLastUpdatedAtom,
 	restoreSavedNoteAtom,
@@ -13,8 +15,15 @@ export function StatusView() {
 
 	const status = useAtomValue(statusAtom);
 
+	const forceRerender = useSetAtom(forceRerenderAtom);
+
 	const shouldDisplayStatus =
 		status !== "editing" && note && note.text.length > 0;
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
+	useEffect(() => {
+		forceRerender();
+	}, [shouldDisplayStatus]);
 
 	return (
 		shouldDisplayStatus && (

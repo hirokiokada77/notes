@@ -124,14 +124,6 @@ export function App() {
 		};
 	}, [forceRerender]);
 
-	useEffect(() => {
-		const intervalId = setInterval(() => {
-			forceRerender();
-		}, 60000);
-
-		return () => clearInterval(intervalId);
-	}, [forceRerender]);
-
 	return (
 		<div className="main">
 			<Toast />
