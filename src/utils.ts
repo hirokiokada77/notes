@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import { notesAppSavedNote } from "./constants";
 import de from "./locales/de.json";
 import en from "./locales/en.json";
@@ -123,7 +122,7 @@ export interface Note {
 
 export function createNewNote(): Note {
 	return {
-		id: uuidv4(),
+		id: createRandomId(),
 		text: "",
 		created: Date.now(),
 		lastUpdated: Date.now(),
@@ -160,3 +159,15 @@ export function getInitialNote(): Note | null {
 }
 
 export type Status = "viewing" | "editing";
+
+export function createRandomId(): string {
+	const length = 16;
+	const characters = "0123456789abcdef";
+	const charactersLength = characters.length;
+
+	const result = Array.from({ length }, () =>
+		characters.charAt(Math.floor(Math.random() * charactersLength)),
+	).join("");
+
+	return result;
+}
