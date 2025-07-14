@@ -114,7 +114,8 @@ summary {
 
 .save-button,
 .clear-button,
-.copy-button {
+.copy-button,
+.share-button {
 	border: none;
 	border-radius: 99px;
 	color: white;
@@ -130,7 +131,8 @@ summary {
 }
 
 .clear-button,
-.copy-button {
+.copy-button,
+.share-button {
 	color: var(--primary-active-bg);
 }
 

@@ -94,6 +94,7 @@ export interface Messages {
 	textarea_placeholder: string;
 	current_url_label: string;
 	copy_button: string;
+	share_button: string;
 	copy_success: string;
 	copy_fail: string;
 	share_instruction: string;

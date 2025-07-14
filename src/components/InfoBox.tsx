@@ -22,6 +22,13 @@ export function InfoBox() {
 		}
 	};
 
+	const share = async () => {
+		await navigator.share({
+			title: document.title,
+			url: location.href,
+		});
+	};
+
 	const handleFocus = () => {
 		if (infoBoxUrlRef.current) {
 			infoBoxUrlRef.current.select();
@@ -47,6 +54,15 @@ export function InfoBox() {
 						aria-label={messages.copy_button}
 					>
 						{messages.copy_button}
+					</button>
+
+					<button
+						type="button"
+						onClick={share}
+						className="share-button"
+						aria-label={messages.share_button}
+					>
+						{messages.share_button}
 					</button>
 				</div>
 

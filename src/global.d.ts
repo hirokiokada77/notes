@@ -4,6 +4,7 @@ export type MessageKeys =
 	| "textarea_placeholder"
 	| "current_url_label"
 	| "copy_button"
+	| "share_button"
 	| "copy_success"
 	| "copy_fail"
 	| "share_instruction"
