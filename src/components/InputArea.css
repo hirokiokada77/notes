@@ -63,7 +63,7 @@
 }
 
 .note-preview a {
-	color: var(--primary-active-bg);
+	color: var(--primary-active-bg-color);
 	text-decoration: none;
 }
 
