@@ -1,6 +1,7 @@
 import { useAtomValue } from "jotai";
 import { useRef } from "react";
 import { messagesAtom, urlAtom } from "../atoms";
+import { Button } from "./Button";
 import { QRCodeView } from "./QRCodeView";
 
 export function InfoBox() {
@@ -47,23 +48,13 @@ export function InfoBox() {
 						onFocus={handleFocus}
 					/>
 
-					<button
-						type="button"
-						onClick={copyUrlToClipboard}
-						className="copy-button"
-						aria-label={messages.copy_button}
-					>
+					<Button level="secondary" onClick={copyUrlToClipboard}>
 						{messages.copy_button}
-					</button>
+					</Button>
 
-					<button
-						type="button"
-						onClick={share}
-						className="share-button"
-						aria-label={messages.share_button}
-					>
+					<Button level="secondary" onClick={share}>
 						{messages.share_button}
-					</button>
+					</Button>
 				</div>
 
 				<QRCodeView />

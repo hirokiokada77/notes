@@ -12,7 +12,6 @@ import {
 	updateUrlAtom,
 } from "./atoms";
 import { ButtonGroup } from "./components/ButtonGroup";
-import { Header } from "./components/Header";
 import { InfoBox } from "./components/InfoBox";
 import { InputArea } from "./components/InputArea";
 import { SettingsPanel } from "./components/SettingsPanel";
@@ -127,8 +126,6 @@ export function App() {
 	return (
 		<div className="main">
 			<Toast />
-
-			<Header />
 
 			<InputArea />
 

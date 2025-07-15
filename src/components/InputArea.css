@@ -1,9 +1,21 @@
+.input-area,
+.note-input,
+.note-input-container,
+.note-preview {
+	min-height: 100%;
+}
+
 .input-area {
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column-reverse;
 	gap: 24px;
-	min-height: 30vh;
+}
+
+.note-input,
+.note-input-container,
+.note-preview {
+	min-height: max(70vh, 240px);
 }
 
 .note-input,
@@ -19,7 +31,6 @@
 	color: var(--primary-text-color);
 	font-size: 16px;
 	line-height: 1.5;
-	min-height: 200px;
 }
 
 .note-preview {
@@ -127,21 +138,14 @@
 }
 
 @media (max-width: 768px) {
-	.input-area {
-		position: relative;
-	}
-
 	.note-input,
 	.note-preview {
-		min-height: 150px;
 		width: 100%;
 	}
-}
 
-@media (max-width: 480px) {
 	.note-input,
+	.note-input-container,
 	.note-preview {
-		font-size: 14px;
-		min-height: 120px;
+		min-height: max(35vh, 240px);
 	}
 }

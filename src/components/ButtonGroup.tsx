@@ -2,63 +2,61 @@ import { useAtomValue, useSetAtom } from "jotai";
 import {
 	clearNoteAtom,
 	clearSavedNoteAtom,
+	forceRerenderAtom,
 	messagesAtom,
+	noteAtom,
+	savedNoteAtom,
 	syncSavedNoteAtom,
 } from "../atoms";
+import { Button } from "./Button";
 
 export function ButtonGroup() {
+	const note = useAtomValue(noteAtom);
+	const savedNote = useAtomValue(savedNoteAtom);
 	const messages = useAtomValue(messagesAtom);
 
 	const clearNote = useSetAtom(clearNoteAtom);
-
 	const clearSavedNote = useSetAtom(clearSavedNoteAtom);
 	const syncSavedNote = useSetAtom(syncSavedNoteAtom);
+	const forceRerender = useSetAtom(forceRerenderAtom);
 
 	const saveTextToBrowser = () => {
-		try {
-			syncSavedNote();
+		forceRerender();
 
-			globalThis.registerToastMessage("save_success");
-		} catch (err) {
-			console.error("Error saving to local storage:", err);
+		syncSavedNote();
 
-			globalThis.registerToastMessage("save_fail");
-		}
+		globalThis.registerToastMessage("save_success");
 	};
 
 	const clearText = () => {
 		if (window.confirm(messages.clear_confirm)) {
-			try {
-				clearNote();
-				clearSavedNote();
+			forceRerender();
 
-				globalThis.registerToastMessage("clear_success");
-			} catch {
-				globalThis.registerToastMessage("clear_fail");
-			}
+			clearNote();
+			clearSavedNote();
+
+			globalThis.registerToastMessage("clear_success");
 		}
 	};
 
 	return (
 		<div className="main-section">
 			<div className="button-group">
-				<button
-					type="button"
+				<Button
+					level="primary"
 					onClick={saveTextToBrowser}
-					className="save-button"
-					aria-label={messages.save_button}
+					disabled={note && savedNote && note.text === savedNote.text}
 				>
 					{messages.save_button}
-				</button>
+				</Button>
 
-				<button
-					type="button"
+				<Button
+					level="secondary"
 					onClick={clearText}
-					className="clear-button"
-					aria-label={messages.clear_button}
+					disabled={!note || note.text.length === 0}
 				>
 					{messages.clear_button}
-				</button>
+				</Button>
 			</div>
 		</div>
 	);

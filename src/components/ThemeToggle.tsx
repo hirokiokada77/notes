@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from "jotai";
-import { useId } from "react";
 import { messagesAtom, themeAtom } from "../atoms";
+import { Switch } from "./Switch";
 
 export function ThemeToggle() {
 	const [theme, setTheme] = useAtom(themeAtom);
@@ -11,23 +11,13 @@ export function ThemeToggle() {
 		setTheme(theme === "light" ? "dark" : "light");
 	};
 
-	const themeToggleContainerId = useId();
-
 	return (
 		<div className="theme-toggle">
-			<label className="theme-switch" htmlFor={themeToggleContainerId}>
-				<input
-					id={themeToggleContainerId}
-					type="checkbox"
-					checked={theme === "dark"}
-					onChange={toggleTheme}
-					role="switch"
-					aria-checked={theme === "dark"}
-					aria-label={messages.dark_mode_label}
-				/>
-
-				<span className="slider round" aria-hidden="true" />
-			</label>
+			<Switch
+				label={messages.dark_mode_label}
+				onChange={toggleTheme}
+				checked={theme === "dark"}
+			/>
 
 			<span className="theme-text" aria-hidden="true">
 				{messages.dark_mode_label}
