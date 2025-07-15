@@ -78,10 +78,10 @@
 .note-preview h5,
 .note-preview h6,
 .note-preview hr,
-.note-preview ol,
+.note-preview > ol,
 .note-preview p,
 .note-preview table,
-.note-preview ul {
+.note-preview > ul {
 	margin: 20px 0;
 }
 
