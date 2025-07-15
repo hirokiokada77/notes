@@ -10,6 +10,16 @@ import pt from "./locales/pt.json";
 import ru from "./locales/ru.json";
 import zh from "./locales/zh.json";
 
+const prettier = import("prettier");
+const prettierPluginMarkdown = import("prettier/plugins/markdown");
+
+export async function formatNoteText(noteText: string) {
+	return await (await prettier).format(noteText, {
+		parser: "markdown",
+		plugins: [(await prettierPluginMarkdown).default],
+	});
+}
+
 export function formatTimeAgo(unixMilliseconds: number) {
 	const now = Date.now();
 	const seconds = Math.floor((now - unixMilliseconds) / 1000);

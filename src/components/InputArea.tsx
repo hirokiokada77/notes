@@ -9,10 +9,8 @@ import {
 	statusAtom,
 	updateNoteTextAtom,
 } from "../atoms";
+import { formatNoteText } from "../utils";
 import { NotePreview } from "./NotePreview";
-
-const prettier = import("prettier");
-const prettierPluginMarkdown = import("prettier/plugins/markdown");
 
 export function InputArea() {
 	const messages = useAtomValue(messagesAtom);
@@ -36,10 +34,7 @@ export function InputArea() {
 		setStatus("viewing");
 
 		if (note) {
-			const formattedText = await (await prettier).format(note.text, {
-				parser: "markdown",
-				plugins: [(await prettierPluginMarkdown).default],
-			});
+			const formattedText = await formatNoteText(note.text);
 
 			if (note.text !== formattedText) {
 				updateNoteText(formattedText);

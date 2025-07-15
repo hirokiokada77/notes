@@ -8,6 +8,7 @@ import {
 } from "./constants";
 import {
 	createNewNote,
+	formatNoteText,
 	formatTimeAgo,
 	getInitialLocale,
 	getInitialNote,
@@ -99,12 +100,13 @@ export const clearSavedNoteAtom = atom(null, (_get, set) => {
 	set(_savedNoteAtom, null);
 });
 
-export const saveNoteAtom = atom(null, (get, set) => {
+export const saveNoteAtom = atom(null, async (get, set) => {
 	const note = get(noteAtom);
 
 	if (note) {
 		const newNote: Note = {
 			...note,
+			text: await formatNoteText(note.text),
 			lastUpdated: Date.now(),
 		};
 
