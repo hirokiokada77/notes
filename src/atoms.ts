@@ -99,10 +99,32 @@ export const clearSavedNoteAtom = atom(null, (_get, set) => {
 	set(_savedNoteAtom, null);
 });
 
-export const syncSavedNoteAtom = atom(null, (get, set) => {
+export const saveNoteAtom = atom(null, (get, set) => {
 	const note = get(noteAtom);
 
 	set(_savedNoteAtom, note);
+});
+
+export const saveFeatureApplicableAtom = atom((get) => {
+	const note = get(noteAtom);
+	const savedNote = get(savedNoteAtom);
+
+	return (
+		!(!note && !savedNote) &&
+		!(
+			note &&
+			savedNote &&
+			note.id === savedNote.id &&
+			note.text === savedNote.text
+		)
+	);
+});
+
+export const clearFeatureApplicableAtom = atom((get) => {
+	const note = get(noteAtom);
+	const savedNote = get(savedNoteAtom);
+
+	return !(!note || (!savedNote && note.text.length === 0));
 });
 
 export const statusAtom = atom<Status>("viewing");

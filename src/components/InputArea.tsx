@@ -1,10 +1,11 @@
 import "./InputArea.css";
 import { useAtomValue, useSetAtom } from "jotai";
 import type { MouseEvent } from "react";
-import { type ChangeEvent, useId } from "react";
+import { type ChangeEvent, useEffect, useId } from "react";
 import {
 	messagesAtom,
 	noteAtom,
+	saveNoteAtom,
 	statusAtom,
 	updateNoteTextAtom,
 } from "../atoms";
@@ -61,6 +62,26 @@ export function InputArea() {
 			}
 		}
 	};
+
+	const savedNote = useSetAtom(saveNoteAtom);
+
+	useEffect(() => {
+		const listener = (event: KeyboardEvent) => {
+			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+				event.preventDefault();
+
+				savedNote();
+
+				globalThis.registerToastMessage("save_success");
+			}
+		};
+
+		document.addEventListener("keydown", listener);
+
+		return () => {
+			document.removeEventListener("keydown", listener);
+		};
+	}, [savedNote]);
 
 	return (
 		<div className="input-area">

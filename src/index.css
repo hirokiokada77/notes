@@ -60,6 +60,7 @@ button {
 	border: 0;
 	background: inherit;
 	color: inherit;
+	font-family: inherit;
 }
 
 input,
