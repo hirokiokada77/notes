@@ -102,7 +102,17 @@ export const clearSavedNoteAtom = atom(null, (_get, set) => {
 export const saveNoteAtom = atom(null, (get, set) => {
 	const note = get(noteAtom);
 
-	set(_savedNoteAtom, note);
+	if (note) {
+		const newNote: Note = {
+			...note,
+			lastUpdated: Date.now(),
+		};
+
+		set(_noteAtom, newNote);
+		set(_savedNoteAtom, newNote);
+	} else {
+		set(_savedNoteAtom, note);
+	}
 });
 
 export const saveFeatureApplicableAtom = atom((get) => {
