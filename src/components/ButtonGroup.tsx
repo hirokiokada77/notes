@@ -53,7 +53,7 @@ export function ButtonGroup() {
 				<Button
 					level="secondary"
 					onClick={clearText}
-					disabled={!note || note.text.length === 0}
+					disabled={!note || (!savedNote && note.text.length === 0)}
 				>
 					{messages.clear_button}
 				</Button>
