@@ -1,5 +1,6 @@
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
+import { atomWithHash } from "jotai-location";
 import {
 	notesAppDisplayQrCode,
 	notesAppLocale,
@@ -11,7 +12,6 @@ import {
 	formatNoteText,
 	formatTimeAgo,
 	getInitialLocale,
-	getInitialNote,
 	type Locale,
 	messagesByLocale,
 	type Note,
@@ -31,7 +31,7 @@ export const messagesAtom = atom((get) => {
 	return messagesByLocale[locale];
 });
 
-const _noteAtom = atom<Note | null>(getInitialNote());
+const _noteAtom = atomWithHash<Note | null>("note", null);
 
 export const noteAtom = atom((get) => get(_noteAtom));
 
@@ -51,16 +51,6 @@ export const clearNoteAtom = atom(null, (_get, set) => {
 	set(_noteAtom, null);
 });
 
-export const restoreNoteFromHashAtom = atom(null, (_get, set, hash: string) => {
-	const fragment = hash.substring(1);
-
-	try {
-		set(_noteAtom, JSON.parse(decodeURIComponent(fragment)));
-	} catch {
-		set(clearNoteAtom);
-	}
-});
-
 export const updateNoteTextAtom = atom(null, (get, set, newText: string) => {
 	const currentNote = get(noteAtom);
 
@@ -76,12 +66,16 @@ export const updateNoteTextAtom = atom(null, (get, set, newText: string) => {
 			text: newText,
 		});
 	}
+
+	set(forceRerenderAtom);
 });
 
 export const restoreSavedNoteAtom = atom(null, (get, set) => {
 	const savedNote = get(savedNoteAtom);
 
 	set(_noteAtom, savedNote);
+
+	globalThis.registerToastMessage("note_loaded_from_browser");
 });
 
 const _rerenderAtom = atom(0);
@@ -144,14 +138,6 @@ export const statusAtom = atom<Status>("viewing");
 export const themeAtom = atomWithStorage<"light" | "dark">(
 	notesAppTheme,
 	window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
-);
-
-const _urlAtom = atom(new URL(location.href));
-
-export const urlAtom = atom((get) => get(_urlAtom));
-
-export const updateUrlAtom = atom(null, (_get, set, newUrl: string) =>
-	set(_urlAtom, new URL(newUrl)),
 );
 
 export const documentTitleAtom = atom((get) => {

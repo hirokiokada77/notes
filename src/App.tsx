@@ -6,10 +6,9 @@ import {
 	localeAtom,
 	messagesAtom,
 	noteAtom,
-	restoreNoteFromHashAtom,
+	restoreSavedNoteAtom,
 	savedNoteAtom,
 	themeAtom,
-	updateUrlAtom,
 } from "./atoms";
 import { ButtonGroup } from "./components/ButtonGroup";
 import { InfoBox } from "./components/InfoBox";
@@ -25,10 +24,8 @@ export function App() {
 
 	const theme = useAtomValue(themeAtom);
 
-	const updateUrl = useSetAtom(updateUrlAtom);
-
 	const note = useAtomValue(noteAtom);
-	const restoreNoteFromHash = useSetAtom(restoreNoteFromHashAtom);
+	const restoreSavedNote = useSetAtom(restoreSavedNoteAtom);
 
 	const savedNote = useAtomValue(savedNoteAtom);
 
@@ -56,39 +53,6 @@ export function App() {
 		document.body.classList.remove("dark-mode", "light-mode");
 		document.body.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
 	}, [theme]);
-
-	useEffect(() => {
-		const listener = () => {
-			updateUrl(location.href);
-		};
-
-		window.addEventListener("hashchange", listener);
-
-		return () => window.removeEventListener("hashchange", listener);
-	}, [updateUrl]);
-
-	useEffect(() => {
-		const updateTextFromHashChange = () => {
-			restoreNoteFromHash(location.hash);
-		};
-
-		window.addEventListener("hashchange", updateTextFromHashChange);
-
-		return () =>
-			window.removeEventListener("hashchange", updateTextFromHashChange);
-	}, [restoreNoteFromHash]);
-
-	useEffect(() => {
-		if (note) {
-			const encodedNote = encodeURIComponent(JSON.stringify(note));
-			const newHash = encodedNote ? `#${encodedNote}` : "";
-			if (window.location.hash !== newHash) {
-				window.location.hash = newHash;
-			}
-		} else {
-			window.location.hash = "";
-		}
-	}, [note]);
 
 	useEffect(() => {
 		const listener = (event: BeforeUnloadEvent) => {
@@ -122,6 +86,12 @@ export function App() {
 			document.removeEventListener("visibilitychange", listener);
 		};
 	}, [forceRerender]);
+
+	useEffect(() => {
+		if (note === null && savedNote) {
+			restoreSavedNote();
+		}
+	}, [note, savedNote, restoreSavedNote]);
 
 	return (
 		<div className="main">

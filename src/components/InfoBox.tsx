@@ -1,19 +1,17 @@
 import { useAtomValue } from "jotai";
 import { useRef } from "react";
-import { messagesAtom, urlAtom } from "../atoms";
+import { messagesAtom } from "../atoms";
 import { Button } from "./Button";
 import { QRCodeView } from "./QRCodeView";
 
 export function InfoBox() {
 	const messages = useAtomValue(messagesAtom);
 
-	const url = useAtomValue(urlAtom);
-
 	const infoBoxUrlRef = useRef<HTMLInputElement>(null);
 
 	const copyUrlToClipboard = async () => {
 		try {
-			await navigator.clipboard.writeText(url.toString());
+			await navigator.clipboard.writeText(window.location.href);
 
 			globalThis.registerToastMessage("copy_success");
 		} catch (err) {
@@ -26,7 +24,7 @@ export function InfoBox() {
 	const share = async () => {
 		await navigator.share({
 			title: document.title,
-			url: location.href,
+			url: window.location.href,
 		});
 	};
 
@@ -42,7 +40,7 @@ export function InfoBox() {
 				<div className="info-box-main">
 					<input
 						className="info-box-url"
-						value={url.toString()}
+						value={window.location.href}
 						readOnly
 						ref={infoBoxUrlRef}
 						onFocus={handleFocus}

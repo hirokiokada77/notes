@@ -1,4 +1,3 @@
-import { notesAppSavedNote } from "./constants";
 import de from "./locales/de.json";
 import en from "./locales/en.json";
 import es from "./locales/es.json";
@@ -138,35 +137,6 @@ export function createNewNote(): Note {
 		created: Date.now(),
 		lastUpdated: Date.now(),
 	};
-}
-
-export function getInitialNote(): Note | null {
-	const fragment = window.location.hash.substring(1);
-	let note: Note | null = null;
-
-	if (fragment) {
-		try {
-			note = JSON.parse(decodeURIComponent(fragment));
-		} catch (error) {
-			console.error("Error decoding URL fragment on initial load:", error);
-		}
-	} else {
-		const savedNote = localStorage.getItem(notesAppSavedNote);
-
-		if (savedNote) {
-			const parsedSavedNote = JSON.parse(savedNote);
-
-			if (parsedSavedNote) {
-				setTimeout(() => {
-					globalThis.registerToastMessage("note_loaded_from_browser");
-				}, 100);
-
-				note = JSON.parse(decodeURIComponent(savedNote));
-			}
-		}
-	}
-
-	return note;
 }
 
 export type Status = "viewing" | "editing";

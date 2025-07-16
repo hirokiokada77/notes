@@ -1,11 +1,13 @@
 import "./QRCodeView.css";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { displayQrCodeAtom, messagesAtom, urlAtom } from "../atoms";
+import { displayQrCodeAtom, messagesAtom, rerenderAtom } from "../atoms";
 
 const QRCode = import("qrcode");
 
 export function QRCodeView() {
+	const rerender = useAtomValue(rerenderAtom);
+
 	const [qrCode, setQrCode] = useState<string | null>(null);
 
 	const [initialized, setInitialized] = useState(false);
@@ -17,8 +19,6 @@ export function QRCodeView() {
 	const [displayQrCode, setDisplayQrCode] = useAtom(displayQrCodeAtom);
 
 	const messages = useAtomValue(messagesAtom);
-
-	const url = useAtomValue(urlAtom);
 
 	useEffect(() => {
 		const detailsElement = detailsRef.current;
@@ -36,12 +36,13 @@ export function QRCodeView() {
 		};
 	}, [setDisplayQrCode]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: required for forced re-rendering
 	useEffect(() => {
 		startTransition(async () => {
 			setInitialized(true);
 
 			try {
-				const dataUrl = await (await QRCode).toDataURL(url.toString(), {
+				const dataUrl = await (await QRCode).toDataURL(window.location.href, {
 					errorCorrectionLevel: "low",
 				});
 
@@ -50,7 +51,7 @@ export function QRCodeView() {
 				setQrCode(null); // The URL is too long
 			}
 		});
-	}, [url]);
+	}, [rerender]);
 
 	return (
 		<div className={["qr-code", isPending ? "busy" : []].flat().join(" ")}>

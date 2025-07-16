@@ -86,8 +86,6 @@ function NewNoteVersionAvailableIndicator() {
 	const restoreNoteFromBrowser = () => {
 		if (savedNote) {
 			restoreSavedNote();
-
-			globalThis.registerToastMessage("note_loaded_from_browser");
 		}
 	};
 
