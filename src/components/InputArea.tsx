@@ -1,7 +1,7 @@
 import "./InputArea.css";
 import { useAtomValue, useSetAtom } from "jotai";
 import type { MouseEvent } from "react";
-import { type ChangeEvent, useEffect, useId } from "react";
+import { type ChangeEvent, useEffect, useId, useRef } from "react";
 import {
 	messagesAtom,
 	noteAtom,
@@ -78,6 +78,14 @@ export function InputArea() {
 		};
 	}, [savedNote]);
 
+	const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
+
+	useEffect(() => {
+		if (note === null) {
+			noteInputRef.current?.focus();
+		}
+	}, [note]);
+
 	return (
 		<div className="input-area">
 			<label htmlFor={noteInputId} className="sr-only">
@@ -87,6 +95,7 @@ export function InputArea() {
 			<div className="note-input">
 				<textarea
 					id={noteInputId}
+					ref={noteInputRef}
 					className="note-input-container"
 					value={note ? note.text : ""}
 					onChange={handleChange}
