@@ -17,11 +17,11 @@ of the documents or any other metadata is ever sent to external servers.
 It automatically caches all core resources to your browser using the
 [Service Worker
 API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API),
-enabling offline usage. We enforce a strict [Content Security
-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy)
-to ensure that no sensitive user data is transmitted to external
-servers. The content set as the URI fragment is in standard JSON format,
-which can be easily parsed using a few lines of scripts or standard
+enabling offline usage. We enforce a strict [Content Security Policy
+(CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) to
+ensure that no sensitive user data is transmitted to external servers.
+The content set as the URI fragment is in standard JSON format, which
+can be easily parsed using a few lines of scripts or standard
 third-party tools.
 
 To run the app locally:
