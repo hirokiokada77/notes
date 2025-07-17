@@ -31,7 +31,9 @@ export const messagesAtom = atom((get) => {
 	return messagesByLocale[locale];
 });
 
-const _noteAtom = atomWithHash<Note | null>("note", null);
+const _noteAtom = atomWithHash<Note | null>("note", null, {
+	setHash: "replaceState",
+});
 
 export const noteAtom = atom((get) => get(_noteAtom));
 
