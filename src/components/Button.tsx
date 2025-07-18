@@ -6,6 +6,7 @@ export interface ButtonProps {
 	disabled?: boolean | null | undefined;
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
 	level: "primary" | "secondary";
+	hidden?: boolean;
 }
 
 export function Button(props: ButtonProps) {
@@ -16,6 +17,7 @@ export function Button(props: ButtonProps) {
 			disabled={!!props.disabled}
 			type="button"
 			onClick={props.onClick}
+			hidden={props.hidden}
 		>
 			{props.children}
 		</button>

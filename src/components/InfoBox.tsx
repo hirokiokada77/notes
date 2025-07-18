@@ -22,12 +22,10 @@ export function InfoBox() {
 	};
 
 	const share = async () => {
-		if (navigator.share) {
-			await navigator.share({
-				title: document.title,
-				url: window.location.href,
-			});
-		}
+		await navigator.share({
+			title: document.title,
+			url: window.location.href,
+		});
 	};
 
 	const handleFocus = () => {
@@ -35,6 +33,8 @@ export function InfoBox() {
 			infoBoxUrlRef.current.select();
 		}
 	};
+
+	const shareFeatureUnavailable = !navigator.share;
 
 	return (
 		<div className="main-section">
@@ -52,7 +52,11 @@ export function InfoBox() {
 						{messages.copy_button}
 					</Button>
 
-					<Button level="secondary" onClick={share}>
+					<Button
+						level="secondary"
+						onClick={share}
+						hidden={shareFeatureUnavailable}
+					>
 						{messages.share_button}
 					</Button>
 				</div>
