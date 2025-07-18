@@ -23,7 +23,6 @@ export function formatTimeAgo(unixMilliseconds: number) {
 	const now = Date.now();
 	const seconds = Math.floor((now - unixMilliseconds) / 1000);
 
-	const SECOND = 1;
 	const MINUTE = 60;
 	const HOUR = MINUTE * 60;
 	const DAY = HOUR * 24;
@@ -32,10 +31,8 @@ export function formatTimeAgo(unixMilliseconds: number) {
 
 	if (seconds < 0) {
 		return "In the future";
-	} else if (seconds < SECOND) {
-		return "Now";
 	} else if (seconds < MINUTE) {
-		return `${seconds} sec${seconds === 1 ? "" : "s"} ago`;
+		return "Now";
 	} else if (seconds < HOUR) {
 		const minutes = Math.floor(seconds / MINUTE);
 		return `${minutes} min${minutes === 1 ? "" : "s"} ago`;
