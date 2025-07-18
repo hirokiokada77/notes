@@ -36,37 +36,29 @@ body.light-mode {
 	--secondary-inactive-text-color: var(--primary-inactive-text-color);
 }
 
-body {
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-font-smoothing: antialiased;
-	background-color: var(--bg-color);
-	box-sizing: border-box;
-	color: var(--primary-text-color);
-	display: block;
-	font-family:
-		"Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-		"Droid Sans", "Helvetica Neue", sans-serif;
-	margin: 0;
-	min-height: 100vh;
-	padding: 24px;
-}
-
 * {
 	overflow-wrap: break-word;
 }
 
-button {
-	padding: 0;
-	border: 0;
-	background: inherit;
-	color: inherit;
-	font-family: inherit;
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
 
+body,
+button,
 input,
 select,
 textarea {
+	margin: 0;
+	padding: 0;
+	border: 0;
 	background: transparent;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	user-select: none;
 }
 
 input:focus,
@@ -74,6 +66,16 @@ select:focus,
 textarea:focus,
 summary:focus {
 	outline: 1px solid var(--primary-active-bg-color);
+}
+
+body {
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	background-color: var(--bg-color);
+	color: var(--primary-text-color);
+	font-family: var(--font-family-default);
+	min-height: 100vh;
+	padding: 24px;
 }
 
 .text-button {
@@ -101,7 +103,6 @@ summary {
 }
 
 .main {
-	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -109,7 +110,6 @@ summary {
 }
 
 .main-section {
-	box-sizing: border-box;
 	margin: 0 auto;
 	max-width: 760px;
 	width: 100%;
@@ -124,7 +124,6 @@ summary {
 .info-box {
 	border-radius: 16px;
 	color: var(--info-box-text);
-	font-size: 0.95em;
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
@@ -158,11 +157,9 @@ summary {
 	border-radius: 99px;
 	border: 1px solid var(--border-color);
 	color: var(--secondary-text-color);
-	font-size: inherit;
-	flex-grow: 1;
+	flex: 1;
 	padding: 16px 24px;
 	width: 100%;
-	box-sizing: border-box;
 }
 
 .settings-panel {
@@ -191,7 +188,6 @@ summary {
 	border-radius: 99px;
 	color: var(--secondary-text-color);
 	cursor: pointer;
-	font-size: 0.95em;
 	padding: 12px 18px;
 }
 
@@ -199,7 +195,6 @@ summary {
 	align-items: center;
 	display: flex;
 	gap: 12px;
-	margin-bottom: 0;
 	text-align: right;
 }
 

@@ -18,11 +18,9 @@ body.light-mode {
 	border-radius: 8px;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 	color: var(--toast-text-color);
-	font-size: 16px;
-	height: 16px;
-	line-height: 16px;
+	line-height: 1;
 	max-width: 300px;
-	padding: 18px 20px;
+	padding: 20px;
 	transform: translateY(72px);
 	opacity: 0;
 	transition:
