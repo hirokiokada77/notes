@@ -132,7 +132,26 @@ summary {
 
 .info-box-main {
 	display: flex;
-	gap: 12px;
+}
+
+.info-box-buttons {
+	display: flex;
+	margin: 0 auto;
+}
+
+.info-box-main,
+.info-box-buttons {
+	gap: 16px;
+}
+
+@media (max-width: 480px) {
+	.info-box-main {
+		flex-direction: column;
+	}
+
+	.info-box-main {
+		gap: 12px;
+	}
 }
 
 .info-box-url {
@@ -141,9 +160,9 @@ summary {
 	color: var(--secondary-text-color);
 	font-size: inherit;
 	flex-grow: 1;
-	padding: 0 24px;
-	width: 0;
-	line-height: inherit;
+	padding: 16px 24px;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .settings-panel {

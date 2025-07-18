@@ -48,17 +48,19 @@ export function InfoBox() {
 						onFocus={handleFocus}
 					/>
 
-					<Button level="secondary" onClick={copyUrlToClipboard}>
-						{messages.copy_button}
-					</Button>
+					<div className="info-box-buttons">
+						<Button level="secondary" onClick={copyUrlToClipboard}>
+							{messages.copy_button}
+						</Button>
 
-					<Button
-						level="secondary"
-						onClick={share}
-						hidden={shareFeatureUnavailable}
-					>
-						{messages.share_button}
-					</Button>
+						<Button
+							level="secondary"
+							onClick={share}
+							hidden={shareFeatureUnavailable}
+						>
+							{messages.share_button}
+						</Button>
+					</div>
 				</div>
 
 				<QRCodeView />
