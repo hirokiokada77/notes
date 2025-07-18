@@ -1,3 +1,4 @@
+import "./InfoBox.css";
 import { useAtomValue } from "jotai";
 import { useRef } from "react";
 import { messagesAtom } from "../atoms";

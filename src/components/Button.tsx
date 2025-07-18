@@ -5,7 +5,7 @@ export interface ButtonProps {
 	children: ReactNode;
 	disabled?: boolean | null | undefined;
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
-	level: "primary" | "secondary";
+	level: "primary" | "secondary" | "in-text";
 	hidden?: boolean;
 }
 

@@ -1,11 +1,13 @@
-.button {
+.primary-button,
+.secondary-button {
 	border-radius: 99px;
 	cursor: pointer;
 	font-weight: 500;
 	padding: 16px 24px;
 }
 
-.button[disabled] {
+.primary-button[disabled],
+.secondary-button[button] {
 	cursor: default;
 }
 
@@ -25,4 +27,13 @@
 
 .secondary-button[disabled] {
 	color: var(--secondary-inactive-text-color);
+}
+
+.in-text-button {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.in-text-button:hover {
+	text-decoration: none;
 }

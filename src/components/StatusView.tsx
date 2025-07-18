@@ -9,6 +9,7 @@ import {
 	savedNoteAtom,
 	statusAtom,
 } from "../atoms";
+import { Button } from "./Button";
 
 export function StatusView() {
 	const note = useAtomValue(noteAtom);
@@ -83,7 +84,7 @@ function NewNoteVersionAvailableIndicator() {
 	const savedNote = useAtomValue(savedNoteAtom);
 	const restoreSavedNote = useSetAtom(restoreSavedNoteAtom);
 
-	const restoreNoteFromBrowser = () => {
+	const restore = () => {
 		if (savedNote) {
 			restoreSavedNote();
 		}
@@ -99,13 +100,9 @@ function NewNoteVersionAvailableIndicator() {
 				<li>A newer version of your note is in your browser</li>
 
 				<li>
-					<button
-						type="button"
-						className="text-button"
-						onClick={restoreNoteFromBrowser}
-					>
+					<Button level="in-text" onClick={restore}>
 						Restore
-					</button>
+					</Button>
 				</li>
 			</>
 		)

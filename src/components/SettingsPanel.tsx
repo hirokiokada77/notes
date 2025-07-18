@@ -1,3 +1,4 @@
+import "./SettingsPanel.css";
 import { LocaleSelector } from "./LocaleSelector";
 import { ThemeToggle } from "./ThemeToggle";
 
