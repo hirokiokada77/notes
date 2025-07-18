@@ -22,10 +22,12 @@ export function InfoBox() {
 	};
 
 	const share = async () => {
-		await navigator.share({
-			title: document.title,
-			url: window.location.href,
-		});
+		if (navigator.share) {
+			await navigator.share({
+				title: document.title,
+				url: window.location.href,
+			});
+		}
 	};
 
 	const handleFocus = () => {
