@@ -16,16 +16,24 @@ body.light-mode {
 	pointer-events: none;
 	background-color: var(--toast-bg-color);
 	border-radius: 8px;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 	color: var(--toast-text-color);
-	line-height: 1;
-	max-width: 300px;
+	line-height: 1.5;
+	max-width: calc(100% - 40px);
 	padding: 20px;
-	transform: translateY(72px);
+	transform: translateY(76px);
 	opacity: 0;
 	transition:
 		transform 0.1s ease,
 		opacity 0.1s ease;
+
+	@media (max-width: 480px) {
+		bottom: 0;
+		left: 0;
+		border-radius: 0;
+		width: 100%;
+		max-width: 100%;
+	}
 
 	@media print {
 		display: none;
@@ -39,7 +47,11 @@ body.light-mode {
 }
 
 .toast.hide {
-	transform: translateY(72px);
+	transform: translateY(76px);
 	opacity: 0;
 	pointer-events: none;
+}
+
+.toast-container {
+	margin: -0.25em 0;
 }

@@ -95,7 +95,7 @@ export function Toast() {
 			aria-live={showToast && !toastIsHiding ? "polite" : "off"}
 			aria-hidden={showToast ? "false" : "true"}
 		>
-			{toastMessage}
+			<div className="toast-container">{toastMessage}</div>
 		</div>
 	);
 }
