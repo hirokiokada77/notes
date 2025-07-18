@@ -1,9 +1,6 @@
 .status {
-	width: 760px;
-	max-width: 100%;
-	margin: 0 auto;
 	color: var(--secondary-text-color);
-	font-size: 0.8em;
+	font-size: calc(1rem * 14 / 16);
 }
 
 .status-list {

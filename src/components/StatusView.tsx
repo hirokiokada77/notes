@@ -27,7 +27,7 @@ export function StatusView() {
 
 	return (
 		shouldDisplayStatus && (
-			<div className="status">
+			<div className="main-section status">
 				<ul className="status-list">
 					<LastUpdatedIndicator />
 
