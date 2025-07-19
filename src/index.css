@@ -58,6 +58,9 @@ textarea {
 	color: inherit;
 	font-family: inherit;
 	font-size: inherit;
+}
+
+button {
 	user-select: none;
 }
 
