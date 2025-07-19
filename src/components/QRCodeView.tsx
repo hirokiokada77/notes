@@ -1,9 +1,8 @@
 import "./QRCodeView.css";
 import { useAtom, useAtomValue } from "jotai";
+import QRCode from "qrcode";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { displayQrCodeAtom, messagesAtom, rerenderAtom } from "../atoms";
-
-const QRCode = import("qrcode");
 
 export function QRCodeView() {
 	const rerender = useAtomValue(rerenderAtom);
@@ -42,7 +41,7 @@ export function QRCodeView() {
 			setInitialized(true);
 
 			try {
-				const dataUrl = await (await QRCode).toDataURL(window.location.href, {
+				const dataUrl = await QRCode.toDataURL(window.location.href, {
 					errorCorrectionLevel: "low",
 				});
 
