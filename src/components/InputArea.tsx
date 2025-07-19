@@ -1,8 +1,9 @@
 import "./InputArea.css";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type { MouseEvent } from "react";
 import { type ChangeEvent, useEffect, useId, useRef } from "react";
 import {
+	cursorPositionAtom,
 	messagesAtom,
 	noteAtom,
 	saveNoteAtom,
@@ -22,8 +23,18 @@ export function InputArea() {
 
 	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
 		const newText = event.target.value;
+		const newCursorPosition = event.target.selectionStart;
 
 		updateNoteText(newText);
+		setCursorPosition(newCursorPosition);
+	};
+
+	const handleCursorChange = () => {
+		if (noteInputRef.current) {
+			const newCursorPosition = noteInputRef.current.selectionStart;
+
+			setCursorPosition(newCursorPosition);
+		}
 	};
 
 	const handleFocus = () => {
@@ -40,6 +51,8 @@ export function InputArea() {
 				updateNoteText(formattedText);
 			}
 		}
+
+		setCursorPosition(null);
 	};
 
 	const noteInputId = useId();
@@ -86,6 +99,16 @@ export function InputArea() {
 		}
 	}, [note]);
 
+	const [cursorPosition, setCursorPosition] = useAtom(cursorPositionAtom);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
+	useEffect(() => {
+		if (noteInputRef.current && cursorPosition !== null) {
+			noteInputRef.current.selectionStart = cursorPosition;
+			noteInputRef.current.selectionEnd = cursorPosition;
+		}
+	}, [cursorPosition, note]);
+
 	return (
 		<div className="input-area">
 			<label htmlFor={noteInputId} className="sr-only">
@@ -99,6 +122,8 @@ export function InputArea() {
 					className="note-input-container"
 					value={note ? note.text : ""}
 					onChange={handleChange}
+					onKeyUp={handleCursorChange}
+					onMouseUp={handleCursorChange}
 					onFocus={handleFocus}
 					onBlur={handleBlur}
 					placeholder={messages.textarea_placeholder}

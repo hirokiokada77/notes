@@ -19,6 +19,17 @@ export async function formatNoteText(noteText: string) {
 	});
 }
 
+export async function formatNoteTextWithCursorResult(
+	noteText: string,
+	cursorOffset: number,
+) {
+	return await (await prettier).formatWithCursor(noteText, {
+		parser: "markdown",
+		plugins: [(await prettierPluginMarkdown).default],
+		cursorOffset,
+	});
+}
+
 export function formatTimeAgo(unixMilliseconds: number) {
 	const now = Date.now();
 	const seconds = Math.floor((now - unixMilliseconds) / 1000);

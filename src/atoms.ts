@@ -10,6 +10,7 @@ import {
 import {
 	createNewNote,
 	formatNoteText,
+	formatNoteTextWithCursorResult,
 	formatTimeAgo,
 	getInitialLocale,
 	type Locale,
@@ -98,11 +99,26 @@ export const clearSavedNoteAtom = atom(null, (_get, set) => {
 
 export const saveNoteAtom = atom(null, async (get, set) => {
 	const note = get(noteAtom);
+	const cursorPosition = get(cursorPositionAtom);
 
 	if (note) {
+		const formattedText = await (async () => {
+			if (cursorPosition !== null) {
+				const result = await formatNoteTextWithCursorResult(
+					note.text,
+					cursorPosition,
+				);
+
+				set(cursorPositionAtom, result.cursorOffset);
+
+				return result.formatted;
+			} else {
+				return await formatNoteText(note.text);
+			}
+		})();
 		const newNote: Note = {
 			...note,
-			text: await formatNoteText(note.text),
+			text: formattedText,
 			lastUpdated: Date.now(),
 		};
 
@@ -159,3 +175,5 @@ export const documentTitleAtom = atom((get) => {
 
 	return messages.app_name;
 });
+
+export const cursorPositionAtom = atom<number | null>(null);
