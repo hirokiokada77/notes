@@ -79,6 +79,10 @@
 	margin: 20px 0;
 }
 
+.note-preview .katex-display {
+	margin: 20px 0 !important;
+}
+
 .note-preview code {
 	background-color: var(--code-bg-color);
 	color: var(--code-text-color);
