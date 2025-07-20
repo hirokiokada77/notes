@@ -134,8 +134,8 @@ export interface Messages {
 export interface Note {
 	id: string;
 	text: string;
-	created: number;
-	lastUpdated: number;
+	created: number | null;
+	lastUpdated: number | null;
 }
 
 export function createNewNote(): Note {

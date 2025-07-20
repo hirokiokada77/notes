@@ -72,6 +72,8 @@ function UnsavedChangesIndicator() {
 		savedNote &&
 		note.id === savedNote.id &&
 		note.text !== savedNote.text &&
+		note.lastUpdated &&
+		savedNote.lastUpdated &&
 		note.lastUpdated >= savedNote.lastUpdated && (
 			<li>You have unsaved changes</li>
 		)
@@ -95,6 +97,8 @@ function NewNoteVersionAvailableIndicator() {
 		savedNote &&
 		note.id === savedNote.id &&
 		note.text !== savedNote.text &&
+		note.lastUpdated &&
+		savedNote.lastUpdated &&
 		note.lastUpdated < savedNote.lastUpdated && (
 			<>
 				<li>A newer version of your note is in your browser</li>

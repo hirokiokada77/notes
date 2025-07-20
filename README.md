@@ -20,9 +20,15 @@ API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API),
 enabling offline usage. We enforce a strict [Content Security Policy
 (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) to
 ensure that no sensitive user data is transmitted to external servers.
-The content set as the URI fragment is in standard JSON format, which
-can be easily parsed using a few lines of scripts or standard
-third-party tools.
+The content set as the URI fragment is in standard
+[URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams)
+format, which can be easily parsed using a few lines of code or standard
+third-party tools:
+
+```js
+const params = new URLSearchParams(location.hash);
+const noteText = params.get("text");
+```
 
 To run the app locally:
 

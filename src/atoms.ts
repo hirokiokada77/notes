@@ -33,11 +33,58 @@ export const messagesAtom = atom((get) => {
 	return messagesByLocale[locale];
 });
 
-const _noteAtom = atomWithHash<Note | null>("note", null, {
+const _noteAtom = atom(
+	(get) => {
+		const id = get(_noteIdAtom);
+		const text = get(_noteTextAtom);
+		const created = get(_noteCreatedAtom);
+		const lastUpdated = get(_noteLastUpdatedAtom);
+
+		if (id && text) {
+			const note: Note = {
+				id,
+				text,
+				created,
+				lastUpdated,
+			};
+
+			return note;
+		}
+
+		return null;
+	},
+	(_get, set, note: Note | null) => {
+		if (note) {
+			set(_noteIdAtom, note.id);
+			set(_noteTextAtom, note.text);
+			set(_noteCreatedAtom, note.created);
+			set(_noteLastUpdatedAtom, note.lastUpdated);
+		} else {
+			set(_noteIdAtom, null);
+			set(_noteTextAtom, null);
+			set(_noteCreatedAtom, null);
+			set(_noteLastUpdatedAtom, null);
+		}
+	},
+);
+
+export const noteAtom = atom((get) => get(_noteAtom));
+
+const _noteIdAtom = atomWithHash<string | null>("id", null, {
 	setHash: "replaceState",
 });
 
-export const noteAtom = atom((get) => get(_noteAtom));
+const _noteTextAtom = atomWithHash<string | null>("text", null, {
+	setHash: "replaceState",
+});
+
+const _noteCreatedAtom = atomWithHash<number | null>("created", null, {
+	setHash: "replaceState",
+});
+
+const _noteLastUpdatedAtom = atomWithHash<number | null>("lastUpdated", null, {
+	setHash: "replaceState",
+});
 
 export const noteFormattedLastUpdatedAtom = atom((get) => {
 	get(rerenderAtom);
