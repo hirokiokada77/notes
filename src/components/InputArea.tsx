@@ -74,6 +74,11 @@ export function InputArea() {
 			const href = target.getAttribute("href");
 
 			if (href) {
+				if (href.startsWith("#")) {
+					// Temporarily disable anchor links until we have a fix
+					return;
+				}
+
 				window.open(href, "_blank", "noopener,noreferrer");
 			}
 		}
