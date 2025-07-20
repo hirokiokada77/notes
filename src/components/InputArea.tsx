@@ -131,13 +131,12 @@ export function InputArea() {
 				/>
 			</div>
 
-			{/** biome-ignore lint/a11y/noStaticElementInteractions: expected behavior */}
 			{/** biome-ignore lint/a11y/useKeyWithClickEvents: expected behavior */}
-			<div className="note-preview" onClick={handleClick} aria-live="polite">
+			<main className="note-preview" onClick={handleClick} aria-live="polite">
 				<div className="note-preview-container">
 					<NotePreview />
 				</div>
-			</div>
+			</main>
 		</div>
 	);
 }
