@@ -4,6 +4,10 @@
 	width: 100%;
 	flex-direction: column;
 	gap: 24px;
+
+	@media print {
+		display: none;
+	}
 }
 
 .locale-selector {

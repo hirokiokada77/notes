@@ -1,6 +1,10 @@
 .status {
 	color: var(--secondary-text-color);
 	font-size: calc(1rem * 14 / 16);
+
+	@media print {
+		display: none;
+	}
 }
 
 .status-list {
