@@ -79,6 +79,10 @@
 	margin: 20px 0;
 }
 
+.note-preview li {
+	margin: 8px 0;
+}
+
 .note-preview .katex-display {
 	margin: 20px 0 !important;
 }
