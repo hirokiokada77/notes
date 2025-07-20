@@ -27,7 +27,7 @@ third-party tools:
 
 ```js
 const params = new URLSearchParams(location.hash);
-const noteText = params.get("text");
+const noteText = JSON.parse(params.get("text"));
 ```
 
 To run the app locally:
