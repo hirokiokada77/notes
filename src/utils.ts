@@ -165,3 +165,21 @@ export interface TextSelection {
 	start: number;
 	end: number;
 }
+
+export function updateAnchor(anchor: string) {
+	const targetElement = document.getElementById(decodeURIComponent(anchor));
+
+	if (targetElement) {
+		const elementPosition =
+			targetElement.getBoundingClientRect().top + window.pageYOffset;
+		const offsetPosition = elementPosition;
+
+		window.scrollTo({
+			top: offsetPosition,
+		});
+
+		return true;
+	}
+
+	return false;
+}

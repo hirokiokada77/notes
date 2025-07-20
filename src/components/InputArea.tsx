@@ -10,7 +10,7 @@ import {
 	textSelectionAtom,
 	updateNoteTextAtom,
 } from "../atoms";
-import { formatNoteText } from "../utils";
+import { formatNoteText, updateAnchor } from "../utils";
 import { NotePreview } from "./NotePreview";
 
 export function InputArea() {
@@ -75,7 +75,8 @@ export function InputArea() {
 
 			if (href) {
 				if (href.startsWith("#")) {
-					// Temporarily disable anchor links until we have a fix
+					updateAnchor(href.substring(1));
+
 					return;
 				}
 
