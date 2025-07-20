@@ -127,6 +127,8 @@ export function InputArea() {
 
 	const noteBlank = !(note && note.text.trim().length > 0);
 
+	const status = useAtomValue(statusAtom);
+
 	return (
 		<div className="input-area">
 			<label htmlFor={noteInputId} className="sr-only">
@@ -151,7 +153,10 @@ export function InputArea() {
 
 			{/** biome-ignore lint/a11y/useKeyWithClickEvents: expected behavior */}
 			<main
-				className={["note-preview", noteBlank ? "note-preview--blank" : []]
+				className={[
+					"note-preview",
+					noteBlank && status === "viewing" ? "note-preview--skeleton" : [],
+				]
 					.flat()
 					.join(" ")}
 				onClick={handleClick}

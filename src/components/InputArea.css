@@ -37,7 +37,7 @@
 	width: 0;
 }
 
-.note-preview--blank {
+.note-preview--skeleton {
 	background: var(--code-bg-color);
 }
 
