@@ -81,7 +81,7 @@ body {
 	color: var(--primary-text-color);
 	font-family: var(--font-family-default);
 	min-height: 100vh;
-	padding: var(--spacing-primary);
+	padding: 24px;
 }
 
 summary {
