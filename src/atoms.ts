@@ -44,7 +44,11 @@ export const noteFormattedLastUpdatedAtom = atom((get) => {
 	const note = get(noteAtom);
 
 	if (note) {
-		return formatTimeAgo(note.lastUpdated);
+		const lastUpdated = note.lastUpdated;
+
+		if (lastUpdated) {
+			return formatTimeAgo(lastUpdated);
+		}
 	}
 
 	return null;

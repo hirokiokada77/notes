@@ -46,7 +46,7 @@ export function StatusView() {
 function LastUpdatedIndicator() {
 	const noteFormattedLastUpdated = useAtomValue(noteFormattedLastUpdatedAtom);
 
-	return <li>{noteFormattedLastUpdated}</li>;
+	return noteFormattedLastUpdated && <li>{noteFormattedLastUpdated}</li>;
 }
 
 function SavedChangesIndicator() {
