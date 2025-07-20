@@ -24,7 +24,7 @@ export function StatusView() {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
 	useEffect(() => {
 		forceRerender();
-	}, [shouldDisplayStatus]);
+	}, [forceRerender, shouldDisplayStatus]);
 
 	return (
 		shouldDisplayStatus && (
