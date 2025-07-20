@@ -1,5 +1,5 @@
 .button-group {
 	display: flex;
-	gap: 24px;
+	gap: 16px;
 	justify-content: center;
 }

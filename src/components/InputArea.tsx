@@ -109,6 +109,8 @@ export function InputArea() {
 		}
 	}, [cursorPosition, note]);
 
+	const noteBlank = !(note && note.text.trim().length > 0);
+
 	return (
 		<div className="input-area">
 			<label htmlFor={noteInputId} className="sr-only">
@@ -132,7 +134,13 @@ export function InputArea() {
 			</div>
 
 			{/** biome-ignore lint/a11y/useKeyWithClickEvents: expected behavior */}
-			<main className="note-preview" onClick={handleClick} aria-live="polite">
+			<main
+				className={["note-preview", noteBlank ? "note-preview--blank" : []]
+					.flat()
+					.join(" ")}
+				onClick={handleClick}
+				aria-live="polite"
+			>
 				<div className="note-preview-container">
 					<NotePreview />
 				</div>

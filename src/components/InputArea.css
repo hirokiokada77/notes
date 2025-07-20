@@ -24,14 +24,21 @@
 
 .note-input-container,
 .note-preview {
-	border: 1px solid var(--border-color);
 	border-radius: 16px;
 	color: var(--primary-text-color);
 	line-height: 1.5;
 }
 
+.note-input-container {
+	border: 1px solid var(--border-color);
+}
+
 .note-preview {
 	width: 0;
+}
+
+.note-preview--blank {
+	background: var(--code-bg-color);
 }
 
 .note-input {
@@ -43,7 +50,7 @@
 .note-input-container {
 	width: 100%;
 	height: 100%;
-	padding: 20px;
+	padding: var(--spacing-primary);
 	resize: vertical;
 	font-family: var(--font-family-textarea);
 }
@@ -51,11 +58,6 @@
 .note-input-container::placeholder {
 	font-family: var(--font-family-default);
 }
-
-.note-preview-container {
-	margin: 20px;
-}
-
 .note-preview a {
 	color: var(--primary-active-bg-color);
 	text-decoration: none;
@@ -65,31 +67,66 @@
 	text-decoration: underline;
 }
 
-.note-preview h1,
-.note-preview h2,
-.note-preview h3,
-.note-preview h4,
-.note-preview h5,
-.note-preview h6,
+.note-preview-container {
+	margin: var(--spacing-primary);
+}
+
 .note-preview hr,
 .note-preview-container > ol,
 .note-preview p,
 .note-preview table,
 .note-preview-container > ul {
-	margin: 20px 0;
+	margin: 0 0 16px;
+}
+
+.note-preview-container ol,
+.note-preview-container ul {
+	padding-left: 28px;
+}
+
+.note-preview .katex-display {
+	margin: 0 0 16px !important; /* Override KaTeX default */
+}
+
+.note-preview h1,
+.note-preview h2,
+.note-preview h3,
+.note-preview h4,
+.note-preview h5,
+.note-preview h6 {
+	margin: 24px 0 16px;
+}
+
+.note-preview hr {
+	border-top: 1px solid var(--border-color);
+	border-bottom: 0;
+	margin: 8px 0;
+}
+
+.note-preview h1 {
+	font-size: calc(1rem * 28 / 16);
+}
+
+.note-preview h2 {
+	font-size: calc(1rem * 24 / 16);
+}
+
+.note-preview h3 {
+	font-size: calc(1rem * 20 / 16);
+}
+
+.note-preview h4,
+.note-preview h5,
+.note-preview h6 {
+	font-size: 1rem;
 }
 
 .note-preview li {
 	margin: 8px 0;
 }
 
-.note-preview .katex-display {
-	margin: 20px 0 !important;
-}
-
 .note-preview code {
 	background-color: var(--code-bg-color);
-	color: var(--code-text-color);
 	border-radius: 6px;
 	font-family:
 		"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
@@ -101,7 +138,8 @@
 	border-radius: 8px;
 	margin-bottom: 1em;
 	overflow-x: auto;
-	padding: 10px;
+	padding: 16px;
+	font-size: calc(1rem * 14 / 16);
 }
 
 .note-preview pre code {
@@ -110,27 +148,29 @@
 }
 
 .note-preview blockquote {
-	border-left: 4px solid var(--border-color);
-	color: var(--secondary-text-color);
 	margin: 1em 0;
-	padding-left: 15px;
+	padding-left: 40px;
 }
 
 .note-preview table {
-	border-collapse: collapse;
-	width: 100%;
+	max-width: 100%;
+	background-color: var(--code-bg-color);
+	color: var(--primary-heading-color);
+	border-radius: 8px;
+	font-size: calc(1rem * 14 / 16);
 }
 
 .note-preview th,
 .note-preview td {
-	border: 1px solid var(--border-color);
-	padding: 6px 12px;
-	text-align: left;
+	vertical-align: top;
+	padding: 8px 12px;
 }
 
 .note-preview th {
 	background-color: var(--code-bg-color);
 	color: var(--primary-heading-color);
+	font-weight: unset;
+	text-align: unset;
 }
 
 @media (min-width: 769px) {
