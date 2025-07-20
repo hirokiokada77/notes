@@ -7,7 +7,7 @@
 }
 
 .primary-button[disabled],
-.secondary-button[button] {
+.secondary-button[disabled] {
 	cursor: default;
 }
 
