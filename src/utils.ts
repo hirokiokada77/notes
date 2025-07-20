@@ -160,3 +160,8 @@ export function createRandomId(): string {
 
 	return result;
 }
+
+export interface TextSelection {
+	start: number;
+	end: number;
+}

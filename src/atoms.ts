@@ -17,6 +17,7 @@ import {
 	messagesByLocale,
 	type Note,
 	type Status,
+	type TextSelection,
 } from "./utils";
 
 export const displayQrCodeAtom = atomWithStorage(notesAppDisplayQrCode, false);
@@ -103,17 +104,22 @@ export const clearSavedNoteAtom = atom(null, (_get, set) => {
 
 export const saveNoteAtom = atom(null, async (get, set) => {
 	const note = get(noteAtom);
-	const cursorPosition = get(cursorPositionAtom);
+	const textSelection = get(textSelectionAtom);
 
 	if (note) {
 		const formattedText = await (async () => {
-			if (cursorPosition !== null) {
+			if (textSelection !== null) {
 				const result = await formatNoteTextWithCursorResult(
 					note.text,
-					cursorPosition,
+					textSelection.start,
 				);
 
-				set(cursorPositionAtom, result.cursorOffset);
+				if (note.text !== result.formatted) {
+					set(textSelectionAtom, {
+						start: result.cursorOffset,
+						end: result.cursorOffset,
+					});
+				}
 
 				return result.formatted;
 			} else {
@@ -180,4 +186,4 @@ export const documentTitleAtom = atom((get) => {
 	return messages.app_name;
 });
 
-export const cursorPositionAtom = atom<number | null>(null);
+export const textSelectionAtom = atom<TextSelection | null>(null);

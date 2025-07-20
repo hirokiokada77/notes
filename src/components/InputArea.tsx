@@ -3,11 +3,11 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type { MouseEvent } from "react";
 import { type ChangeEvent, useEffect, useId, useRef } from "react";
 import {
-	cursorPositionAtom,
 	messagesAtom,
 	noteAtom,
 	saveNoteAtom,
 	statusAtom,
+	textSelectionAtom,
 	updateNoteTextAtom,
 } from "../atoms";
 import { formatNoteText } from "../utils";
@@ -22,18 +22,26 @@ export function InputArea() {
 	const setStatus = useSetAtom(statusAtom);
 
 	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-		const newText = event.target.value;
-		const newCursorPosition = event.target.selectionStart;
+		const text = event.target.value;
+		const textSelectionStart = event.target.selectionStart;
+		const textSelectionEnd = event.target.selectionEnd;
 
-		updateNoteText(newText);
-		setCursorPosition(newCursorPosition);
+		updateNoteText(text);
+		setTextSelection({
+			start: textSelectionStart,
+			end: textSelectionEnd,
+		});
 	};
 
 	const handleCursorChange = () => {
 		if (noteInputRef.current) {
-			const newCursorPosition = noteInputRef.current.selectionStart;
+			const textSelectionStart = noteInputRef.current.selectionStart;
+			const textSelectionEnd = noteInputRef.current.selectionEnd;
 
-			setCursorPosition(newCursorPosition);
+			setTextSelection({
+				start: textSelectionStart,
+				end: textSelectionEnd,
+			});
 		}
 	};
 
@@ -52,7 +60,7 @@ export function InputArea() {
 			}
 		}
 
-		setCursorPosition(null);
+		setTextSelection(null);
 	};
 
 	const noteInputId = useId();
@@ -99,15 +107,17 @@ export function InputArea() {
 		}
 	}, [note]);
 
-	const [cursorPosition, setCursorPosition] = useAtom(cursorPositionAtom);
+	const [textSelection, setTextSelection] = useAtom(textSelectionAtom);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
 	useEffect(() => {
-		if (noteInputRef.current && cursorPosition !== null) {
-			noteInputRef.current.selectionStart = cursorPosition;
-			noteInputRef.current.selectionEnd = cursorPosition;
+		if (noteInputRef.current && textSelection !== null) {
+			noteInputRef.current.setSelectionRange(
+				textSelection.start,
+				textSelection.end,
+			);
 		}
-	}, [cursorPosition, note]);
+	}, [textSelection, note]);
 
 	const noteBlank = !(note && note.text.trim().length > 0);
 
