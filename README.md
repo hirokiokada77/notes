@@ -2,6 +2,16 @@
 
 ![Screenshot of Markdown Notes](screenshot.png)
 
+To run the app locally:
+
+```sh
+bun install
+bun run build
+bun run preview
+```
+
+---
+
 This is a web-based Markdown editor, formatter, and previewer with
 support for [LaTeX](https://www.latex-project.org/) math formulas. It
 automatically formats Markdown documents using
@@ -20,20 +30,26 @@ API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API),
 enabling offline usage. We enforce a strict [Content Security Policy
 (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) to
 ensure that no sensitive user data is transmitted to external servers.
-The content set as the URI fragment is in standard
+
+The data set as the URI fragment is in standard
 [URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams)
 format, which can be easily parsed using a few lines of code or standard
 third-party tools:
 
 ```js
-const params = new URLSearchParams(location.hash);
+const hash = location.hash; // "#id=1&text=Note+text+here&..."
+const params = new URLSearchParams(hash);
 const noteText = params.get("text");
+console.log(noteText); // Output: "Note text here"
 ```
 
-To run the app locally:
+Here is another example in Python:
 
-```sh
-bun install
-bun run build
-bun run preview
+```python
+from urllib.parse import parse_qs
+
+hash = "#id=1&text=Note+text+here"
+params = parse_qs(hash)
+note_text = params.get("text")[0]
+print(note_text) # Output: "Note text here"
 ```
