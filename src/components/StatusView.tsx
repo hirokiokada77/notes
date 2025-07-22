@@ -18,28 +18,26 @@ export function StatusView() {
 
 	const forceRerender = useSetAtom(forceRerenderAtom);
 
-	const shouldDisplayStatus =
+	const shouldDisplayLastUpdated =
 		status !== "editing" && note && note.text.length > 0;
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
 	useEffect(() => {
 		forceRerender();
-	}, [forceRerender, shouldDisplayStatus]);
+	}, [forceRerender, shouldDisplayLastUpdated]);
 
 	return (
-		shouldDisplayStatus && (
-			<div className="status-view">
-				<ul className="status-view-list">
-					<LastUpdatedIndicator />
+		<div className="status-view">
+			<ul className="status-view-list">
+				{shouldDisplayLastUpdated && <LastUpdatedIndicator />}
 
-					<SavedChangesIndicator />
+				<SavedChangesIndicator />
 
-					<UnsavedChangesIndicator />
+				<UnsavedChangesIndicator />
 
-					<NewNoteVersionAvailableIndicator />
-				</ul>
-			</div>
-		)
+				<NewNoteVersionAvailableIndicator />
+			</ul>
+		</div>
 	);
 }
 
@@ -74,9 +72,7 @@ function UnsavedChangesIndicator() {
 		note.text !== savedNote.text &&
 		note.lastUpdated &&
 		savedNote.lastUpdated &&
-		note.lastUpdated >= savedNote.lastUpdated && (
-			<li>You have unsaved changes</li>
-		)
+		note.lastUpdated >= savedNote.lastUpdated && <li>Unsaved changes</li>
 	);
 }
 
@@ -101,7 +97,7 @@ function NewNoteVersionAvailableIndicator() {
 		savedNote.lastUpdated &&
 		note.lastUpdated < savedNote.lastUpdated && (
 			<>
-				<li>A newer version of your note is in your browser</li>
+				<li>Newer version in browser</li>
 
 				<li>
 					<Button level="in-text" onClick={restore}>

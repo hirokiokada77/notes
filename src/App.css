@@ -1,12 +1,18 @@
 .App {
 	display: flex;
 	flex-direction: column;
-	width: 100%;
-	gap: 48px;
+	gap: var(--spacing-primary);
 }
 
 .App-section {
 	margin: 0 auto;
 	max-width: 760px;
 	width: 100%;
+}
+
+.App-misc {
+	display: flex;
+	flex-direction: column;
+	gap: 48px;
+	padding: 24px 0;
 }

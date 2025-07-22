@@ -112,6 +112,16 @@ const _noteLastUpdatedAtom = atomWithHash<number | null>("lastUpdated", null, {
 	},
 });
 
+export const noteTitleAtom = atom((get) => {
+	const noteText = get(noteAtom)?.text;
+
+	if (noteText) {
+		return getFirstHeadingOrParagraphText(noteText);
+	}
+
+	return null;
+});
+
 export const noteFormattedLastUpdatedAtom = atom((get) => {
 	get(rerenderAtom);
 
@@ -225,13 +235,6 @@ export const saveFeatureApplicableAtom = atom((get) => {
 			note.text === savedNote.text
 		)
 	);
-});
-
-export const clearFeatureApplicableAtom = atom((get) => {
-	const note = get(noteAtom);
-	const savedNote = get(savedNoteAtom);
-
-	return !(!note || (!savedNote && note.text.length === 0));
 });
 
 export const statusAtom = atom<Status>("viewing");

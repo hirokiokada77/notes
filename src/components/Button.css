@@ -32,6 +32,7 @@
 .in-text-button {
 	text-decoration: underline;
 	cursor: pointer;
+	line-height: inherit;
 }
 
 .in-text-button:hover {
