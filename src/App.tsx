@@ -40,8 +40,8 @@ export function App() {
 	useEffect(() => {
 		const description = document.querySelector("meta[name=description]");
 
-		description?.setAttribute("content", messages.app_description);
-	}, [messages.app_description]);
+		description?.setAttribute("content", messages.appDescription);
+	}, [messages.appDescription]);
 
 	useEffect(() => {
 		const html = document.querySelector("html");

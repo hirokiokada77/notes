@@ -156,7 +156,7 @@ export const restoreSavedNoteAtom = atom(null, (get, set) => {
 
 	set(_noteAtom, savedNote);
 
-	globalThis.registerToastMessage("note_loaded_from_browser");
+	globalThis.registerToastMessage("noteLoadedFromBrowser");
 });
 
 const _rerenderAtom = atom(0);
@@ -250,11 +250,11 @@ export const documentTitleAtom = atom((get) => {
 			getFirstHeadingOrParagraphText(noteText);
 
 		if (firstHeadingOrParagraphText) {
-			return `${messages.app_name} – ${firstHeadingOrParagraphText}`;
+			return `${messages.appName} – ${firstHeadingOrParagraphText}`;
 		}
 	}
 
-	return messages.app_name;
+	return messages.appName;
 });
 
 export const textSelectionAtom = atom<TextSelection | null>(null);

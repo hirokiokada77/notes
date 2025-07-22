@@ -6,7 +6,7 @@ import * as cheerio from "cheerio";
 import type { OutputAsset } from "rollup";
 import { defineConfig, type ResolvedConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
-import { app_description, app_name } from "./src/locales/en.json";
+import { appDescription, appName } from "./src/locales/en.json";
 
 export default defineConfig({
 	base: "/notes/",
@@ -18,9 +18,9 @@ export default defineConfig({
 				globPatterns: ["**/*"],
 			},
 			manifest: {
-				name: app_name,
-				short_name: app_name,
-				description: app_description,
+				name: appName,
+				short_name: appName,
+				description: appDescription,
 				theme_color: "#ffffff",
 				icons: [
 					{
@@ -39,13 +39,13 @@ export default defineConfig({
 		{
 			name: "inject-app-name",
 			transformIndexHtml(html) {
-				return html.replace("__app_name__", app_name);
+				return html.replace("__appName__", appName);
 			},
 		},
 		{
 			name: "inject-app-description",
 			transformIndexHtml(html) {
-				return html.replace("__app_description__", app_description);
+				return html.replace("__appDescription__", appDescription);
 			},
 		},
 		(() => {

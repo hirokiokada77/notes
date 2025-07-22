@@ -14,13 +14,13 @@ export function ThemeToggle() {
 	return (
 		<div className="theme-toggle">
 			<Switch
-				label={messages.dark_mode_label}
+				label={messages.darkModeLabel}
 				onChange={toggleTheme}
 				checked={theme === "dark"}
 			/>
 
 			<span className="theme-text" aria-hidden="true">
-				{messages.dark_mode_label}
+				{messages.darkModeLabel}
 			</span>
 		</div>
 	);

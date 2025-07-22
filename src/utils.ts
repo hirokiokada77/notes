@@ -108,29 +108,29 @@ export function getInitialLocale() {
 export type { MessageKeys } from "./global";
 
 export interface Messages {
-	app_name: string;
-	app_description: string;
-	textarea_placeholder: string;
-	current_url_label: string;
-	copy_button: string;
-	share_button: string;
-	copy_success: string;
-	copy_fail: string;
-	share_instruction: string;
-	locale_selector_label: string;
-	dark_mode_label: string;
-	save_button: string;
-	save_success: string;
-	note_loaded_from_browser: string;
-	save_fail: string;
-	clear_button: string;
-	clear_confirm: string;
-	clear_success: string;
-	clear_fail: string;
-	view_button: string;
-	edit_button: string;
-	qr_code_view_summary: string;
-	qr_code_img_alt: string;
+	appName: string;
+	appDescription: string;
+	textareaPlaceholder: string;
+	currentUrlLabel: string;
+	copyButton: string;
+	shareButton: string;
+	copySuccess: string;
+	copyFail: string;
+	shareInstruction: string;
+	localeSelectorLabel: string;
+	darkModeLabel: string;
+	saveButton: string;
+	saveSuccess: string;
+	noteLoadedFromBrowser: string;
+	saveFail: string;
+	clearButton: string;
+	clearConfirm: string;
+	clearSuccess: string;
+	clearFail: string;
+	viewButton: string;
+	editButton: string;
+	qrCodeViewSummary: string;
+	qrCodeImgAlt: string;
 }
 
 export interface Note {

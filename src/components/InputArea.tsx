@@ -148,7 +148,7 @@ export function InputArea() {
 
 				saveNote();
 
-				globalThis.registerToastMessage("save_success");
+				globalThis.registerToastMessage("saveSuccess");
 			}
 
 			// Ctrl/Cmd + Z: Undo
@@ -246,7 +246,7 @@ export function InputArea() {
 	return (
 		<div className="input-area">
 			<label htmlFor={noteInputId} className="sr-only">
-				{messages.textarea_placeholder}
+				{messages.textareaPlaceholder}
 			</label>
 
 			<div className="note-input">
@@ -261,8 +261,8 @@ export function InputArea() {
 					onFocus={handleFocus}
 					onBlur={handleBlur}
 					onPaste={handlePaste}
-					placeholder={messages.textarea_placeholder}
-					aria-label={messages.textarea_placeholder}
+					placeholder={messages.textareaPlaceholder}
+					aria-label={messages.textareaPlaceholder}
 				/>
 			</div>
 

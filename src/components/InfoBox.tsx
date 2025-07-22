@@ -14,11 +14,11 @@ export function InfoBox() {
 		try {
 			await navigator.clipboard.writeText(window.location.href);
 
-			globalThis.registerToastMessage("copy_success");
+			globalThis.registerToastMessage("copySuccess");
 		} catch (err) {
 			console.error("Error copying to clipboard:", err);
 
-			globalThis.registerToastMessage("copy_fail");
+			globalThis.registerToastMessage("copyFail");
 		}
 	};
 
@@ -51,7 +51,7 @@ export function InfoBox() {
 
 					<div className="info-box-buttons">
 						<Button level="secondary" onClick={copyUrlToClipboard}>
-							{messages.copy_button}
+							{messages.copyButton}
 						</Button>
 
 						<Button
@@ -59,7 +59,7 @@ export function InfoBox() {
 							onClick={share}
 							hidden={shareFeatureUnavailable}
 						>
-							{messages.share_button}
+							{messages.shareButton}
 						</Button>
 					</div>
 				</div>

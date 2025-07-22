@@ -61,9 +61,9 @@ export function QRCodeView() {
 				aria-hidden={initialized && !qrCode}
 				aria-busy={isPending}
 			>
-				<summary>{messages.qr_code_view_summary}</summary>
+				<summary>{messages.qrCodeViewSummary}</summary>
 
-				{qrCode && <img src={qrCode} alt={messages.qr_code_img_alt} />}
+				{qrCode && <img src={qrCode} alt={messages.qrCodeImgAlt} />}
 			</details>
 		</div>
 	);

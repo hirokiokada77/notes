@@ -17,14 +17,14 @@ export function LocaleSelector() {
 	return (
 		<div className="locale-selector">
 			<label htmlFor={localeSelectorContainerId}>
-				{messages.locale_selector_label}
+				{messages.localeSelectorLabel}
 			</label>
 
 			<select
 				id={localeSelectorContainerId}
 				onChange={handleLocaleChange}
 				value={locale}
-				aria-label={messages.locale_selector_label}
+				aria-label={messages.localeSelectorLabel}
 			>
 				<option value="de" lang="de">
 					Deutsch

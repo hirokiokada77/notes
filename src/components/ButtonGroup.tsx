@@ -28,18 +28,18 @@ export function ButtonGroup() {
 
 		saveNote();
 
-		globalThis.registerToastMessage("save_success");
+		globalThis.registerToastMessage("saveSuccess");
 	};
 
 	const clear = () => {
-		if (window.confirm(messages.clear_confirm)) {
+		if (window.confirm(messages.clearConfirm)) {
 			forceRerender();
 
 			clearNote();
 			clearSavedNote();
 			initializeEditHistory("", null);
 
-			globalThis.registerToastMessage("clear_success");
+			globalThis.registerToastMessage("clearSuccess");
 		}
 	};
 
@@ -51,7 +51,7 @@ export function ButtonGroup() {
 					onClick={save}
 					disabled={!saveFeatureApplicable}
 				>
-					{messages.save_button}
+					{messages.saveButton}
 				</Button>
 
 				<Button
@@ -59,7 +59,7 @@ export function ButtonGroup() {
 					onClick={clear}
 					disabled={!clearFeatureApplicable}
 				>
-					{messages.clear_button}
+					{messages.clearButton}
 				</Button>
 			</div>
 		</div>
