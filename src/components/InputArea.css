@@ -43,8 +43,6 @@
 }
 
 .note-input {
-	font-size: calc(1rem * 14 / 16);
-
 	@media print {
 		display: none;
 	}
