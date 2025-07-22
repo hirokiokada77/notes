@@ -2,15 +2,7 @@
 
 ![Screenshot of Markdown Notes](screenshot.png)
 
-To run the app locally:
-
-```sh
-bun install
-bun run build
-bun run preview
-```
-
----
+## Overview
 
 This is a web-based Markdown editor, formatter, and previewer with
 support for [LaTeX](https://www.latex-project.org/) math formulas. It
@@ -22,19 +14,43 @@ others. You can also save your Markdown documents to your browser's
 [local
 storage](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API).
 
+### Privacy
+
 The app is highly privacy-respecting. No information about the content
 of the documents or any other metadata is ever sent to external servers.
-It automatically caches all core resources to your browser using the
-[Service Worker
-API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API),
-enabling offline usage. We enforce a strict [Content Security Policy
+We enforce a strict [Content Security Policy
 (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) to
 ensure that no sensitive user data is transmitted to external servers.
 
-The data set as the URI fragment is in standard
+### Offline usage
+
+The app automatically caches all core resources to your browser using
+the [Service Worker
+API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API),
+enabling offline usage.
+
+## Build
+
+To run the app locally:
+
+```sh
+bun install
+bun run build
+bun run preview
+```
+
+## Data serialization
+
+If you type your note into the app, the URL will look like this:
+
+```
+https://hirokiokada77.github.io/notes/#id=10fe615de58c4e67&text=Note+text+here
+```
+
+The data set in the URI fragment is in standard
 [URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams)
-format, which can be easily parsed using a few lines of code or standard
-third-party tools:
+format, which can be easily parsed using just a few lines of code or
+standard third-party tools:
 
 ```js
 const hash = location.hash; // "#id=1&text=Note+text+here&..."
