@@ -115,10 +115,13 @@ export function InputArea() {
 	const handleClick = (event: MouseEvent<HTMLDivElement>) => {
 		const target = event.target as HTMLElement;
 
-		if (target.tagName === "A" && target.hasAttribute("href")) {
+		if (
+			(target.tagName === "A" && target.hasAttribute("href")) ||
+			(target.tagName === "IMG" && target.closest("a[href]"))
+		) {
 			event.preventDefault();
 
-			const href = target.getAttribute("href");
+			const href = target.getAttribute("href") ?? target.closest("a")?.href;
 
 			if (href) {
 				if (href.startsWith("#")) {
