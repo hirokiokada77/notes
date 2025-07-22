@@ -174,11 +174,11 @@ export function InputArea() {
 
 			// Tab
 			if (event.key === "Tab") {
-				event.preventDefault();
-
 				const textarea = noteInputRef.current;
 
-				if (textarea) {
+				if (textarea && event.target === textarea) {
+					event.preventDefault();
+
 					const start = textarea.selectionStart;
 					const end = textarea.selectionEnd;
 
