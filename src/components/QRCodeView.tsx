@@ -19,6 +19,8 @@ export function QRCodeView() {
 
 	const messages = useAtomValue(messagesAtom);
 
+	const url = useRef<string | null>(null);
+
 	useEffect(() => {
 		const detailsElement = detailsRef.current;
 
@@ -41,28 +43,32 @@ export function QRCodeView() {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: forced re-rendering
 	useEffect(() => {
-		setBusy(true);
+		if (url.current !== window.location.href) {
+			setBusy(true);
 
-		const timeoutId = setTimeout(
-			async () => {
-				try {
-					const dataUrl = await QRCode.toDataURL(window.location.href, {
-						errorCorrectionLevel: "low",
-					});
+			const timeoutId = setTimeout(
+				async () => {
+					try {
+						const dataUrl = await QRCode.toDataURL(window.location.href, {
+							errorCorrectionLevel: "low",
+						});
 
-					setQrCode(dataUrl);
-				} catch {
-					setQrCode(null); // The URL is too long
-				}
+						setQrCode(dataUrl);
+					} catch {
+						setQrCode(null); // The URL is too long
+					}
 
-				setBusy(false);
-			},
-			initialized ? 300 : 0,
-		);
+					setBusy(false);
 
-		return () => {
-			clearTimeout(timeoutId);
-		};
+					url.current = window.location.href;
+				},
+				initialized ? 300 : 0,
+			);
+
+			return () => {
+				clearTimeout(timeoutId);
+			};
+		}
 	}, [rerender]);
 
 	return (
