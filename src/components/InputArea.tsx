@@ -4,14 +4,18 @@ import type { ClipboardEvent, MouseEvent } from "react";
 import { type ChangeEvent, useEffect, useId, useRef } from "react";
 import TurndownService from "turndown";
 import {
+	applyNextEditHistoryAtom,
+	applyPreviousEditHistoryAtom,
+	initializeEditHistoryAtom,
 	messagesAtom,
 	noteAtom,
+	saveEditHistoryAtom,
 	saveNoteAtom,
 	statusAtom,
 	textSelectionAtom,
 	updateNoteTextAtom,
 } from "../atoms";
-import { formatNoteText, updateAnchor } from "../utils";
+import { formatNoteText, type TextSelection, updateAnchor } from "../utils";
 import { NotePreview } from "./NotePreview";
 
 const turndownService = new TurndownService();
@@ -24,27 +28,29 @@ export function InputArea() {
 
 	const setStatus = useSetAtom(statusAtom);
 
-	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-		const text = event.target.value;
-		const textSelectionStart = event.target.selectionStart;
-		const textSelectionEnd = event.target.selectionEnd;
+	const saveEditHistory = useSetAtom(saveEditHistoryAtom);
 
-		updateNoteText(text);
-		setTextSelection({
-			start: textSelectionStart,
-			end: textSelectionEnd,
-		});
+	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+		const newNoteText = event.target.value;
+
+		const newTextSelection = {
+			start: event.target.selectionStart,
+			end: event.target.selectionEnd,
+		};
+
+		updateNoteText(newNoteText);
+		setTextSelection(newTextSelection);
+		saveEditHistory(newNoteText, newTextSelection);
 	};
 
 	const handleCursorChange = () => {
 		if (noteInputRef.current) {
-			const textSelectionStart = noteInputRef.current.selectionStart;
-			const textSelectionEnd = noteInputRef.current.selectionEnd;
+			const newTextSelection: TextSelection = {
+				start: noteInputRef.current.selectionStart,
+				end: noteInputRef.current.selectionEnd,
+			};
 
-			setTextSelection({
-				start: textSelectionStart,
-				end: textSelectionEnd,
-			});
+			setTextSelection(newTextSelection);
 		}
 	};
 
@@ -60,6 +66,7 @@ export function InputArea() {
 
 			if (note.text !== formattedText) {
 				updateNoteText(formattedText);
+				saveEditHistory(formattedText, textSelection);
 			}
 		}
 
@@ -84,17 +91,19 @@ export function InputArea() {
 						const start = textarea.selectionStart;
 						const end = textarea.selectionEnd;
 
-						const newNote =
+						const newNoteText =
 							(note?.text ?? "").substring(0, start) +
 							pastedMarkdown +
 							(note?.text ?? "").substring(end);
 
-						updateNoteText(newNote);
-
-						setTextSelection({
+						const newTextSelection: TextSelection = {
 							start: start + pastedMarkdown.length,
 							end: start + pastedMarkdown.length,
-						});
+						};
+
+						updateNoteText(newNoteText);
+						setTextSelection(newTextSelection);
+						saveEditHistory(newNoteText, newTextSelection);
 					}
 				} catch {}
 			}
@@ -123,20 +132,47 @@ export function InputArea() {
 		}
 	};
 
-	const savedNote = useSetAtom(saveNoteAtom);
+	const saveNote = useSetAtom(saveNoteAtom);
 
 	const [textSelection, setTextSelection] = useAtom(textSelectionAtom);
 
+	const applyPreviousEditHistory = useSetAtom(applyPreviousEditHistoryAtom);
+
+	const applyNextEditHistory = useSetAtom(applyNextEditHistoryAtom);
+
 	useEffect(() => {
 		const listener = (event: KeyboardEvent) => {
+			// Ctrl/Cmd + S: Save
 			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
 				event.preventDefault();
 
-				savedNote();
+				saveNote();
 
 				globalThis.registerToastMessage("save_success");
 			}
 
+			// Ctrl/Cmd + Z: Undo
+			if (
+				(event.ctrlKey || event.metaKey) &&
+				event.key === "z" &&
+				!event.shiftKey
+			) {
+				event.preventDefault();
+
+				applyPreviousEditHistory();
+			}
+
+			// Ctrl/Cmd + Y or Ctrl/Cmd + Shift + Z: Redo
+			if (
+				(event.ctrlKey || event.metaKey) &&
+				(event.key === "y" || (event.key === "z" && event.shiftKey))
+			) {
+				event.preventDefault();
+
+				applyNextEditHistory();
+			}
+
+			// Tab
 			if (event.key === "Tab") {
 				event.preventDefault();
 
@@ -146,17 +182,19 @@ export function InputArea() {
 					const start = textarea.selectionStart;
 					const end = textarea.selectionEnd;
 
-					const newNote =
+					const newNoteText =
 						(note?.text ?? "").substring(0, start) +
 						"\t" +
 						(note?.text ?? "").substring(end);
 
-					updateNoteText(newNote);
-
-					setTextSelection({
+					const newTextSelection: TextSelection = {
 						start: start + 1,
 						end: start + 1,
-					});
+					};
+
+					updateNoteText(newNoteText);
+					setTextSelection(newTextSelection);
+					saveEditHistory(newNoteText, newTextSelection);
 				}
 			}
 		};
@@ -166,7 +204,22 @@ export function InputArea() {
 		return () => {
 			document.removeEventListener("keydown", listener);
 		};
-	}, [savedNote, note, updateNoteText, setTextSelection]);
+	}, [
+		saveNote,
+		note,
+		updateNoteText,
+		setTextSelection,
+		saveEditHistory,
+		applyPreviousEditHistory,
+		applyNextEditHistory,
+	]);
+
+	const initializeEditHistory = useSetAtom(initializeEditHistoryAtom);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: initialization
+	useEffect(() => {
+		initializeEditHistory(note?.text ?? "", textSelection);
+	}, []);
 
 	const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
 

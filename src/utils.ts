@@ -183,3 +183,9 @@ export function updateAnchor(anchor: string) {
 
 	return false;
 }
+
+export interface EditHistoryEntry {
+	noteText: string;
+	textSelection: TextSelection | null;
+	created: number;
+}

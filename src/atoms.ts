@@ -9,6 +9,7 @@ import {
 } from "./constants";
 import {
 	createNewNote,
+	type EditHistoryEntry,
 	formatNoteText,
 	formatNoteTextWithCursorResult,
 	formatTimeAgo,
@@ -234,3 +235,65 @@ export const documentTitleAtom = atom((get) => {
 });
 
 export const textSelectionAtom = atom<TextSelection | null>(null);
+
+const _editHistoryAtom = atom<EditHistoryEntry[]>([]);
+
+const _editHistoryPointerAtom = atom<number>(-1);
+
+export const saveEditHistoryAtom = atom(
+	null,
+	(get, set, noteText: string, textSelection: TextSelection | null) => {
+		const editHistory = get(_editHistoryAtom);
+		const editHistoryPointer = get(_editHistoryPointerAtom);
+
+		const newEntry: EditHistoryEntry = {
+			noteText,
+			textSelection,
+			created: Date.now(),
+		};
+
+		const newEditHistory = [
+			...editHistory.slice(0, editHistoryPointer + 1),
+			newEntry,
+		];
+		const newEditHistoryPointer = editHistoryPointer + 1;
+
+		set(_editHistoryAtom, newEditHistory);
+		set(_editHistoryPointerAtom, newEditHistoryPointer);
+	},
+);
+
+export const initializeEditHistoryAtom = atom(
+	null,
+	async (_get, set, noteText: string, textSelection: TextSelection | null) => {
+		set(_editHistoryAtom, []);
+		set(_editHistoryPointerAtom, -1);
+		set(saveEditHistoryAtom, noteText, textSelection);
+	},
+);
+
+export const applyPreviousEditHistoryAtom = atom(null, (get, set) => {
+	const editHistory = get(_editHistoryAtom);
+	const editHistoryPointer = get(_editHistoryPointerAtom);
+
+	if (editHistoryPointer >= 1) {
+		const previousHistoryEntry = editHistory[editHistoryPointer - 1];
+
+		set(updateNoteTextAtom, previousHistoryEntry.noteText);
+		set(textSelectionAtom, previousHistoryEntry.textSelection);
+		set(_editHistoryPointerAtom, editHistoryPointer - 1);
+	}
+});
+
+export const applyNextEditHistoryAtom = atom(null, (get, set) => {
+	const editHistory = get(_editHistoryAtom);
+	const editHistoryPointer = get(_editHistoryPointerAtom);
+
+	if (editHistory.length - editHistoryPointer >= 2) {
+		const nextEditHistory = editHistory[editHistoryPointer + 1];
+
+		set(updateNoteTextAtom, nextEditHistory.noteText);
+		set(textSelectionAtom, nextEditHistory.textSelection);
+		set(_editHistoryPointerAtom, editHistoryPointer + 1);
+	}
+});

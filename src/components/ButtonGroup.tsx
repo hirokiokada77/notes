@@ -5,6 +5,7 @@ import {
 	clearNoteAtom,
 	clearSavedNoteAtom,
 	forceRerenderAtom,
+	initializeEditHistoryAtom,
 	messagesAtom,
 	saveFeatureApplicableAtom,
 	saveNoteAtom,
@@ -20,6 +21,7 @@ export function ButtonGroup() {
 	const clearSavedNote = useSetAtom(clearSavedNoteAtom);
 	const saveNote = useSetAtom(saveNoteAtom);
 	const forceRerender = useSetAtom(forceRerenderAtom);
+	const initializeEditHistory = useSetAtom(initializeEditHistoryAtom);
 
 	const save = () => {
 		forceRerender();
@@ -35,6 +37,7 @@ export function ButtonGroup() {
 
 			clearNote();
 			clearSavedNote();
+			initializeEditHistory("", null);
 
 			globalThis.registerToastMessage("clear_success");
 		}
