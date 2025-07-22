@@ -16,7 +16,6 @@ export function NotePreview() {
 
 	return (
 		<ReactMarkdown
-			disallowedElements={["img"]}
 			remarkPlugins={[remarkGfm, remarkMath]}
 			rehypePlugins={[rehypeKatex, rehypeRaw, rehypeSanitize, rehypeSlug]}
 			components={{

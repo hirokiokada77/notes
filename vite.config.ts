@@ -116,7 +116,7 @@ export default defineConfig({
 							[
 								["default-src", ["'none'"]],
 								["font-src", ["'self'", "data:"]],
-								["img-src", ["'self'", "data:"]],
+								["img-src", ["*"]],
 								["manifest-src", ["'self'"]],
 								["script-src-elem", ["'self'"]],
 								["style-src-attr", ["'unsafe-inline'"]],

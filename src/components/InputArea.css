@@ -180,6 +180,10 @@
 	text-align: unset;
 }
 
+.note-preview img {
+	max-width: 100%;
+}
+
 @media (min-width: 769px) {
 	.input-area {
 		flex-direction: row;
