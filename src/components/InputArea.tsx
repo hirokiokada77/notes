@@ -1,7 +1,8 @@
 import "./InputArea.css";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import type { MouseEvent } from "react";
+import type { ClipboardEvent, MouseEvent } from "react";
 import { type ChangeEvent, useEffect, useId, useRef } from "react";
+import TurndownService from "turndown";
 import {
 	messagesAtom,
 	noteAtom,
@@ -12,6 +13,8 @@ import {
 } from "../atoms";
 import { formatNoteText, updateAnchor } from "../utils";
 import { NotePreview } from "./NotePreview";
+
+const turndownService = new TurndownService();
 
 export function InputArea() {
 	const messages = useAtomValue(messagesAtom);
@@ -61,6 +64,41 @@ export function InputArea() {
 		}
 
 		setTextSelection(null);
+	};
+
+	const handlePaste = (event: ClipboardEvent<HTMLTextAreaElement>) => {
+		const clipboardData = event.clipboardData;
+
+		if (clipboardData) {
+			const htmlContent = clipboardData.getData("text/html");
+
+			if (htmlContent) {
+				try {
+					const pastedMarkdown = turndownService.turndown(htmlContent);
+
+					event.preventDefault();
+
+					const textarea = noteInputRef.current;
+
+					if (textarea) {
+						const start = textarea.selectionStart;
+						const end = textarea.selectionEnd;
+
+						const newNote =
+							(note?.text ?? "").substring(0, start) +
+							pastedMarkdown +
+							(note?.text ?? "").substring(end);
+
+						updateNoteText(newNote);
+
+						setTextSelection({
+							start: start + pastedMarkdown.length,
+							end: start + pastedMarkdown.length,
+						});
+					}
+				} catch {}
+			}
+		}
 	};
 
 	const noteInputId = useId();
@@ -146,6 +184,7 @@ export function InputArea() {
 					onMouseUp={handleCursorChange}
 					onFocus={handleFocus}
 					onBlur={handleBlur}
+					onPaste={handlePaste}
 					placeholder={messages.textarea_placeholder}
 					aria-label={messages.textarea_placeholder}
 				/>
