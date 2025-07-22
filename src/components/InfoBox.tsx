@@ -38,35 +38,33 @@ export function InfoBox() {
 	const shareFeatureUnavailable = !navigator.share;
 
 	return (
-		<div className="main-section">
-			<div className="info-box">
-				<div className="info-box-main">
-					<input
-						className="info-box-url"
-						value={window.location.href}
-						readOnly
-						ref={infoBoxUrlRef}
-						onFocus={handleFocus}
-						aria-label={messages.shareInstruction}
-					/>
+		<div className="info-box">
+			<div className="info-box-main">
+				<input
+					className="info-box-url"
+					value={window.location.href}
+					readOnly
+					ref={infoBoxUrlRef}
+					onFocus={handleFocus}
+					aria-label={messages.shareInstruction}
+				/>
 
-					<div className="info-box-buttons">
-						<Button level="secondary" onClick={copyUrlToClipboard}>
-							{messages.copyButton}
-						</Button>
+				<div className="info-box-buttons">
+					<Button level="secondary" onClick={copyUrlToClipboard}>
+						{messages.copyButton}
+					</Button>
 
-						<Button
-							level="secondary"
-							onClick={share}
-							hidden={shareFeatureUnavailable}
-						>
-							{messages.shareButton}
-						</Button>
-					</div>
+					<Button
+						level="secondary"
+						onClick={share}
+						hidden={shareFeatureUnavailable}
+					>
+						{messages.shareButton}
+					</Button>
 				</div>
-
-				<QRCodeView />
 			</div>
+
+			<QRCodeView />
 		</div>
 	);
 }

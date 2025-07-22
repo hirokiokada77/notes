@@ -1,16 +1,16 @@
-.qr-code {
+.qr-code-view {
 	text-align: center;
 }
 
-.qr-code summary {
+.qr-code-view summary {
 	color: var(--secondary-text-color);
 }
 
-.qr-code img {
+.qr-code-view img {
 	max-width: 100%;
 	margin-top: 16px;
 }
 
-.qr-code--busy img {
+.qr-code-view--busy img {
 	opacity: 0.25;
 }

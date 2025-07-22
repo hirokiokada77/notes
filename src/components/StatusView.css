@@ -1,4 +1,4 @@
-.status {
+.status-view {
 	color: var(--secondary-text-color);
 	font-size: calc(1rem * 14 / 16);
 
@@ -7,7 +7,7 @@
 	}
 }
 
-.status-list {
+.status-view-list {
 	margin: 0;
 	padding: 0;
 	line-height: 1.5;
@@ -17,13 +17,13 @@
 	align-items: center;
 }
 
-.status-list li {
+.status-view-list li {
 	display: inline-block;
 	padding: 0 10px;
 	position: relative;
 }
 
-.status-list li:not(:last-child)::after {
+.status-view-list li:not(:last-child)::after {
 	content: "・";
 	position: absolute;
 	right: -0.5em;

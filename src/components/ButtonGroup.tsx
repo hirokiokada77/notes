@@ -44,24 +44,18 @@ export function ButtonGroup() {
 	};
 
 	return (
-		<div className="main-section">
-			<div className="button-group">
-				<Button
-					level="primary"
-					onClick={save}
-					disabled={!saveFeatureApplicable}
-				>
-					{messages.saveButton}
-				</Button>
+		<div className="button-group">
+			<Button level="primary" onClick={save} disabled={!saveFeatureApplicable}>
+				{messages.saveButton}
+			</Button>
 
-				<Button
-					level="secondary"
-					onClick={clear}
-					disabled={!clearFeatureApplicable}
-				>
-					{messages.clearButton}
-				</Button>
-			</div>
+			<Button
+				level="secondary"
+				onClick={clear}
+				disabled={!clearFeatureApplicable}
+			>
+				{messages.clearButton}
+			</Button>
 		</div>
 	);
 }

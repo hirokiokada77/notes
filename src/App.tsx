@@ -16,6 +16,7 @@ import { InputArea } from "./components/InputArea";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { StatusView } from "./components/StatusView";
 import { Toast } from "./components/Toast";
+import "./App.css";
 
 export function App() {
 	const locale = useAtomValue(localeAtom);
@@ -94,18 +95,26 @@ export function App() {
 	}, [note, savedNote, restoreSavedNote]);
 
 	return (
-		<div className="main">
+		<div className="App">
 			<Toast />
 
 			<InputArea />
 
-			<ButtonGroup />
+			<div className="App-section">
+				<ButtonGroup />
+			</div>
 
-			<StatusView />
+			<div className="App-section">
+				<StatusView />
+			</div>
 
-			<InfoBox />
+			<div className="App-section">
+				<InfoBox />
+			</div>
 
-			<SettingsPanel />
+			<div className="App-section">
+				<SettingsPanel />
+			</div>
 		</div>
 	);
 }

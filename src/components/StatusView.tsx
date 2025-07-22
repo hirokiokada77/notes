@@ -28,8 +28,8 @@ export function StatusView() {
 
 	return (
 		shouldDisplayStatus && (
-			<div className="main-section status">
-				<ul className="status-list">
+			<div className="status-view">
+				<ul className="status-view-list">
 					<LastUpdatedIndicator />
 
 					<SavedChangesIndicator />

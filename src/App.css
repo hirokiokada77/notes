@@ -1,0 +1,12 @@
+.App {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	gap: 48px;
+}
+
+.App-section {
+	margin: 0 auto;
+	max-width: 760px;
+	width: 100%;
+}

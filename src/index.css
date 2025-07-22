@@ -98,16 +98,3 @@ summary {
 	position: absolute;
 	width: 1px;
 }
-
-.main {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	gap: 48px;
-}
-
-.main-section {
-	margin: 0 auto;
-	max-width: 760px;
-	width: 100%;
-}

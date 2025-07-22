@@ -66,7 +66,11 @@ export function QRCodeView() {
 	}, [rerender]);
 
 	return (
-		<div className={["qr-code", busy ? "qr-code--busy" : []].flat().join(" ")}>
+		<div
+			className={["qr-code-view", busy ? "qr-code-view--busy" : []]
+				.flat()
+				.join(" ")}
+		>
 			<details
 				ref={detailsRef}
 				open={displayQrCode ? true : undefined}
