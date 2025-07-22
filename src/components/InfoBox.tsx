@@ -47,6 +47,7 @@ export function InfoBox() {
 						readOnly
 						ref={infoBoxUrlRef}
 						onFocus={handleFocus}
+						aria-label={messages.shareInstruction}
 					/>
 
 					<div className="info-box-buttons">
