@@ -74,18 +74,42 @@ export const noteAtom = atom((get) => get(_noteAtom));
 
 const _noteIdAtom = atomWithHash<string | null>("id", null, {
 	setHash: "replaceState",
+	serialize(val) {
+		return val ? val : "";
+	},
+	deserialize(str) {
+		return str.length > 0 ? str : null;
+	},
 });
 
 const _noteTextAtom = atomWithHash<string | null>("text", null, {
 	setHash: "replaceState",
+	serialize(val) {
+		return val ? val : "";
+	},
+	deserialize(str) {
+		return str.length > 0 ? str : null;
+	},
 });
 
 const _noteCreatedAtom = atomWithHash<number | null>("created", null, {
 	setHash: "replaceState",
+	serialize(val) {
+		return val ? val.toString() : "";
+	},
+	deserialize(str) {
+		return str.length > 0 ? Number(str) : null;
+	},
 });
 
 const _noteLastUpdatedAtom = atomWithHash<number | null>("lastUpdated", null, {
 	setHash: "replaceState",
+	serialize(val) {
+		return val ? val.toString() : "";
+	},
+	deserialize(str) {
+		return str.length > 0 ? Number(str) : null;
+	},
 });
 
 export const noteFormattedLastUpdatedAtom = atom((get) => {
