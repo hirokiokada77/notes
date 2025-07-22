@@ -1,3 +1,4 @@
+import type { Content, Image, Root } from "mdast";
 import { remark } from "remark";
 import type { Literal, Parent } from "unist";
 import de from "./locales/de.json";
@@ -230,4 +231,52 @@ export function getFirstHeadingOrParagraphText(
 	}
 
 	return null;
+}
+
+export interface ExtractedImage {
+	url: string;
+	alt: string;
+	title: string;
+}
+
+export function getFirstImage(noteText: string): ExtractedImage | null {
+	const tree: Root = remark().parse(noteText) as Root;
+
+	let firstImage: ExtractedImage | null = null;
+
+	function findImage(node: Content | Root): void {
+		if (firstImage) {
+			return;
+		}
+
+		if (node.type === "image") {
+			const imageNode = node as Image;
+
+			firstImage = {
+				url: imageNode.url,
+				alt: imageNode.alt ?? "",
+				title: imageNode.title ?? "",
+			};
+
+			return;
+		}
+
+		if (
+			"children" in node &&
+			Array.isArray(node.children) &&
+			node.children.length > 0
+		) {
+			for (const child of node.children) {
+				findImage(child as Content);
+
+				if (firstImage) {
+					return;
+				}
+			}
+		}
+	}
+
+	findImage(tree);
+
+	return firstImage;
 }

@@ -14,6 +14,7 @@ import {
 	formatNoteTextWithCursorResult,
 	formatTimeAgo,
 	getFirstHeadingOrParagraphText,
+	getFirstImage,
 	getInitialLocale,
 	type Locale,
 	messagesByLocale,
@@ -258,6 +259,20 @@ export const documentTitleAtom = atom((get) => {
 	}
 
 	return messages.appName;
+});
+
+export const noteThumbnailImageAtom = atom((get) => {
+	const noteText = get(noteAtom)?.text;
+
+	if (noteText) {
+		const thumbnail = getFirstImage(noteText);
+
+		if (thumbnail) {
+			return thumbnail;
+		}
+	}
+
+	return null;
 });
 
 export const textSelectionAtom = atom<TextSelection | null>(null);

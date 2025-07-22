@@ -15,6 +15,7 @@ body.dark-mode {
 	--bg-color: #1b1c1d;
 	--border-color: #4a5050;
 	--code-bg-color: #282a2c;
+	--icon-color: #c4c7c5;
 	--primary-active-bg-color: #a8c7fa;
 	--primary-active-text-color: #062e6f;
 	--primary-inactive-bg-color: #333434;
@@ -29,6 +30,7 @@ body.light-mode {
 	--bg-color: #fff;
 	--border-color: #c4c7c5;
 	--code-bg-color: #f1f4f8;
+	--icon-color: #585b5f;
 	--primary-active-bg-color: #0b57d0;
 	--primary-active-text-color: #fff;
 	--primary-inactive-bg-color: #e3e3e3;

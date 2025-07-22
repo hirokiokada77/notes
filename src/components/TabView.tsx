@@ -9,6 +9,7 @@ import {
 	forceRerenderAtom,
 	initializeEditHistoryAtom,
 	messagesAtom,
+	noteThumbnailImageAtom,
 	noteTitleAtom,
 } from "../atoms";
 import { StatusView } from "./StatusView";
@@ -17,6 +18,7 @@ export function TabView() {
 	const tabViewListRef = useRef<HTMLUListElement | null>(null);
 
 	const noteTitle = useAtomValue(noteTitleAtom);
+	const thumbnailImage = useAtomValue(noteThumbnailImageAtom);
 	const messages = useAtomValue(messagesAtom);
 	const clearNote = useSetAtom(clearNoteAtom);
 	const clearSavedNote = useSetAtom(clearSavedNoteAtom);
@@ -54,12 +56,22 @@ export function TabView() {
 			<ul className="tab-view-list" ref={tabViewListRef}>
 				<li className="tab-view-status">
 					<div className="tab-view-item-container">
+						{thumbnailImage && (
+							<div className="tab-view-item-icon">
+								<img
+									src={thumbnailImage.url}
+									alt={thumbnailImage.alt}
+									title={thumbnailImage.title}
+								/>
+							</div>
+						)}
+
 						<div className="tab-view-item-content">
 							<div className="tab-view-item-title">
 								{untitled ? (
 									<span className="tab-view-item-title-untitled">Untitled</span>
 								) : (
-									noteTitle
+									<span title={noteTitle}>{noteTitle}</span>
 								)}
 							</div>
 
