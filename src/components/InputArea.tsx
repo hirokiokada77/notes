@@ -125,6 +125,8 @@ export function InputArea() {
 
 	const savedNote = useSetAtom(saveNoteAtom);
 
+	const [textSelection, setTextSelection] = useAtom(textSelectionAtom);
+
 	useEffect(() => {
 		const listener = (event: KeyboardEvent) => {
 			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
@@ -134,6 +136,29 @@ export function InputArea() {
 
 				globalThis.registerToastMessage("save_success");
 			}
+
+			if (event.key === "Tab") {
+				event.preventDefault();
+
+				const textarea = noteInputRef.current;
+
+				if (textarea) {
+					const start = textarea.selectionStart;
+					const end = textarea.selectionEnd;
+
+					const newNote =
+						(note?.text ?? "").substring(0, start) +
+						"\t" +
+						(note?.text ?? "").substring(end);
+
+					updateNoteText(newNote);
+
+					setTextSelection({
+						start: start + 1,
+						end: start + 1,
+					});
+				}
+			}
 		};
 
 		document.addEventListener("keydown", listener);
@@ -141,7 +166,7 @@ export function InputArea() {
 		return () => {
 			document.removeEventListener("keydown", listener);
 		};
-	}, [savedNote]);
+	}, [savedNote, note, updateNoteText, setTextSelection]);
 
 	const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -150,8 +175,6 @@ export function InputArea() {
 			noteInputRef.current?.focus();
 		}
 	}, [note]);
-
-	const [textSelection, setTextSelection] = useAtom(textSelectionAtom);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
 	useEffect(() => {
