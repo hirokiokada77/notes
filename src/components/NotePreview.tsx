@@ -1,6 +1,8 @@
 import "katex/dist/katex.css";
 import { useAtomValue } from "jotai";
 import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
@@ -17,6 +19,32 @@ export function NotePreview() {
 			disallowedElements={["img"]}
 			remarkPlugins={[remarkGfm, remarkMath]}
 			rehypePlugins={[rehypeKatex, rehypeRaw, rehypeSanitize, rehypeSlug]}
+			components={{
+				code({ node, className, children, ...props }) {
+					const match = /language-(\w+)/.exec(className ?? "");
+
+					if (match) {
+						return (
+							<SyntaxHighlighter
+								className="note-preview-code-block"
+								// @ts-ignore
+								style={dracula}
+								language={match[1]}
+								PreTag="div"
+								{...props}
+							>
+								{children ? String(children) : ""}
+							</SyntaxHighlighter>
+						);
+					}
+
+					return (
+						<code className={className} {...props}>
+							{children}
+						</code>
+					);
+				},
+			}}
 		>
 			{note?.text}
 		</ReactMarkdown>
