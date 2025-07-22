@@ -1,7 +1,7 @@
 import "./QRCodeView.css";
 import { useAtom, useAtomValue } from "jotai";
 import QRCode from "qrcode";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import { displayQrCodeAtom, messagesAtom, rerenderAtom } from "../atoms";
 
 export function QRCodeView() {
@@ -11,7 +11,7 @@ export function QRCodeView() {
 
 	const [initialized, setInitialized] = useState(false);
 
-	const [isPending, startTransition] = useTransition();
+	const [busy, setBusy] = useState(false);
 
 	const detailsRef = useRef<HTMLDetailsElement>(null);
 
@@ -35,31 +35,44 @@ export function QRCodeView() {
 		};
 	}, [setDisplayQrCode]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: required for forced re-rendering
 	useEffect(() => {
-		startTransition(async () => {
-			setInitialized(true);
+		setInitialized(true);
+	}, []);
 
-			try {
-				const dataUrl = await QRCode.toDataURL(window.location.href, {
-					errorCorrectionLevel: "low",
-				});
+	// biome-ignore lint/correctness/useExhaustiveDependencies: forced re-rendering
+	useEffect(() => {
+		setBusy(true);
 
-				setQrCode(dataUrl);
-			} catch {
-				setQrCode(null); // The URL is too long
-			}
-		});
+		const timeoutId = setTimeout(
+			async () => {
+				try {
+					const dataUrl = await QRCode.toDataURL(window.location.href, {
+						errorCorrectionLevel: "low",
+					});
+
+					setQrCode(dataUrl);
+				} catch {
+					setQrCode(null); // The URL is too long
+				}
+
+				setBusy(false);
+			},
+			initialized ? 300 : 0,
+		);
+
+		return () => {
+			clearTimeout(timeoutId);
+		};
 	}, [rerender]);
 
 	return (
-		<div className={["qr-code", isPending ? "busy" : []].flat().join(" ")}>
+		<div className={["qr-code", busy ? "qr-code--busy" : []].flat().join(" ")}>
 			<details
 				ref={detailsRef}
 				open={displayQrCode ? true : undefined}
 				hidden={initialized && !qrCode}
 				aria-hidden={initialized && !qrCode}
-				aria-busy={isPending}
+				aria-busy={busy}
 			>
 				<summary>{messages.qrCodeViewSummary}</summary>
 
