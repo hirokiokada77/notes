@@ -72,6 +72,10 @@
 	margin: var(--spacing-primary);
 }
 
+.note-preview-container > *:first-child {
+	margin-top: 0;
+}
+
 .note-preview hr,
 .note-preview-container > ol,
 .note-preview p,
