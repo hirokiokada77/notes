@@ -42,7 +42,7 @@ const _noteAtom = atom(
 		const created = get(_noteCreatedAtom);
 		const lastUpdated = get(_noteLastUpdatedAtom);
 
-		if (id !== null && text !== null) {
+		if (id !== null) {
 			const note: Note = {
 				id,
 				text,
@@ -63,7 +63,7 @@ const _noteAtom = atom(
 			set(_noteLastUpdatedAtom, note.lastUpdated);
 		} else {
 			set(_noteIdAtom, null);
-			set(_noteTextAtom, null);
+			set(_noteTextAtom, "");
 			set(_noteCreatedAtom, null);
 			set(_noteLastUpdatedAtom, null);
 		}
@@ -82,13 +82,13 @@ const _noteIdAtom = atomWithHash<string | null>("id", null, {
 	},
 });
 
-const _noteTextAtom = atomWithHash<string | null>("text", null, {
+const _noteTextAtom = atomWithHash<string>("text", "", {
 	setHash: "replaceState",
 	serialize(val) {
 		return val ? val : "";
 	},
 	deserialize(str) {
-		return str.length > 0 ? str : null;
+		return str.length > 0 ? str : "";
 	},
 });
 
