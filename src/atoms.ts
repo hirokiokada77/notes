@@ -40,7 +40,7 @@ const _noteAtom = atom(
 		const created = get(_noteCreatedAtom);
 		const lastUpdated = get(_noteLastUpdatedAtom);
 
-		if (id && text) {
+		if (id !== null && text !== null) {
 			const note: Note = {
 				id,
 				text,
