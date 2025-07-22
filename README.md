@@ -29,6 +29,12 @@ the [Service Worker
 API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API),
 enabling offline usage.
 
+### Automatic HTML conversion
+
+If you copy a segment of a web page into the clipboard and paste it into
+this app, it will automatically convert the content into Markdown and
+display the preview.
+
 ## Build
 
 To run the app locally:
