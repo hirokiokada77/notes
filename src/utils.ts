@@ -1,3 +1,5 @@
+import { remark } from "remark";
+import type { Literal, Parent } from "unist";
 import de from "./locales/de.json";
 import en from "./locales/en.json";
 import es from "./locales/es.json";
@@ -188,4 +190,44 @@ export interface EditHistoryEntry {
 	noteText: string;
 	textSelection: TextSelection | null;
 	created: number;
+}
+
+export function getFirstHeadingOrParagraphText(
+	noteText: string,
+): string | null {
+	const tree = remark().parse(noteText);
+
+	if (!tree.children || tree.children.length === 0) {
+		return null;
+	}
+
+	const firstNode = tree.children[0];
+
+	if (firstNode.type === "heading") {
+		let headingText = "";
+		const headingNode = firstNode as Parent;
+
+		headingNode.children.forEach((child) => {
+			if (child.type === "text") {
+				headingText += (child as Literal).value;
+			}
+		});
+
+		return headingText.trim();
+	}
+
+	if (firstNode.type === "paragraph") {
+		let paragraphText = "";
+		const paragraphNode = firstNode as Parent;
+
+		paragraphNode.children.forEach((child) => {
+			if (child.type === "text") {
+				paragraphText += (child as Literal).value;
+			}
+		});
+
+		return paragraphText.trim();
+	}
+
+	return null;
 }

@@ -13,6 +13,7 @@ import {
 	formatNoteText,
 	formatNoteTextWithCursorResult,
 	formatTimeAgo,
+	getFirstHeadingOrParagraphText,
 	getInitialLocale,
 	type Locale,
 	messagesByLocale,
@@ -218,17 +219,15 @@ export const themeAtom = atomWithStorage<"light" | "dark">(
 
 export const documentTitleAtom = atom((get) => {
 	const messages = get(messagesAtom);
-	const note = get(noteAtom);
+	const noteText = get(noteAtom)?.text;
 
-	const noteFirstLine = (note?.text ?? "").split("\n")[0].trim();
-	const maxTitleLength = 140;
+	if (noteText) {
+		const firstHeadingOrParagraphText =
+			getFirstHeadingOrParagraphText(noteText);
 
-	if (noteFirstLine) {
-		const truncatedTitle =
-			noteFirstLine.length > maxTitleLength
-				? `${noteFirstLine.substring(0, maxTitleLength)}...`
-				: noteFirstLine;
-		return `${messages.app_name} – ${truncatedTitle}`;
+		if (firstHeadingOrParagraphText) {
+			return `${messages.app_name} – ${firstHeadingOrParagraphText}`;
+		}
 	}
 
 	return messages.app_name;
