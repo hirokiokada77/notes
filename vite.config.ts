@@ -121,6 +121,8 @@ export default defineConfig({
 								["script-src-elem", ["'self'"]],
 								["style-src", ["'self'", "'unsafe-inline'"]],
 								["worker-src", ["'self'"]],
+								["base-uri", ["'none'"]],
+								["form-action", ["'none'"]],
 							]
 								.map(
 									([key, values]) => `${key} ${(values as string[]).join(" ")}`,
