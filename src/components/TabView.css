@@ -1,5 +1,9 @@
 .tab-view {
 	margin: 0 calc(-1 * var(--spacing-primary));
+
+	@media print {
+		display: none;
+	}
 }
 
 .tab-view-list {
