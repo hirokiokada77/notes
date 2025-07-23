@@ -7,7 +7,7 @@
 
 .input-area {
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: column;
 	gap: var(--spacing-primary);
 	tab-size: 4;
 }
