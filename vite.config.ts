@@ -119,8 +119,7 @@ export default defineConfig({
 								["img-src", ["*", "data:"]],
 								["manifest-src", ["'self'"]],
 								["script-src-elem", ["'self'"]],
-								["style-src-attr", ["'unsafe-inline'"]],
-								["style-src-elem", ["'self'"]],
+								["style-src", ["'self'", "'unsafe-inline'"]],
 								["worker-src", ["'self'"]],
 							]
 								.map(
