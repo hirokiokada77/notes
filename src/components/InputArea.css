@@ -12,15 +12,15 @@
 	tab-size: 4;
 }
 
-.note-input,
 .note-input-container,
 .note-preview {
-	min-height: max(70vh, 240px);
+	min-height: 240px;
 }
 
 .note-input,
 .note-preview {
 	flex: 1;
+	width: 0;
 }
 
 .note-input-container,
@@ -32,6 +32,7 @@
 
 .note-input-container {
 	border: 1px solid var(--border-color);
+	field-sizing: content;
 }
 
 .note-preview {
@@ -52,7 +53,7 @@
 	width: 100%;
 	height: 100%;
 	padding: var(--spacing-primary);
-	resize: vertical;
+	resize: none;
 	font-family: var(--font-family-monospace);
 }
 
@@ -199,11 +200,5 @@
 	.note-input,
 	.note-preview {
 		width: 100%;
-	}
-
-	.note-input,
-	.note-input-container,
-	.note-preview {
-		min-height: max(35vh, 240px);
 	}
 }
