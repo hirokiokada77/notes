@@ -13,12 +13,6 @@
 }
 
 .note-input,
-.note-input-container,
-.note-preview {
-	min-height: max(70vh, 240px);
-}
-
-.note-input,
 .note-preview {
 	flex: 1;
 }
@@ -52,7 +46,8 @@
 	width: 100%;
 	height: 100%;
 	padding: var(--spacing-primary);
-	resize: vertical;
+	resize: none;
+	overflow: hidden;
 	font-family: var(--font-family-monospace);
 }
 
