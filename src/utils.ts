@@ -280,12 +280,3 @@ export function getFirstImage(noteText: string): ExtractedImage | null {
 
 	return firstImage;
 }
-
-export function adjustTextAreaHeight(textarea: HTMLTextAreaElement | null) {
-	if (textarea) {
-		setTimeout(() => {
-			textarea.style.height = "auto";
-			textarea.style.height = `${textarea.scrollHeight}px`;
-		}, 0);
-	}
-}

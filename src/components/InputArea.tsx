@@ -15,12 +15,7 @@ import {
 	textSelectionAtom,
 	updateNoteTextAtom,
 } from "../atoms";
-import {
-	adjustTextAreaHeight,
-	formatNoteText,
-	type TextSelection,
-	updateAnchor,
-} from "../utils";
+import { formatNoteText, type TextSelection, updateAnchor } from "../utils";
 import { NotePreview } from "./NotePreview";
 
 const turndownService = new TurndownService();
@@ -35,22 +30,6 @@ export function InputArea() {
 
 	const saveEditHistory = useSetAtom(saveEditHistoryAtom);
 
-	useEffect(() => {
-		adjustTextAreaHeight(noteInputRef.current);
-	}, []);
-
-	useEffect(() => {
-		const listener = () => {
-			adjustTextAreaHeight(noteInputRef.current);
-		};
-
-		window.addEventListener("resize", listener);
-
-		return () => {
-			window.removeEventListener("resize", listener);
-		};
-	});
-
 	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
 		const newNoteText = event.target.value;
 
@@ -62,7 +41,6 @@ export function InputArea() {
 		updateNoteText(newNoteText);
 		setTextSelection(newTextSelection);
 		saveEditHistory(newNoteText, newTextSelection);
-		adjustTextAreaHeight(noteInputRef.current);
 	};
 
 	const handleCursorChange = () => {
@@ -89,7 +67,6 @@ export function InputArea() {
 			if (note.text !== formattedText) {
 				updateNoteText(formattedText);
 				saveEditHistory(formattedText, textSelection);
-				adjustTextAreaHeight(noteInputRef.current);
 			}
 		}
 
@@ -127,7 +104,6 @@ export function InputArea() {
 						updateNoteText(newNoteText);
 						setTextSelection(newTextSelection);
 						saveEditHistory(newNoteText, newTextSelection);
-						adjustTextAreaHeight(noteInputRef.current);
 					}
 				} catch {}
 			}
@@ -172,8 +148,9 @@ export function InputArea() {
 			// Ctrl/Cmd + S: Save
 			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
 				event.preventDefault();
+
 				saveNote();
-				adjustTextAreaHeight(noteInputRef.current);
+
 				globalThis.registerToastMessage("saveSuccess");
 			}
 
@@ -184,8 +161,8 @@ export function InputArea() {
 				!event.shiftKey
 			) {
 				event.preventDefault();
+
 				applyPreviousEditHistory();
-				adjustTextAreaHeight(noteInputRef.current);
 			}
 
 			// Ctrl/Cmd + Y or Ctrl/Cmd + Shift + Z: Redo
@@ -194,8 +171,8 @@ export function InputArea() {
 				(event.key === "y" || (event.key === "z" && event.shiftKey))
 			) {
 				event.preventDefault();
+
 				applyNextEditHistory();
-				adjustTextAreaHeight(noteInputRef.current);
 			}
 
 			// Tab
@@ -221,7 +198,6 @@ export function InputArea() {
 					updateNoteText(newNoteText);
 					setTextSelection(newTextSelection);
 					saveEditHistory(newNoteText, newTextSelection);
-					adjustTextAreaHeight(noteInputRef.current);
 				}
 			}
 		};
@@ -282,7 +258,6 @@ export function InputArea() {
 					ref={noteInputRef}
 					className="note-input-container"
 					value={note ? note.text : ""}
-					rows={10}
 					onChange={handleChange}
 					onKeyUp={handleCursorChange}
 					onMouseUp={handleCursorChange}
