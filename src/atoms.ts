@@ -197,12 +197,24 @@ export const saveNoteAtom = atom(null, async (get, set) => {
 					note.text,
 					textSelection.start,
 				);
+				const newTextSelectionStart = result.cursorOffset;
 
 				if (note.text !== result.formatted) {
-					set(textSelectionAtom, {
-						start: result.cursorOffset,
-						end: result.cursorOffset,
-					});
+					if (textSelection.start !== textSelection.end) {
+						const newTextSelectionEnd = (
+							await formatNoteTextWithCursorResult(note.text, textSelection.end)
+						).cursorOffset;
+
+						set(textSelectionAtom, {
+							start: newTextSelectionStart,
+							end: newTextSelectionEnd,
+						});
+					} else {
+						set(textSelectionAtom, {
+							start: newTextSelectionStart,
+							end: newTextSelectionStart,
+						});
+					}
 				}
 
 				return result.formatted;
