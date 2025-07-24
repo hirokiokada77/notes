@@ -20,7 +20,12 @@ export function NotePreview() {
 			// Run rehype-sanitize first, and then run rehype-katex. If
 			// done in reverse, the KaTeX rendering will be improperly
 			// sanitized.
-			rehypePlugins={[rehypeSanitize, rehypeKatex, rehypeRaw, rehypeSlug]}
+			rehypePlugins={[
+				[rehypeSanitize, { clobberPrefix: "" }],
+				rehypeKatex,
+				rehypeRaw,
+				rehypeSlug,
+			]}
 			components={{
 				code({ node, className, children, ...props }) {
 					const match = /language-(\w+)/.exec(className ?? "");
