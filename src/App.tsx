@@ -1,5 +1,5 @@
 import "./App.css";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
@@ -18,7 +18,7 @@ import { SavedNotes } from "./pages/SavedNotes";
 export function App() {
 	const locale = useAtomValue(localeAtom);
 	const messages = useAtomValue(messagesAtom);
-	const theme = useAtomValue(themeAtom);
+	const [theme, setTheme] = useAtom(themeAtom);
 	const documentTitle = useAtomValue(documentTitleAtom);
 	const shouldWarnBeforeLeaving = useAtomValue(shouldWarnBeforeLeavingAtom);
 	const updateTime = useSetAtom(updateTimeAtom);
@@ -43,6 +43,19 @@ export function App() {
 		document.body.classList.remove("dark-mode", "light-mode");
 		document.body.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
 	}, [theme]);
+
+	useEffect(() => {
+		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+		const handleThemeChange = (event: MediaQueryListEvent) => {
+			setTheme(event.matches ? "dark" : "light");
+		};
+
+		mediaQuery.addEventListener("change", handleThemeChange);
+
+		return () => {
+			mediaQuery.removeEventListener("change", handleThemeChange);
+		};
+	}, [setTheme]);
 
 	useEffect(() => {
 		const listener = (event: BeforeUnloadEvent) => {
