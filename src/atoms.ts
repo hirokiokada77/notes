@@ -112,9 +112,16 @@ export const latestSavedNoteAtom = atom((get) => {
 });
 
 export const deleteSavedNoteByIdAtom = atom(null, (get, set, id: string) => {
+	const note = get(noteAtom);
+	const savedNotes = get(savedNotesAtom);
+
+	if (note && note.id === id) {
+		set(noteAtom, null);
+	}
+
 	set(
 		_savedNotesAtom,
-		get(savedNotesAtom).filter((note) => note.id !== id),
+		savedNotes.filter((note) => note.id !== id),
 	);
 });
 
