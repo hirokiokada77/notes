@@ -8,7 +8,7 @@
 .input-area {
 	display: flex;
 	flex-direction: column;
-	gap: 24px;
+	gap: var(--spacing-primary);
 	tab-size: 4;
 }
 
