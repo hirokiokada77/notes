@@ -91,7 +91,7 @@ export const restoreSavedNoteAtom = atom(null, (get, set, id) => {
 	}
 });
 
-const _timeAtom = atom(0);
+const _timeAtom = atom(Date.now());
 
 export const timeAtom = atom((get) => get(_timeAtom));
 
