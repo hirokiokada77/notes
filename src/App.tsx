@@ -6,7 +6,6 @@ import {
 	documentTitleAtom,
 	localeAtom,
 	messagesAtom,
-	shouldWarnBeforeLeavingAtom,
 	themeAtom,
 	updateTimeAtom,
 } from "./atoms";
@@ -20,7 +19,6 @@ export function App() {
 	const messages = useAtomValue(messagesAtom);
 	const [theme, setTheme] = useAtom(themeAtom);
 	const documentTitle = useAtomValue(documentTitleAtom);
-	const shouldWarnBeforeLeaving = useAtomValue(shouldWarnBeforeLeavingAtom);
 	const updateTime = useSetAtom(updateTimeAtom);
 
 	useEffect(() => {
@@ -56,20 +54,6 @@ export function App() {
 			mediaQuery.removeEventListener("change", handleThemeChange);
 		};
 	}, [setTheme]);
-
-	useEffect(() => {
-		const listener = (event: BeforeUnloadEvent) => {
-			if (shouldWarnBeforeLeaving) {
-				event.preventDefault();
-			}
-		};
-
-		window.addEventListener("beforeunload", listener);
-
-		return () => {
-			window.removeEventListener("beforeunload", listener);
-		};
-	}, [shouldWarnBeforeLeaving]);
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {

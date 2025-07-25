@@ -3,6 +3,7 @@ import { atomWithStorage } from "jotai/utils";
 import {
 	homePath,
 	notesAppLocale,
+	notesAppNote,
 	notesAppQrCodeViewExpanded,
 	notesAppSavedNotes,
 	notesAppTheme,
@@ -40,7 +41,7 @@ export const messagesAtom = atom((get) => {
 	return messagesByLocale[locale];
 });
 
-export const noteAtom = atom<Note | null>(null);
+export const noteAtom = atomWithStorage<Note | null>(notesAppNote, null);
 
 export const noteUrlAtom = atom((get) => {
 	const note = get(noteAtom);
