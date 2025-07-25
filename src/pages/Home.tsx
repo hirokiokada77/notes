@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { noteAtom } from "../atoms";
 import { InfoBox } from "../components/InfoBox";
 import { InputArea } from "../components/InputArea";
-import { Settings } from "../components/Settings";
 import { Tab } from "../components/Tab";
 import type { Note } from "../utils";
 
@@ -52,10 +51,6 @@ export function Home() {
 			<div className="home-misc">
 				<div className="home-section">
 					<InfoBox />
-				</div>
-
-				<div className="home-section">
-					<Settings />
 				</div>
 			</div>
 		</div>
