@@ -2,7 +2,7 @@
 .saved-notes {
 	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-primary);
+	gap: 24px;
 }
 
 .home-section,
