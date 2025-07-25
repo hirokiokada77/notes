@@ -41,6 +41,10 @@
 
 .note-preview--skeleton {
 	background: var(--code-bg-color);
+
+	@media print {
+		background: unset;
+	}
 }
 
 .note-input {

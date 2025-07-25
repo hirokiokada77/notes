@@ -1,13 +1,9 @@
-.status-view {
+.note-status {
 	color: var(--secondary-text-color);
 	font-size: calc(1rem * 12 / 16);
-
-	@media print {
-		display: none;
-	}
 }
 
-.status-view-list {
+.note-status-list {
 	margin: 0 -6px;
 	padding: 0;
 	height: 1em;
@@ -20,13 +16,13 @@
 	overflow: hidden;
 }
 
-.status-view-list li {
+.note-status-list li {
 	display: inline-block;
 	padding: 0 6px;
 	position: relative;
 }
 
-.status-view-list li:not(:first-child)::before {
+.note-status-list li:not(:first-child)::before {
 	content: "・";
 	position: absolute;
 	left: -0.5em;

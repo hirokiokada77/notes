@@ -1,10 +1,10 @@
-import { atom } from "jotai";
+import { atom, createStore } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import { atomWithHash } from "jotai-location";
 import {
+	homePath,
 	notesAppDisplayQrCode,
 	notesAppLocale,
-	notesAppSavedNote,
+	notesAppSavedNotes,
 	notesAppTheme,
 } from "./constants";
 import {
@@ -12,7 +12,6 @@ import {
 	type EditHistoryEntry,
 	formatNoteText,
 	formatNoteTextWithCursorResult,
-	formatTimeAgo,
 	getFirstHeadingOrParagraphText,
 	getFirstImage,
 	getInitialLocale,
@@ -22,6 +21,8 @@ import {
 	type Status,
 	type TextSelection,
 } from "./utils";
+
+export const store = createStore();
 
 export const displayQrCodeAtom = atomWithStorage(notesAppDisplayQrCode, false);
 
@@ -36,158 +37,87 @@ export const messagesAtom = atom((get) => {
 	return messagesByLocale[locale];
 });
 
-const _noteAtom = atom(
-	(get) => {
-		const id = get(_noteIdAtom);
-		const text = get(_noteTextAtom);
-		const created = get(_noteCreatedAtom);
-		const lastUpdated = get(_noteLastUpdatedAtom);
+export const noteAtom = atom<Note | null>(null);
 
-		if (id !== null) {
-			const note: Note = {
-				id,
-				text,
-				created,
-				lastUpdated,
-			};
-
-			return note;
-		}
-
-		return null;
-	},
-	(_get, set, note: Note | null) => {
-		if (note) {
-			set(_noteIdAtom, note.id);
-			set(_noteTextAtom, note.text);
-			set(_noteCreatedAtom, note.created);
-			set(_noteLastUpdatedAtom, note.lastUpdated);
-		} else {
-			set(_noteIdAtom, null);
-			set(_noteTextAtom, "");
-			set(_noteCreatedAtom, null);
-			set(_noteLastUpdatedAtom, null);
-		}
-	},
-);
-
-export const noteAtom = atom((get) => get(_noteAtom));
-
-const _noteIdAtom = atomWithHash<string | null>("id", null, {
-	setHash: "replaceState",
-	serialize(val) {
-		return val ? val : "";
-	},
-	deserialize(str) {
-		return str.length > 0 ? str : null;
-	},
-});
-
-const _noteTextAtom = atomWithHash<string>("text", "", {
-	setHash: "replaceState",
-	serialize(val) {
-		return val ? val : "";
-	},
-	deserialize(str) {
-		return str.length > 0 ? str : "";
-	},
-});
-
-const _noteCreatedAtom = atomWithHash<number | null>("created", null, {
-	setHash: "replaceState",
-	serialize(val) {
-		return val ? val.toString() : "";
-	},
-	deserialize(str) {
-		return str.length > 0 ? Number(str) : null;
-	},
-});
-
-const _noteLastUpdatedAtom = atomWithHash<number | null>("lastUpdated", null, {
-	setHash: "replaceState",
-	serialize(val) {
-		return val ? val.toString() : "";
-	},
-	deserialize(str) {
-		return str.length > 0 ? Number(str) : null;
-	},
-});
-
-export const noteTitleAtom = atom((get) => {
-	const noteText = get(noteAtom)?.text;
-
-	if (noteText) {
-		return getFirstHeadingOrParagraphText(noteText);
-	}
-
-	return null;
-});
-
-export const noteFormattedLastUpdatedAtom = atom((get) => {
-	get(rerenderAtom);
-
+export const noteUrlAtom = atom((get) => {
 	const note = get(noteAtom);
 
 	if (note) {
-		const lastUpdated = note.lastUpdated;
+		const hash = new URLSearchParams({
+			id: note.id,
+			text: note.text,
+			created: note.created !== null ? note.created.toString() : "",
+			lastUpdated: note.lastUpdated !== null ? note.lastUpdated.toString() : "",
+		}).toString();
 
-		if (lastUpdated) {
-			return formatTimeAgo(lastUpdated);
-		}
+		return `${location.protocol}//${location.host}${homePath}#${hash}`;
 	}
 
-	return null;
+	return `${location.protocol}//${location.host}${homePath}`;
 });
 
-export const clearNoteAtom = atom(null, (_get, set) => {
-	set(_noteAtom, null);
+export const initializeNoteAtom = atom(null, (_get, set) => {
+	set(noteAtom, createNewNote());
+	set(initializeEditHistoryAtom, "", null);
 });
 
 export const updateNoteTextAtom = atom(null, (get, set, newText: string) => {
 	const currentNote = get(noteAtom);
 
 	if (currentNote) {
-		set(_noteAtom, {
+		set(noteAtom, {
 			...currentNote,
 			text: newText,
 			lastUpdated: Date.now(),
 		});
 	} else {
-		set(_noteAtom, {
+		set(noteAtom, {
 			...createNewNote(),
 			text: newText,
 		});
 	}
-
-	set(forceRerenderAtom);
 });
 
-export const restoreSavedNoteAtom = atom(null, (get, set) => {
-	const savedNote = get(savedNoteAtom);
+export const restoreSavedNoteAtom = atom(null, (get, set, id) => {
+	const savedNote = get(savedNotesAtom).filter((n) => n.id === id)[0] ?? null;
 
-	set(_noteAtom, savedNote);
-
-	globalThis.registerToastMessage("noteLoadedFromBrowser");
+	if (savedNote) {
+		set(noteAtom, savedNote);
+	} else {
+		throw new Error();
+	}
 });
 
-const _rerenderAtom = atom(0);
+const _timeAtom = atom(0);
 
-export const rerenderAtom = atom((get) => get(_rerenderAtom));
+export const timeAtom = atom((get) => get(_timeAtom));
 
-export const forceRerenderAtom = atom(null, (_get, set) => {
-	set(_rerenderAtom, Date.now());
+export const updateTimeAtom = atom(null, (_get, set) => {
+	set(_timeAtom, Date.now());
 });
 
-const _savedNoteAtom = atomWithStorage<Note | null>(notesAppSavedNote, null);
+const _savedNotesAtom = atomWithStorage<Note[]>(notesAppSavedNotes, []);
 
-export const savedNoteAtom = atom((get) => get(_savedNoteAtom));
+export const savedNotesAtom = atom((get) =>
+	get(_savedNotesAtom).sort(
+		(a, b) => (b.lastUpdated ?? 0) - (a.lastUpdated ?? 0),
+	),
+);
 
-export const clearSavedNoteAtom = atom(null, (_get, set) => {
-	set(_savedNoteAtom, null);
+export const latestSavedNoteAtom = atom((get) => {
+	return get(savedNotesAtom)[0] ?? null;
+});
+
+export const deleteSavedNoteByIdAtom = atom(null, (get, set, id: string) => {
+	set(
+		_savedNotesAtom,
+		get(savedNotesAtom).filter((note) => note.id !== id),
+	);
 });
 
 export const saveNoteAtom = atom(null, async (get, set) => {
 	const note = get(noteAtom);
+	const savedNotes = get(savedNotesAtom);
 	const textSelection = get(textSelectionAtom);
 
 	if (note) {
@@ -228,16 +158,23 @@ export const saveNoteAtom = atom(null, async (get, set) => {
 			lastUpdated: Date.now(),
 		};
 
-		set(_noteAtom, newNote);
-		set(_savedNoteAtom, newNote);
-	} else {
-		set(_savedNoteAtom, note);
+		set(noteAtom, newNote);
+
+		if (savedNotes.filter((n) => n.id === newNote.id).length > 0) {
+			set(
+				_savedNotesAtom,
+				savedNotes.map((n) => (n.id === newNote.id ? newNote : n)),
+			);
+		} else {
+			set(_savedNotesAtom, [...savedNotes, newNote]);
+		}
 	}
 });
 
-export const saveFeatureApplicableAtom = atom((get) => {
+export const unsavedChangesAtom = atom((get) => {
 	const note = get(noteAtom);
-	const savedNote = get(savedNoteAtom);
+	const savedNote =
+		get(savedNotesAtom).filter((n) => note && n.id === note.id)[0] ?? null;
 
 	return (
 		!(!note && !savedNote) &&
@@ -247,6 +184,18 @@ export const saveFeatureApplicableAtom = atom((get) => {
 			note.id === savedNote.id &&
 			note.text === savedNote.text
 		)
+	);
+});
+
+export const shouldWarnBeforeLeavingAtom = atom((get) => {
+	const note = get(noteAtom);
+	const savedNote =
+		get(savedNotesAtom).filter((n) => note && n.id === note.id)[0] ?? null;
+
+	return (
+		((!savedNote && (note?.text ?? "").trim().length > 0) ||
+			(note && savedNote && note.text !== savedNote.text)) ??
+		false
 	);
 });
 
@@ -318,7 +267,7 @@ export const saveEditHistoryAtom = atom(
 
 export const initializeEditHistoryAtom = atom(
 	null,
-	async (_get, set, noteText: string, textSelection: TextSelection | null) => {
+	(_get, set, noteText: string, textSelection: TextSelection | null) => {
 		set(_editHistoryAtom, []);
 		set(_editHistoryPointerAtom, -1);
 		set(saveEditHistoryAtom, noteText, textSelection);

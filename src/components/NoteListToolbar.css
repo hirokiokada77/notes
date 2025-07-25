@@ -1,0 +1,31 @@
+.note-list-toolbar {
+	color: var(--icon-color);
+	padding: 8px;
+	display: flex;
+
+	@media print {
+		display: none;
+	}
+}
+
+.note-list-toolbar-checkbox {
+	padding: 8px;
+}
+
+.note-list-toolbar-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.note-list-toolbar-actions svg {
+	padding: 8px;
+	cursor: pointer;
+}
+
+.note-list-toolbar-actions--disabled {
+	opacity: 0.25;
+}
+
+.note-list-toolbar-actions--disabled svg {
+	cursor: default;
+}

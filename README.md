@@ -59,9 +59,11 @@ format, which can be easily parsed using just a few lines of code or
 standard third-party tools:
 
 ```js
-const hash = location.hash; // "#id=1&text=Note+text+here&..."
-const params = new URLSearchParams(hash);
+const hash = "#id=10f...&text=Note+text+here";
+const query = hash.substring(1);
+const params = new URLSearchParams(query);
 const noteText = params.get("text");
+
 console.log(noteText); // Output: "Note text here"
 ```
 
@@ -70,8 +72,10 @@ Here is another example in Python:
 ```python
 from urllib.parse import parse_qs
 
-hash = "#id=1&text=Note+text+here"
-params = parse_qs(hash)
+hash_string = "#id=10f...&text=Note+text+here"
+query = hash_string.lstrip('#')
+params = parse_qs(query)
 note_text = params.get("text")[0]
+
 print(note_text) # Output: "Note text here"
 ```

@@ -1,0 +1,6 @@
+.home-misc {
+	display: flex;
+	flex-direction: column;
+	gap: 48px;
+	padding: 24px 0;
+}

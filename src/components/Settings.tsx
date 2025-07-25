@@ -1,10 +1,10 @@
-import "./SettingsPanel.css";
+import "./Settings.css";
 import { LocaleSelector } from "./LocaleSelector";
 import { ThemeToggle } from "./ThemeToggle";
 
-export function SettingsPanel() {
+export function Settings() {
 	return (
-		<div className="settings-panel">
+		<div className="settings">
 			<LocaleSelector />
 
 			<ThemeToggle />

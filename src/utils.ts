@@ -33,9 +33,8 @@ export async function formatNoteTextWithCursorResult(
 	});
 }
 
-export function formatTimeAgo(unixMilliseconds: number) {
-	const now = Date.now();
-	const seconds = Math.floor((now - unixMilliseconds) / 1000);
+export function formatTimeAgo(targetTime: number, currentTime: number) {
+	const seconds = Math.floor((currentTime - targetTime) / 1000);
 
 	const MINUTE = 60;
 	const HOUR = MINUTE * 60;
@@ -43,9 +42,7 @@ export function formatTimeAgo(unixMilliseconds: number) {
 	const MONTH = DAY * 30;
 	const YEAR = DAY * 365;
 
-	if (seconds < 0) {
-		return "In the future";
-	} else if (seconds < MINUTE) {
+	if (seconds < MINUTE) {
 		return "Now";
 	} else if (seconds < HOUR) {
 		const minutes = Math.floor(seconds / MINUTE);

@@ -2,24 +2,17 @@ import "./QRCodeView.css";
 import { useAtom, useAtomValue } from "jotai";
 import QRCode from "qrcode";
 import { useEffect, useRef, useState } from "react";
-import { displayQrCodeAtom, messagesAtom, rerenderAtom } from "../atoms";
+import { displayQrCodeAtom, messagesAtom, noteUrlAtom } from "../atoms";
 
 export function QRCodeView() {
-	const rerender = useAtomValue(rerenderAtom);
-
 	const [qrCode, setQrCode] = useState<string | null>(null);
-
-	const [initialized, setInitialized] = useState(false);
-
+	const initialized = useRef(false);
 	const [busy, setBusy] = useState(false);
-
 	const detailsRef = useRef<HTMLDetailsElement>(null);
-
 	const [displayQrCode, setDisplayQrCode] = useAtom(displayQrCodeAtom);
-
 	const messages = useAtomValue(messagesAtom);
-
 	const url = useRef<string | null>(null);
+	const noteUrl = useAtomValue(noteUrlAtom);
 
 	useEffect(() => {
 		const detailsElement = detailsRef.current;
@@ -38,18 +31,15 @@ export function QRCodeView() {
 	}, [setDisplayQrCode]);
 
 	useEffect(() => {
-		setInitialized(true);
-	}, []);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: forced re-rendering
-	useEffect(() => {
-		if (url.current !== window.location.href) {
+		if (url.current !== noteUrl) {
 			setBusy(true);
 
 			const timeoutId = setTimeout(
 				async () => {
+					initialized.current = true;
+
 					try {
-						const dataUrl = await QRCode.toDataURL(window.location.href, {
+						const dataUrl = await QRCode.toDataURL(noteUrl, {
 							errorCorrectionLevel: "low",
 						});
 
@@ -60,16 +50,16 @@ export function QRCodeView() {
 
 					setBusy(false);
 
-					url.current = window.location.href;
+					url.current = noteUrl;
 				},
-				initialized ? 300 : 0,
+				initialized.current ? 300 : 0,
 			);
 
 			return () => {
 				clearTimeout(timeoutId);
 			};
 		}
-	}, [rerender]);
+	}, [noteUrl]);
 
 	return (
 		<div

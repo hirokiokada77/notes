@@ -1,38 +1,27 @@
+import "./App.css";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
 	documentTitleAtom,
-	forceRerenderAtom,
 	localeAtom,
 	messagesAtom,
-	noteAtom,
-	restoreSavedNoteAtom,
-	savedNoteAtom,
+	shouldWarnBeforeLeavingAtom,
 	themeAtom,
+	updateTimeAtom,
 } from "./atoms";
-import { ButtonGroup } from "./components/ButtonGroup";
-import { InfoBox } from "./components/InfoBox";
-import { InputArea } from "./components/InputArea";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { Toast } from "./components/Toast";
-import "./App.css";
-import { TabView } from "./components/TabView";
+import { homePath, savedNotesPath } from "./constants";
+import { Home } from "./pages/Home";
+import { SavedNotes } from "./pages/SavedNotes";
 
 export function App() {
 	const locale = useAtomValue(localeAtom);
-
 	const messages = useAtomValue(messagesAtom);
-
 	const theme = useAtomValue(themeAtom);
-
-	const note = useAtomValue(noteAtom);
-	const restoreSavedNote = useSetAtom(restoreSavedNoteAtom);
-
-	const savedNote = useAtomValue(savedNoteAtom);
-
-	const forceRerender = useSetAtom(forceRerenderAtom);
-
 	const documentTitle = useAtomValue(documentTitleAtom);
+	const shouldWarnBeforeLeaving = useAtomValue(shouldWarnBeforeLeavingAtom);
+	const updateTime = useSetAtom(updateTimeAtom);
 
 	useEffect(() => {
 		document.title = documentTitle;
@@ -57,13 +46,8 @@ export function App() {
 
 	useEffect(() => {
 		const listener = (event: BeforeUnloadEvent) => {
-			if (
-				note &&
-				savedNote &&
-				note.id === savedNote.id &&
-				note.text !== savedNote.text
-			) {
-				event.preventDefault(); // Warn about unsaved changes
+			if (shouldWarnBeforeLeaving) {
+				event.preventDefault();
 			}
 		};
 
@@ -72,49 +56,27 @@ export function App() {
 		return () => {
 			window.removeEventListener("beforeunload", listener);
 		};
-	}, [note, savedNote]);
+	}, [shouldWarnBeforeLeaving]);
 
 	useEffect(() => {
-		const listener = () => {
-			if (document.visibilityState === "visible") {
-				forceRerender();
-			}
-		};
-
-		document.addEventListener("visibilitychange", listener);
+		const intervalId = setInterval(() => {
+			updateTime();
+		}, 1000);
 
 		return () => {
-			document.removeEventListener("visibilitychange", listener);
+			clearInterval(intervalId);
 		};
-	}, [forceRerender]);
-
-	useEffect(() => {
-		if (note === null && savedNote) {
-			restoreSavedNote();
-		}
-	}, [note, savedNote, restoreSavedNote]);
+	}, [updateTime]);
 
 	return (
-		<div className="App">
+		<BrowserRouter>
+			<Routes>
+				<Route path={homePath} element={<Home />} />
+
+				<Route path={savedNotesPath} element={<SavedNotes />} />
+			</Routes>
+
 			<Toast />
-
-			<TabView />
-
-			<InputArea />
-
-			<div className="App-misc">
-				<div className="App-section">
-					<ButtonGroup />
-				</div>
-
-				<div className="App-section">
-					<InfoBox />
-				</div>
-
-				<div className="App-section">
-					<SettingsPanel />
-				</div>
-			</div>
-		</div>
+		</BrowserRouter>
 	);
 }

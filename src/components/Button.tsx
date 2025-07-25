@@ -7,17 +7,18 @@ export interface ButtonProps {
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
 	level: "primary" | "secondary" | "in-text";
 	hidden?: boolean;
+	accessibilityLabel?: string;
 }
 
 export function Button(props: ButtonProps) {
 	return (
 		<button
-			aria-label={props.children?.toString()}
 			className={["button", `${props.level}-button`].join(" ")}
 			disabled={!!props.disabled}
 			type="button"
 			onClick={props.onClick}
 			hidden={props.hidden}
+			aria-label={props.accessibilityLabel ?? undefined}
 		>
 			{props.children}
 		</button>

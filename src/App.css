@@ -1,18 +1,13 @@
-.App {
+.home,
+.saved-notes {
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-primary);
 }
 
-.App-section {
+.home-section,
+.saved-notes-section {
 	margin: 0 auto;
 	max-width: 760px;
 	width: 100%;
-}
-
-.App-misc {
-	display: flex;
-	flex-direction: column;
-	gap: 48px;
-	padding: 24px 0;
 }

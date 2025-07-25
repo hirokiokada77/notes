@@ -138,4 +138,12 @@ export default defineConfig({
 			},
 		},
 	],
+	build: {
+		rollupOptions: {
+			input: {
+				index: resolve(__dirname, "index.html"),
+				savedNotes: resolve(__dirname, "saved-notes.html"),
+			},
+		},
+	},
 });
