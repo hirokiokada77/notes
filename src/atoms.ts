@@ -2,8 +2,8 @@ import { atom, createStore } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import {
 	homePath,
-	notesAppDisplayQrCode,
 	notesAppLocale,
+	notesAppQrCodeViewExpanded,
 	notesAppSavedNotes,
 	notesAppTheme,
 } from "./constants";
@@ -24,7 +24,10 @@ import {
 
 export const store = createStore();
 
-export const displayQrCodeAtom = atomWithStorage(notesAppDisplayQrCode, false);
+export const qrCodeViewExpandedAtom = atomWithStorage(
+	notesAppQrCodeViewExpanded,
+	false,
+);
 
 export const localeAtom = atomWithStorage<Locale>(
 	notesAppLocale,
