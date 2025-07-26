@@ -75,6 +75,10 @@
 
 .note-preview-container {
 	margin: var(--spacing-primary);
+
+	@media print {
+		margin: 16px 0;
+	}
 }
 
 .note-preview-container > *:first-child {
