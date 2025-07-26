@@ -1,8 +1,5 @@
-.input-area,
-.note-input,
-.note-input-container,
-.note-preview {
-	min-height: 100%;
+.input-area {
+	min-height: 100vh;
 }
 
 .input-area {
@@ -10,11 +7,6 @@
 	flex-direction: column;
 	gap: var(--spacing-primary);
 	tab-size: 4;
-}
-
-.note-input-container,
-.note-preview {
-	min-height: 240px;
 }
 
 .note-input,
@@ -209,5 +201,11 @@
 	.note-input,
 	.note-preview {
 		width: 100%;
+	}
+
+	.note-input,
+	.note-input-container,
+	.note-preview {
+		min-height: 50vh;
 	}
 }
