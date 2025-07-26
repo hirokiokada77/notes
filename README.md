@@ -31,9 +31,9 @@ enabling offline usage.
 
 ### Automatic HTML conversion
 
-If you copy a segment of a web page into the clipboard and paste it into
-this app, it will automatically convert the content into Markdown and
-display the preview.
+If you copy a segment of a web page (including text and images) to the
+clipboard and paste it into this app, it will automatically convert the
+content into Markdown, load the images, and display a preview.
 
 ## Build
 
