@@ -27,18 +27,11 @@ export function NoteList() {
 		setSelected([]);
 	};
 	const handleDelete = () => {
-		if (
-			window.confirm(
-				selected.length > 1
-					? `Delete selected ${selected.length} notes?`
-					: "Delete selected note?",
-			)
-		) {
+		if (confirmDelete(selected)) {
 			selected.forEach((id) => {
 				deleteSavedNoteById(id);
 			});
-
-			handleDeselectAll();
+			setSelected([]);
 		}
 	};
 	const HandleCreateNote = () => {
@@ -52,6 +45,16 @@ export function NoteList() {
 				setSelected(notes.map((n) => n.id));
 			}
 
+			if ((event.ctrlKey || event.metaKey) && event.key === "d") {
+				if (selected.length > 0 && confirmDelete(selected)) {
+					event.preventDefault();
+					selected.forEach((id) => {
+						deleteSavedNoteById(id);
+					});
+					setSelected([]);
+				}
+			}
+
 			if (event.key === "Escape" || event.key === "Esc") {
 				event.preventDefault();
 				setSelected([]);
@@ -63,7 +66,7 @@ export function NoteList() {
 		return () => {
 			document.removeEventListener("keydown", listener);
 		};
-	}, [notes]);
+	}, [notes, selected, deleteSavedNoteById]);
 
 	return notes.length > 0 ? (
 		<div className="note-list">
@@ -125,6 +128,14 @@ export function NoteList() {
 				Create new
 			</Button>
 		</p>
+	);
+}
+
+function confirmDelete(selected: string[]) {
+	return window.confirm(
+		selected.length > 1
+			? `Delete ${selected.length} notes?`
+			: "Delete selected note?",
 	);
 }
 

@@ -50,7 +50,7 @@ export function NoteListToolbar({
 					className="note-list-toolbar-actions-button"
 					type="button"
 					onClick={handleDelete}
-					title="Delete notes"
+					title="Delete selected"
 					disabled={!someSelected}
 				>
 					<FontAwesomeIcon icon={faTrash} />
