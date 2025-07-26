@@ -51,6 +51,11 @@ export function NoteList() {
 				event.preventDefault();
 				setSelected(notes.map((n) => n.id));
 			}
+
+			if (event.key === "Escape" || event.key === "Esc") {
+				event.preventDefault();
+				setSelected([]);
+			}
 		};
 
 		document.addEventListener("keydown", listener);
