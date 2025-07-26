@@ -4,6 +4,7 @@ import { type MouseEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
 	deleteSavedNoteByIdAtom,
+	initializeNoteAtom,
 	restoreSavedNoteAtom,
 	savedNotesAtom,
 } from "../atoms";
@@ -17,6 +18,7 @@ export function NoteList() {
 	const notes = useAtomValue(savedNotesAtom);
 	const [selected, setSelected] = useState<string[]>([]);
 	const deleteSavedNoteById = useSetAtom(deleteSavedNoteByIdAtom);
+	const initializeNote = useSetAtom(initializeNoteAtom);
 	const navigate = useNavigate();
 	const someSelected = selected.length > 0;
 	const allSelected = notes.length === selected.length;
@@ -42,6 +44,7 @@ export function NoteList() {
 		}
 	};
 	const HandleCreateNote = () => {
+		initializeNote();
 		navigate(homePath);
 	};
 
