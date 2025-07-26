@@ -9,11 +9,6 @@
 	height: 1em;
 	line-height: 1;
 	list-style-type: none;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	white-space: nowrap;
-	overflow: hidden;
 }
 
 .note-status-list li {
