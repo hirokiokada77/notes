@@ -110,6 +110,7 @@
 .note-preview h5,
 .note-preview h6 {
 	margin: 24px 0 16px;
+	line-height: 1.25;
 }
 
 .note-preview hr {
