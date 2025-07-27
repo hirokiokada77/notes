@@ -45,7 +45,7 @@ bun run build
 bun run preview
 ```
 
-## Data serialization
+## Data format
 
 If you type your note into the app, the URL will look like this:
 
