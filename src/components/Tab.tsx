@@ -18,6 +18,7 @@ import {
 	saveNoteAtom,
 	shouldWarnBeforeLeavingAtom,
 	store,
+	toastTextAtom,
 	unsavedChangesAtom,
 } from "../atoms";
 import { homePath, savedNotesPath } from "../constants";
@@ -31,11 +32,13 @@ export function Tab() {
 	const initializeNote = useSetAtom(initializeNoteAtom);
 	const navigate = useNavigate();
 	const location = useLocation();
+
 	const resetScroll = () => {
 		if (tabViewListRef.current) {
 			tabViewListRef.current.scrollTo({ left: 0 });
 		}
 	};
+
 	const createNote = () => {
 		if (
 			!store.get(shouldWarnBeforeLeavingAtom) ||
@@ -49,6 +52,7 @@ export function Tab() {
 			resetScroll();
 		}
 	};
+
 	const importNote = () => {
 		alert("Not implemented");
 	};
@@ -106,6 +110,8 @@ function TabItem({ note }: TabItemProps) {
 		useAtomValue(savedNotesAtom).filter((n) => note && n.id === note.id)[0] ??
 		null;
 	const saveNote = useSetAtom(saveNoteAtom);
+	const setToastText = useSetAtom(toastTextAtom);
+	const untitled = noteTitle === null;
 
 	const save = () => {
 		if (
@@ -117,11 +123,9 @@ function TabItem({ note }: TabItemProps) {
 			)
 		) {
 			saveNote();
-			globalThis.registerToastMessage("saveSuccess");
+			setToastText("saveSuccess");
 		}
 	};
-
-	const untitled = noteTitle === null;
 
 	return (
 		<li className="tab-view-status" key={note.id}>

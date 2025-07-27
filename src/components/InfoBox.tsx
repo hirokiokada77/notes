@@ -1,35 +1,39 @@
 import "./InfoBox.css";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useRef } from "react";
-import { messagesAtom, noteUrlAtom } from "../atoms";
+import { messagesAtom, noteUrlAtom, toastTextAtom } from "../atoms";
 import { Button } from "./Button";
 import { QRCodeView } from "./QRCodeView";
 
 export function InfoBox() {
 	const messages = useAtomValue(messagesAtom);
+	const setToastText = useSetAtom(toastTextAtom);
 	const infoBoxUrlRef = useRef<HTMLInputElement>(null);
+	const shareFeatureUnavailable = !navigator.share;
+	const noteUrl = useAtomValue(noteUrlAtom);
+
 	const copy = async () => {
 		try {
 			await navigator.clipboard.writeText(noteUrl);
-			globalThis.registerToastMessage("copySuccess");
+			setToastText("copySuccess");
 		} catch (err) {
 			console.error("Error copying to clipboard:", err);
-			globalThis.registerToastMessage("copyFail");
+			setToastText("copyFail");
 		}
 	};
+
 	const share = async () => {
 		await navigator.share({
 			title: document.title,
 			url: window.location.href,
 		});
 	};
+
 	const handleFocus = () => {
 		if (infoBoxUrlRef.current) {
 			infoBoxUrlRef.current.select();
 		}
 	};
-	const shareFeatureUnavailable = !navigator.share;
-	const noteUrl = useAtomValue(noteUrlAtom);
 
 	return (
 		<div className="info-box">

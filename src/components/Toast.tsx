@@ -1,80 +1,64 @@
 import "./Toast.css";
 import { useAtomValue } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { messagesAtom } from "../atoms";
-import type { MessageKeys } from "../utils";
+import { toastTextAtom } from "../atoms";
 
 export function Toast() {
-	const messages = useAtomValue(messagesAtom);
-
-	const [toastMessage, setToastMessage] = useState<string | null>(null);
-
+	const toastText = useAtomValue(toastTextAtom);
+	const [actualToastText, setActualToastText] = useState<string | null>(null);
 	const [showToast, setShowToast] = useState(false);
-
 	const [toastIsHiding, setToastIsHiding] = useState(false);
-
 	const displayDuration = 4000;
 	const animationDuration = 100;
-
 	const toastDisplayTimeoutRef = useRef<number | null>(null);
 	const toastHideTimeoutRef = useRef<number | null>(null);
 
-	const startToastDisplayTimer = () => {
-		if (toastDisplayTimeoutRef.current) {
-			clearTimeout(toastDisplayTimeoutRef.current);
-		}
-
-		toastDisplayTimeoutRef.current = window.setTimeout(() => {
-			setToastIsHiding(true);
-
-			if (toastHideTimeoutRef.current) {
-				clearTimeout(toastHideTimeoutRef.current);
-			}
-
-			toastHideTimeoutRef.current = window.setTimeout(() => {
-				setShowToast(false);
-			}, animationDuration);
-		}, displayDuration);
-	};
-
-	globalThis.registerToastMessage = (newToastMessageKey: MessageKeys) => {
-		if (showToast) {
-			setToastIsHiding(true);
-
+	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
+	useEffect(() => {
+		const startToastDisplayTimer = () => {
 			if (toastDisplayTimeoutRef.current) {
 				clearTimeout(toastDisplayTimeoutRef.current);
 			}
+			toastDisplayTimeoutRef.current = window.setTimeout(() => {
+				setToastIsHiding(true);
+				if (toastHideTimeoutRef.current) {
+					clearTimeout(toastHideTimeoutRef.current);
+				}
+				toastHideTimeoutRef.current = window.setTimeout(() => {
+					setShowToast(false);
+				}, animationDuration);
+			}, displayDuration);
+		};
 
-			if (toastHideTimeoutRef.current) {
-				clearTimeout(toastHideTimeoutRef.current);
-			}
-
-			toastHideTimeoutRef.current = window.setTimeout(() => {
-				setToastMessage(messages[newToastMessageKey]);
-
+		if (toastText) {
+			if (showToast) {
+				setToastIsHiding(true);
+				if (toastDisplayTimeoutRef.current) {
+					clearTimeout(toastDisplayTimeoutRef.current);
+				}
+				if (toastHideTimeoutRef.current) {
+					clearTimeout(toastHideTimeoutRef.current);
+				}
+				toastHideTimeoutRef.current = window.setTimeout(() => {
+					setActualToastText(toastText.content);
+					setShowToast(true);
+					setToastIsHiding(false);
+					startToastDisplayTimer();
+				}, animationDuration);
+			} else {
+				setActualToastText(toastText.content);
 				setShowToast(true);
-
 				setToastIsHiding(false);
-
 				startToastDisplayTimer();
-			}, animationDuration);
-		} else {
-			setToastMessage(messages[newToastMessageKey]);
-
-			setShowToast(true);
-
-			setToastIsHiding(false);
-
-			startToastDisplayTimer();
+			}
 		}
-	};
+	}, [toastText]);
 
 	useEffect(() => {
 		return () => {
 			if (toastDisplayTimeoutRef.current) {
 				clearTimeout(toastDisplayTimeoutRef.current);
 			}
-
 			if (toastHideTimeoutRef.current) {
 				clearTimeout(toastHideTimeoutRef.current);
 			}
@@ -95,7 +79,7 @@ export function Toast() {
 			aria-live={showToast && !toastIsHiding ? "polite" : "off"}
 			aria-hidden={showToast ? "false" : "true"}
 		>
-			<div className="toast-container">{toastMessage}</div>
+			<div className="toast-container">{actualToastText}</div>
 		</div>
 	);
 }

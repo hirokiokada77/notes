@@ -103,7 +103,30 @@ export function getInitialLocale() {
 	return "en" as Locale;
 }
 
-export type { MessageKeys } from "./global";
+export type MessageKey =
+	| "appName"
+	| "appDescription"
+	| "textareaPlaceholder"
+	| "currentUrlLabel"
+	| "copyButton"
+	| "shareButton"
+	| "copySuccess"
+	| "copyFail"
+	| "shareInstruction"
+	| "localeSelectorLabel"
+	| "darkModeLabel"
+	| "saveButton"
+	| "saveSuccess"
+	| "noteLoadedFromBrowser"
+	| "saveFail"
+	| "clearButton"
+	| "clearConfirm"
+	| "clearSuccess"
+	| "clearFail"
+	| "viewButton"
+	| "editButton"
+	| "qrCodeViewSummary"
+	| "qrCodeImgAlt";
 
 export interface Messages {
 	appName: string;

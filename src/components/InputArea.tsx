@@ -13,6 +13,7 @@ import {
 	saveNoteAtom,
 	statusAtom,
 	textSelectionAtom,
+	toastTextAtom,
 	updateNoteTextAtom,
 } from "../atoms";
 import { formatNoteText, type TextSelection, updateAnchor } from "../utils";
@@ -22,22 +23,26 @@ const turndownService = new TurndownService();
 
 export function InputArea() {
 	const messages = useAtomValue(messagesAtom);
-
+	const setToastText = useSetAtom(toastTextAtom);
 	const note = useAtomValue(noteAtom);
 	const updateNoteText = useSetAtom(updateNoteTextAtom);
-
-	const setStatus = useSetAtom(statusAtom);
-
+	const [status, setStatus] = useAtom(statusAtom);
 	const saveEditHistory = useSetAtom(saveEditHistoryAtom);
+	const noteInputId = useId();
+	const saveNote = useSetAtom(saveNoteAtom);
+	const [textSelection, setTextSelection] = useAtom(textSelectionAtom);
+	const applyPreviousEditHistory = useSetAtom(applyPreviousEditHistoryAtom);
+	const applyNextEditHistory = useSetAtom(applyNextEditHistoryAtom);
+	const initializeEditHistory = useSetAtom(initializeEditHistoryAtom);
+	const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
+	const noteBlank = !(note && note.text.trim().length > 0);
 
 	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
 		const newNoteText = event.target.value;
-
 		const newTextSelection = {
 			start: event.target.selectionStart,
 			end: event.target.selectionEnd,
 		};
-
 		updateNoteText(newNoteText);
 		setTextSelection(newTextSelection);
 		saveEditHistory(newNoteText, newTextSelection);
@@ -49,7 +54,6 @@ export function InputArea() {
 				start: noteInputRef.current.selectionStart,
 				end: noteInputRef.current.selectionEnd,
 			};
-
 			setTextSelection(newTextSelection);
 		}
 	};
@@ -60,150 +64,115 @@ export function InputArea() {
 
 	const handleBlur = async () => {
 		setStatus("viewing");
-
 		if (note) {
 			const formattedText = await formatNoteText(note.text);
-
 			if (note.text !== formattedText) {
 				updateNoteText(formattedText);
 				saveEditHistory(formattedText, textSelection);
 			}
 		}
-
 		setTextSelection(null);
 	};
 
 	const handlePaste = (event: ClipboardEvent<HTMLTextAreaElement>) => {
 		const clipboardData = event.clipboardData;
-
 		if (clipboardData) {
 			const htmlContent = clipboardData.getData("text/html");
-
 			if (htmlContent) {
 				try {
-					const pastedMarkdown = turndownService.turndown(htmlContent);
-
 					event.preventDefault();
-
+					const pastedMarkdown = turndownService.turndown(htmlContent);
 					const textarea = noteInputRef.current;
-
 					if (textarea) {
-						const start = textarea.selectionStart;
-						const end = textarea.selectionEnd;
-
+						const selectionStart = textarea.selectionStart;
+						const selectionEnd = textarea.selectionEnd;
 						const newNoteText =
-							(note?.text ?? "").substring(0, start) +
+							(note?.text ?? "").substring(0, selectionStart) +
 							pastedMarkdown +
-							(note?.text ?? "").substring(end);
-
+							(note?.text ?? "").substring(selectionEnd);
 						const newTextSelection: TextSelection = {
-							start: start + pastedMarkdown.length,
-							end: start + pastedMarkdown.length,
+							start: selectionStart + pastedMarkdown.length,
+							end: selectionStart + pastedMarkdown.length,
 						};
-
 						updateNoteText(newNoteText);
 						setTextSelection(newTextSelection);
 						saveEditHistory(newNoteText, newTextSelection);
 					}
-				} catch {}
+				} catch (error) {
+					console.error(error);
+				}
 			}
 		}
 	};
 
-	const noteInputId = useId();
-
 	const handleClick = (event: MouseEvent<HTMLDivElement>) => {
 		const target = event.target as HTMLElement;
-
 		if (
 			(target.tagName === "A" && target.hasAttribute("href")) ||
 			(target.tagName === "IMG" && target.closest("a[href]"))
 		) {
 			event.preventDefault();
-
 			const href = target.getAttribute("href") ?? target.closest("a")?.href;
-
 			if (href) {
 				if (href.startsWith("#")) {
 					updateAnchor(href.substring(1));
-
 					return;
 				}
-
 				window.open(href, "_blank", "noopener,noreferrer");
 			}
 		}
 	};
 
-	const saveNote = useSetAtom(saveNoteAtom);
-
-	const [textSelection, setTextSelection] = useAtom(textSelectionAtom);
-
-	const applyPreviousEditHistory = useSetAtom(applyPreviousEditHistoryAtom);
-
-	const applyNextEditHistory = useSetAtom(applyNextEditHistoryAtom);
-
 	useEffect(() => {
 		const listener = (event: KeyboardEvent) => {
-			// Ctrl/Cmd + S: Save
+			// Save
 			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
 				event.preventDefault();
-
 				saveNote();
-
-				globalThis.registerToastMessage("saveSuccess");
+				setToastText("saveSuccess");
 			}
 
-			// Ctrl/Cmd + Z: Undo
+			// Undo
 			if (
 				(event.ctrlKey || event.metaKey) &&
 				event.key === "z" &&
 				!event.shiftKey
 			) {
 				event.preventDefault();
-
 				applyPreviousEditHistory();
 			}
 
-			// Ctrl/Cmd + Y or Ctrl/Cmd + Shift + Z: Redo
+			// Redo
 			if (
 				(event.ctrlKey || event.metaKey) &&
 				(event.key === "y" || (event.key === "z" && event.shiftKey))
 			) {
 				event.preventDefault();
-
 				applyNextEditHistory();
 			}
 
 			// Tab
 			if (event.key === "Tab") {
 				const textarea = noteInputRef.current;
-
 				if (textarea && event.target === textarea) {
 					event.preventDefault();
-
 					const start = textarea.selectionStart;
 					const end = textarea.selectionEnd;
-
 					const newNoteText =
 						(note?.text ?? "").substring(0, start) +
 						"\t" +
 						(note?.text ?? "").substring(end);
-
 					const newTextSelection: TextSelection = {
 						start: start + 1,
 						end: start + 1,
 					};
-
 					updateNoteText(newNoteText);
 					setTextSelection(newTextSelection);
 					saveEditHistory(newNoteText, newTextSelection);
 				}
 			}
 		};
-
 		document.addEventListener("keydown", listener);
-
 		return () => {
 			document.removeEventListener("keydown", listener);
 		};
@@ -215,16 +184,13 @@ export function InputArea() {
 		saveEditHistory,
 		applyPreviousEditHistory,
 		applyNextEditHistory,
+		setToastText,
 	]);
-
-	const initializeEditHistory = useSetAtom(initializeEditHistoryAtom);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: initialization
 	useEffect(() => {
 		initializeEditHistory(note?.text ?? "", textSelection);
 	}, []);
-
-	const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
 
 	useEffect(() => {
 		if (note === null) {
@@ -241,10 +207,6 @@ export function InputArea() {
 			);
 		}
 	}, [textSelection, note]);
-
-	const noteBlank = !(note && note.text.trim().length > 0);
-
-	const status = useAtomValue(statusAtom);
 
 	return (
 		<div className="input-area">

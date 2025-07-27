@@ -17,6 +17,7 @@ import {
 	getFirstImage,
 	getInitialLocale,
 	type Locale,
+	type MessageKey,
 	messagesByLocale,
 	type Note,
 	type Status,
@@ -310,3 +311,20 @@ export const applyNextEditHistoryAtom = atom(null, (get, set) => {
 		set(_editHistoryPointerAtom, editHistoryPointer + 1);
 	}
 });
+
+const _toastTextAtom = atom<{
+	content: string;
+	created: number;
+} | null>(null);
+
+export const toastTextAtom = atom(
+	(get) => get(_toastTextAtom),
+	(get, set, messageKey: MessageKey) => {
+		const messages = get(messagesAtom);
+
+		set(_toastTextAtom, {
+			content: messages[messageKey],
+			created: Date.now(),
+		});
+	},
+);
