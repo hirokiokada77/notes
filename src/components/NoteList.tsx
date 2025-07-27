@@ -1,6 +1,7 @@
 import "./NoteList.css";
+import { produce } from "immer";
 import { useAtomValue, useSetAtom } from "jotai";
-import { type MouseEvent, useEffect, useState } from "react";
+import { type MouseEvent, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import {
 	deleteSavedNoteByIdAtom,
@@ -15,23 +16,17 @@ import { NoteStatus } from "./NoteStatus";
 
 export function NoteList() {
 	const notes = useAtomValue(savedNotesAtom);
-	const [selected, setSelected] = useState<string[]>([]);
+	const [{ selected }, dispatch] = useReducer(noteListReducer, initialState);
 	const deleteSavedNoteById = useSetAtom(deleteSavedNoteByIdAtom);
 	const navigate = useNavigate();
-	const someSelected = selected.length > 0;
-	const allSelected = notes.length === selected.length;
-	const handleSelectAll = () => {
-		setSelected(notes.map((note) => note.id));
-	};
-	const handleDeselectAll = () => {
-		setSelected([]);
-	};
+	const someSelected = selected.size > 0;
+	const allSelected = notes.length === selected.size;
 	const handleDelete = () => {
 		if (confirmDelete(selected)) {
 			selected.forEach((id) => {
 				deleteSavedNoteById(id);
 			});
-			setSelected([]);
+			dispatch({ type: "DESELECT_ALL" });
 		}
 	};
 	const HandleCreateNote = () => {
@@ -42,22 +37,22 @@ export function NoteList() {
 		const listener = (event: KeyboardEvent) => {
 			if ((event.ctrlKey || event.metaKey) && event.key === "a") {
 				event.preventDefault();
-				setSelected(notes.map((n) => n.id));
+				dispatch({ type: "SELECT_ALL", payload: notes });
 			}
 
 			if ((event.ctrlKey || event.metaKey) && event.key === "d") {
-				if (selected.length > 0 && confirmDelete(selected)) {
+				if (selected.size > 0 && confirmDelete(selected)) {
 					event.preventDefault();
 					selected.forEach((id) => {
 						deleteSavedNoteById(id);
 					});
-					setSelected([]);
+					dispatch({ type: "DESELECT_ALL" });
 				}
 			}
 
 			if (event.key === "Escape" || event.key === "Esc") {
 				event.preventDefault();
-				setSelected([]);
+				dispatch({ type: "DESELECT_ALL" });
 			}
 		};
 
@@ -75,32 +70,22 @@ export function NoteList() {
 			<NoteListToolbar
 				someSelected={someSelected}
 				allSelected={allSelected}
-				handleSelectAll={handleSelectAll}
-				handleDeselectAll={handleDeselectAll}
+				handleSelectAll={() => dispatch({ type: "SELECT_ALL", payload: notes })}
+				handleDeselectAll={() => dispatch({ type: "DESELECT_ALL" })}
 				handleDelete={handleDelete}
 			/>
 
 			<ul>
 				{notes.map((note) => {
-					const noteSelected =
-						selected.filter((id) => id === note.id).length > 0;
-					const handleSelect = () => {
-						setSelected([...selected, note.id]);
-					};
-					const handleDeselect = () => {
-						setSelected(selected.filter((id) => id !== note.id));
-					};
 					const handleClick = (event: MouseEvent) => {
 						if (event.ctrlKey || event.metaKey) {
-							if (noteSelected) {
-								handleDeselect();
+							if (selected.has(note.id)) {
+								dispatch({ type: "DESELECT", payload: note });
 							} else {
-								handleSelect();
+								dispatch({ type: "SELECT", payload: note });
 							}
-
 							return false;
 						}
-
 						return true;
 					};
 
@@ -108,9 +93,9 @@ export function NoteList() {
 						<NoteListItem
 							key={note.id}
 							note={note}
-							selected={noteSelected}
-							onSelect={handleSelect}
-							onDeselect={handleDeselect}
+							selected={selected.has(note.id)}
+							onSelect={() => dispatch({ type: "SELECT", payload: note })}
+							onDeselect={() => dispatch({ type: "DESELECT", payload: note })}
 							onClick={handleClick}
 						/>
 					);
@@ -128,14 +113,6 @@ export function NoteList() {
 				Create new
 			</Button>
 		</p>
-	);
-}
-
-function confirmDelete(selected: string[]) {
-	return window.confirm(
-		selected.length > 1
-			? `Delete ${selected.length} notes?`
-			: "Delete selected note?",
 	);
 }
 
@@ -196,3 +173,52 @@ export function NoteListItem({
 		</li>
 	);
 }
+
+function confirmDelete(selected: Set<string>) {
+	return window.confirm(
+		selected.size > 1
+			? `Delete ${selected.size} notes?`
+			: "Delete selected note?",
+	);
+}
+
+interface NoteListState {
+	selected: Set<string>;
+}
+
+const initialState: NoteListState = {
+	selected: new Set(),
+};
+
+type NoteListAction =
+	| { type: "SELECT"; payload: Note }
+	| { type: "DESELECT"; payload: Note }
+	| { type: "SELECT_ALL"; payload: Note[] }
+	| { type: "DESELECT_ALL" };
+
+const noteListReducer = produce(
+	(draft: NoteListState, action: NoteListAction) => {
+		switch (action.type) {
+			case "SELECT":
+				draft.selected.add(action.payload.id);
+				break;
+
+			case "DESELECT":
+				draft.selected.delete(action.payload.id);
+				break;
+
+			case "SELECT_ALL":
+				action.payload.forEach((note) => {
+					draft.selected.add(note.id);
+				});
+				break;
+
+			case "DESELECT_ALL":
+				draft.selected.clear();
+				break;
+
+			default:
+				throw new Error();
+		}
+	},
+);

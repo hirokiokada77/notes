@@ -9,6 +9,7 @@
 		"@fortawesome/fontawesome-svg-core": "^7.0.0",
 		"@fortawesome/free-solid-svg-icons": "^7.0.0",
 		"@fortawesome/react-fontawesome": "^0.2.2",
+		"immer": "^10.1.1",
 		"jotai": "^2.12.5",
 		"jotai-location": "^0.6.1",
 		"prettier": "^3.6.2",
