@@ -45,6 +45,7 @@
 	line-clamp: 2;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	line-height: 1.5;
 }
 
 .note-list-no-saved-notes-indicator {
