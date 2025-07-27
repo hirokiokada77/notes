@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAtomValue, useSetAtom } from "jotai";
-import { type MouseEventHandler, useRef } from "react";
+import { type MouseEventHandler, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
 	initializeNoteAtom,
@@ -32,6 +32,8 @@ export function Tab() {
 	const initializeNote = useSetAtom(initializeNoteAtom);
 	const navigate = useNavigate();
 	const location = useLocation();
+	const setToastText = useSetAtom(toastTextAtom);
+	const saveNote = useSetAtom(saveNoteAtom);
 
 	const resetScroll = () => {
 		if (tabViewListRef.current) {
@@ -56,6 +58,22 @@ export function Tab() {
 	const importNote = () => {
 		alert("Not implemented");
 	};
+
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			// Save
+			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+				event.preventDefault();
+				saveNote();
+				setToastText("saveSuccess");
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [saveNote, setToastText]);
 
 	return (
 		<div className="tab-view">

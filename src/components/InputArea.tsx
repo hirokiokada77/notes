@@ -10,10 +10,8 @@ import {
 	messagesAtom,
 	noteAtom,
 	saveEditHistoryAtom,
-	saveNoteAtom,
 	statusAtom,
 	textSelectionAtom,
-	toastTextAtom,
 	updateNoteTextAtom,
 } from "../atoms";
 import { formatNoteText, type TextSelection, updateAnchor } from "../utils";
@@ -23,13 +21,11 @@ const turndownService = new TurndownService();
 
 export function InputArea() {
 	const messages = useAtomValue(messagesAtom);
-	const setToastText = useSetAtom(toastTextAtom);
 	const note = useAtomValue(noteAtom);
 	const updateNoteText = useSetAtom(updateNoteTextAtom);
 	const [status, setStatus] = useAtom(statusAtom);
 	const saveEditHistory = useSetAtom(saveEditHistoryAtom);
 	const noteInputId = useId();
-	const saveNote = useSetAtom(saveNoteAtom);
 	const [textSelection, setTextSelection] = useAtom(textSelectionAtom);
 	const applyPreviousEditHistory = useSetAtom(applyPreviousEditHistoryAtom);
 	const applyNextEditHistory = useSetAtom(applyNextEditHistoryAtom);
@@ -124,14 +120,7 @@ export function InputArea() {
 	};
 
 	useEffect(() => {
-		const listener = (event: KeyboardEvent) => {
-			// Save
-			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
-				event.preventDefault();
-				saveNote();
-				setToastText("saveSuccess");
-			}
-
+		const handleKeyDown = (event: KeyboardEvent) => {
 			// Undo
 			if (
 				(event.ctrlKey || event.metaKey) &&
@@ -172,19 +161,18 @@ export function InputArea() {
 				}
 			}
 		};
-		document.addEventListener("keydown", listener);
+
+		document.addEventListener("keydown", handleKeyDown);
 		return () => {
-			document.removeEventListener("keydown", listener);
+			document.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [
-		saveNote,
 		note,
 		updateNoteText,
 		setTextSelection,
 		saveEditHistory,
 		applyPreviousEditHistory,
 		applyNextEditHistory,
-		setToastText,
 	]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: initialization
