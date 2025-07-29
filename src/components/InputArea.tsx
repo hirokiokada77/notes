@@ -1,5 +1,5 @@
 import "./InputArea.css";
-import type { ClipboardEvent, MouseEvent } from "react";
+import type { ClipboardEvent } from "react";
 import { type ChangeEvent, useEffect, useId, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TurndownService from "turndown";
@@ -13,7 +13,7 @@ import {
 	updateActiveNoteTextSelection,
 } from "../notesSlice";
 import { selectStatus, updateStatus } from "../statusSlice";
-import { formatNoteText, type TextSelection, updateAnchor } from "../utils";
+import { formatNoteText, type TextSelection } from "../utils";
 import { NotePreview } from "./NotePreview";
 
 const turndownService = new TurndownService();
@@ -88,24 +88,6 @@ export function InputArea() {
 				} catch (error) {
 					console.error(error);
 				}
-			}
-		}
-	};
-
-	const handleClick = (event: MouseEvent<HTMLDivElement>) => {
-		const target = event.target as HTMLElement;
-		if (
-			(target.tagName === "A" && target.hasAttribute("href")) ||
-			(target.tagName === "IMG" && target.closest("a[href]"))
-		) {
-			event.preventDefault();
-			const href = target.getAttribute("href") ?? target.closest("a")?.href;
-			if (href) {
-				if (href.startsWith("#")) {
-					updateAnchor(href.substring(1));
-					return;
-				}
-				window.open(href, "_blank", "noopener,noreferrer");
 			}
 		}
 	};
@@ -196,7 +178,6 @@ export function InputArea() {
 				/>
 			</div>
 
-			{/** biome-ignore lint/a11y/useKeyWithClickEvents: expected behavior */}
 			<main
 				className={[
 					"note-preview",
@@ -204,7 +185,6 @@ export function InputArea() {
 				]
 					.flat()
 					.join(" ")}
-				onClick={handleClick}
 				aria-live="polite"
 			>
 				<div className="note-preview-container">

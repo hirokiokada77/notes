@@ -1,4 +1,5 @@
 import "katex/dist/katex.css";
+import type { MouseEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import { useSelector } from "react-redux";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -10,6 +11,7 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import { selectActiveNote } from "../notesSlice";
+import { applyAnchor } from "../utils";
 
 export function NotePreview() {
 	const activeNote = useSelector(selectActiveNote);
@@ -27,6 +29,25 @@ export function NotePreview() {
 				rehypeSlug,
 			]}
 			components={{
+				a({ node, children, ...props }) {
+					const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+						const href = event.currentTarget.getAttribute("href");
+						if (href) {
+							event.preventDefault();
+							if (href.startsWith("#")) {
+								applyAnchor(href.substring(1));
+							} else {
+								window.open(href, "_blank", "noopener,noreferrer");
+							}
+						}
+					};
+
+					return (
+						<a {...props} onClick={handleClick}>
+							{children}
+						</a>
+					);
+				},
 				code({ node, className, children, ...props }) {
 					const match = /language-(\w+)/.exec(className ?? "");
 

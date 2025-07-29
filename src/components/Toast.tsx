@@ -76,7 +76,6 @@ export function Toast() {
 	}, []);
 
 	return (
-		// biome-ignore lint/a11y/useSemanticElements: false positive
 		<div
 			className={[
 				"toast",

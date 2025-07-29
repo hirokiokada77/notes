@@ -188,7 +188,7 @@ export interface TextSelection {
 	end: number;
 }
 
-export function updateAnchor(anchor: string) {
+export function applyAnchor(anchor: string) {
 	const targetElement = document.getElementById(decodeURIComponent(anchor));
 
 	if (targetElement) {
