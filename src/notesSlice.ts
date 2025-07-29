@@ -91,12 +91,13 @@ export const notesSlice = createSlice({
 			];
 			state.activeNoteEditHistoryPointer = 0;
 		},
-		saveActiveNote(state) {
+		saveActiveNote(state, action: PayloadAction<number>) {
 			if (state.activeNote) {
 				state.savedNotes = state.savedNotes.filter(
 					// biome-ignore lint/style/noNonNullAssertion: false positive
 					(note) => note.id !== state.activeNote!.id,
 				);
+				state.activeNote.lastUpdated = action.payload;
 				// TODO: Implement format on save
 				state.savedNotes.push(state.activeNote);
 			} else {

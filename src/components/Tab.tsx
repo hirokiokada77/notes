@@ -62,7 +62,7 @@ export function Tab() {
 			// Save
 			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
 				event.preventDefault();
-				dispatch(saveActiveNote());
+				dispatch(saveActiveNote(Date.now()));
 				dispatch(updateToastText(["saveSuccess", Date.now()]));
 			}
 		};
@@ -137,7 +137,7 @@ function TabItem({ note }: TabItemProps) {
 					"Do you want to proceed?",
 			)
 		) {
-			dispatch(saveActiveNote());
+			dispatch(saveActiveNote(Date.now()));
 			dispatch(updateToastText(["saveSuccess", Date.now()]));
 		}
 	};
