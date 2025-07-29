@@ -36,28 +36,30 @@ export async function formatNoteTextWithCursorResult(
 export function formatTimeAgo(targetTime: number, currentTime: number) {
 	const seconds = Math.floor((currentTime - targetTime) / 1000);
 
-	const MINUTE = 60;
-	const HOUR = MINUTE * 60;
-	const DAY = HOUR * 24;
-	const MONTH = DAY * 30;
-	const YEAR = DAY * 365;
+	const units = {
+		minute: 60,
+		hour: 60 * 60,
+		day: 60 * 60 * 24,
+		month: 60 * 60 * 24 * 30,
+		year: 60 * 60 * 24 * 365,
+	};
 
-	if (seconds < MINUTE) {
+	if (seconds < units.minute) {
 		return "Now";
-	} else if (seconds < HOUR) {
-		const minutes = Math.floor(seconds / MINUTE);
+	} else if (seconds < units.hour) {
+		const minutes = Math.floor(seconds / units.minute);
 		return `${minutes} min${minutes === 1 ? "" : "s"} ago`;
-	} else if (seconds < DAY) {
-		const hours = Math.floor(seconds / HOUR);
+	} else if (seconds < units.day) {
+		const hours = Math.floor(seconds / units.hour);
 		return `${hours} hour${hours === 1 ? "" : "s"} ago`;
-	} else if (seconds < MONTH) {
-		const days = Math.floor(seconds / DAY);
+	} else if (seconds < units.month) {
+		const days = Math.floor(seconds / units.day);
 		return `${days} day${days === 1 ? "" : "s"} ago`;
-	} else if (seconds < YEAR) {
-		const months = Math.floor(seconds / MONTH);
+	} else if (seconds < units.year) {
+		const months = Math.floor(seconds / units.month);
 		return `${months} month${months === 1 ? "" : "s"} ago`;
 	} else {
-		const years = Math.floor(seconds / YEAR);
+		const years = Math.floor(seconds / units.year);
 		return `${years} year${years === 1 ? "" : "s"} ago`;
 	}
 }

@@ -26,7 +26,7 @@ export function NoteList() {
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if ((event.ctrlKey || event.metaKey) && event.key === "a") {
 				event.preventDefault();
-				dispatch({ type: "SELECT_ALL", payload: savedNotes });
+				dispatch({ type: "selectAll", payload: savedNotes });
 			}
 
 			if ((event.ctrlKey || event.metaKey) && event.key === "d") {
@@ -35,13 +35,13 @@ export function NoteList() {
 					selected.forEach((id) => {
 						deleteSavedNoteById(id);
 					});
-					dispatch({ type: "DESELECT_ALL" });
+					dispatch({ type: "deselectAll" });
 				}
 			}
 
 			if (event.key === "Escape" || event.key === "Esc") {
 				event.preventDefault();
-				dispatch({ type: "DESELECT_ALL" });
+				dispatch({ type: "deselectAll" });
 			}
 		};
 
@@ -59,15 +59,15 @@ export function NoteList() {
 				someSelected={selected.size > 0}
 				allSelected={savedNotes.length === selected.size}
 				handleSelectAll={() =>
-					dispatch({ type: "SELECT_ALL", payload: savedNotes })
+					dispatch({ type: "selectAll", payload: savedNotes })
 				}
-				handleDeselectAll={() => dispatch({ type: "DESELECT_ALL" })}
+				handleDeselectAll={() => dispatch({ type: "deselectAll" })}
 				handleDelete={() => {
 					if (confirmDelete(selected)) {
 						selected.forEach((id) => {
 							reduxDispatch(deleteSavedNoteById(id));
 						});
-						dispatch({ type: "DESELECT_ALL" });
+						dispatch({ type: "deselectAll" });
 					}
 				}}
 			/>
@@ -77,9 +77,9 @@ export function NoteList() {
 					const handleClick = (event: MouseEvent) => {
 						if (event.ctrlKey || event.metaKey) {
 							if (selected.has(note.id)) {
-								dispatch({ type: "DESELECT", payload: note });
+								dispatch({ type: "deselect", payload: note });
 							} else {
-								dispatch({ type: "SELECT", payload: note });
+								dispatch({ type: "select", payload: note });
 							}
 							return false;
 						}
@@ -91,8 +91,8 @@ export function NoteList() {
 							key={note.id}
 							note={note}
 							selected={selected.has(note.id)}
-							onSelect={() => dispatch({ type: "SELECT", payload: note })}
-							onDeselect={() => dispatch({ type: "DESELECT", payload: note })}
+							onSelect={() => dispatch({ type: "select", payload: note })}
+							onDeselect={() => dispatch({ type: "deselect", payload: note })}
 							onClick={handleClick}
 						/>
 					);
@@ -189,29 +189,29 @@ const initialState: NoteListState = {
 };
 
 type NoteListAction =
-	| { type: "SELECT"; payload: Note }
-	| { type: "DESELECT"; payload: Note }
-	| { type: "SELECT_ALL"; payload: Note[] }
-	| { type: "DESELECT_ALL" };
+	| { type: "select"; payload: Note }
+	| { type: "deselect"; payload: Note }
+	| { type: "selectAll"; payload: Note[] }
+	| { type: "deselectAll" };
 
 const noteListReducer = produce(
 	(draft: NoteListState, action: NoteListAction) => {
 		switch (action.type) {
-			case "SELECT":
+			case "select":
 				draft.selected.add(action.payload.id);
 				break;
 
-			case "DESELECT":
+			case "deselect":
 				draft.selected.delete(action.payload.id);
 				break;
 
-			case "SELECT_ALL":
+			case "selectAll":
 				action.payload.forEach((note) => {
 					draft.selected.add(note.id);
 				});
 				break;
 
-			case "DESELECT_ALL":
+			case "deselectAll":
 				draft.selected.clear();
 				break;
 
