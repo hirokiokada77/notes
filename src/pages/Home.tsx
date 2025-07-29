@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InfoBox } from "../components/InfoBox";
 import { InputArea } from "../components/InputArea";
 import { Tab } from "../components/Tab";
+import { selectAllStringResources } from "../localeSlice";
 import {
 	initializeActiveNote,
 	selectActiveNote,
@@ -16,14 +17,15 @@ export function Home() {
 	const dispatch = useDispatch();
 	const activeNote = useSelector(selectActiveNote);
 	const activeNoteTitle = useSelector(selectActiveNoteTitle);
+	const resourceStrings = useSelector(selectAllStringResources);
 
 	useEffect(() => {
 		if (activeNoteTitle) {
-			document.title = `Notes – ${activeNoteTitle}`;
+			document.title = `${resourceStrings.appName} – ${activeNoteTitle}`;
 		} else {
-			document.title = "Notes";
+			document.title = resourceStrings.appName;
 		}
-	}, [activeNoteTitle]);
+	}, [activeNoteTitle, resourceStrings]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: initialization
 	useEffect(() => {
