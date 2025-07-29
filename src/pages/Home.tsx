@@ -1,5 +1,5 @@
 import "./Home.css";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { InfoBox } from "../components/InfoBox";
 import { InputArea } from "../components/InputArea";
@@ -18,6 +18,7 @@ export function Home() {
 	const activeNote = useSelector(selectActiveNote);
 	const activeNoteTitle = useSelector(selectActiveNoteTitle);
 	const resourceStrings = useSelector(selectAllStringResources);
+	const initialized = useRef(false);
 
 	useEffect(() => {
 		if (activeNoteTitle) {
@@ -44,7 +45,6 @@ export function Home() {
 					lastUpdated: lastUpdated !== null ? Number(lastUpdated) : null,
 				};
 				dispatch(setActiveNote([note, Date.now()]));
-				location.hash = "";
 			}
 		};
 
@@ -56,12 +56,41 @@ export function Home() {
 		};
 	}, []);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: initialization
 	useEffect(() => {
-		if (!activeNote) {
-			dispatch(initializeActiveNote(Date.now()));
-		}
-	}, []);
+		const timeoutId = setTimeout(
+			() => {
+				if (activeNote) {
+					const params = new URLSearchParams(
+						activeNote.created !== null && activeNote.lastUpdated !== null
+							? {
+									id: activeNote.id,
+									text: activeNote.text,
+									created: activeNote.created.toString(),
+									lastUpdated: activeNote.lastUpdated.toString(),
+								}
+							: {
+									id: activeNote.id,
+									text: activeNote.text,
+								},
+					);
+					history.replaceState(
+						null,
+						"",
+						`${location.href.split("#")[0]}#${params}`,
+					);
+				} else {
+					dispatch(initializeActiveNote(Date.now()));
+				}
+
+				initialized.current = true;
+			},
+			initialized.current ? 300 : 0,
+		);
+
+		return () => {
+			clearTimeout(timeoutId);
+		};
+	}, [activeNote, dispatch]);
 
 	return (
 		<div className="home">
