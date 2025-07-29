@@ -1,6 +1,7 @@
 import "./NoteStatus.css";
-import { useAtomValue, useSetAtom } from "jotai";
-import { restoreSavedNoteAtom, savedNotesAtom, timeAtom } from "../atoms";
+import { useDispatch, useSelector } from "react-redux";
+import { restoreSavedNote, selectAllSavedNotes } from "../notesSlice";
+import { selectTime } from "../timeSlice";
 import { formatTimeAgo, type Note } from "../utils";
 import { Button } from "./Button";
 
@@ -13,11 +14,8 @@ export function NoteStatus(props: NoteStatusProps) {
 		<div className="note-status">
 			<ul className="note-status-list">
 				<LastUpdatedIndicator {...props} />
-
 				<SavedChangesIndicator {...props} />
-
 				<UnsavedChangesIndicator {...props} />
-
 				<NewerVersionAvailableIndicator {...props} />
 			</ul>
 		</div>
@@ -25,7 +23,7 @@ export function NoteStatus(props: NoteStatusProps) {
 }
 
 function LastUpdatedIndicator({ note }: NoteStatusProps) {
-	const currentTime = useAtomValue(timeAtom);
+	const currentTime = useSelector(selectTime);
 
 	return (
 		note.lastUpdated && <li>{formatTimeAgo(note.lastUpdated, currentTime)}</li>
@@ -34,8 +32,9 @@ function LastUpdatedIndicator({ note }: NoteStatusProps) {
 
 function SavedChangesIndicator({ note }: NoteStatusProps) {
 	const savedNote =
-		useAtomValue(savedNotesAtom).filter((n) => note && n.id === note.id)[0] ??
-		null;
+		useSelector(selectAllSavedNotes).filter(
+			(n) => note && n.id === note.id,
+		)[0] ?? null;
 
 	return (
 		note &&
@@ -47,8 +46,9 @@ function SavedChangesIndicator({ note }: NoteStatusProps) {
 
 function UnsavedChangesIndicator({ note }: NoteStatusProps) {
 	const savedNote =
-		useAtomValue(savedNotesAtom).filter((n) => note && n.id === note.id)[0] ??
-		null;
+		useSelector(selectAllSavedNotes).filter(
+			(n) => note && n.id === note.id,
+		)[0] ?? null;
 
 	return (
 		note &&
@@ -62,14 +62,15 @@ function UnsavedChangesIndicator({ note }: NoteStatusProps) {
 }
 
 function NewerVersionAvailableIndicator({ note }: NoteStatusProps) {
+	const dispatch = useDispatch();
 	const savedNote =
-		useAtomValue(savedNotesAtom).filter((n) => note && n.id === note.id)[0] ??
-		null;
-	const restoreSavedNote = useSetAtom(restoreSavedNoteAtom);
+		useSelector(selectAllSavedNotes).filter(
+			(n) => note && n.id === note.id,
+		)[0] ?? null;
 
 	const restore = () => {
 		if (savedNote) {
-			restoreSavedNote(note.id);
+			dispatch(restoreSavedNote([note.id, Date.now()]));
 		}
 	};
 

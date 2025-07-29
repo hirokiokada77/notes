@@ -74,7 +74,7 @@ export type Locale =
 	| "ru"
 	| "zh";
 
-export const messagesByLocale: { [K in Locale]: Messages } = {
+export const stringResourcesByLocale: { [K in Locale]: StringResources } = {
 	de,
 	en,
 	es,
@@ -87,23 +87,20 @@ export const messagesByLocale: { [K in Locale]: Messages } = {
 	zh,
 };
 
-const supportedLocales = Object.keys(messagesByLocale) as Locale[];
+const supportedLocales = Object.keys(stringResourcesByLocale) as Locale[];
 
 export function getInitialLocale() {
 	const browserLocale = navigator.language.split("-")[0];
-
 	if ((supportedLocales as string[]).includes(browserLocale)) {
 		return browserLocale as Locale;
 	}
-
 	if (browserLocale === "zh" && (supportedLocales as string[]).includes("zh")) {
 		return "zh" as Locale;
 	}
-
 	return "en" as Locale;
 }
 
-export type MessageKey =
+export type StringResourceKey =
 	| "appName"
 	| "appDescription"
 	| "textareaPlaceholder"
@@ -128,7 +125,7 @@ export type MessageKey =
 	| "qrCodeViewSummary"
 	| "qrCodeImgAlt";
 
-export interface Messages {
+export interface StringResources {
 	appName: string;
 	appDescription: string;
 	textareaPlaceholder: string;
@@ -207,15 +204,13 @@ export function updateAnchor(anchor: string) {
 	return false;
 }
 
-export interface EditHistoryEntry {
-	noteText: string;
+export interface EditHistory {
+	text: string;
 	textSelection: TextSelection | null;
 	created: number;
 }
 
-export function getFirstHeadingOrParagraphText(
-	noteText: string,
-): string | null {
+export function getNoteTitle(noteText: string): string | null {
 	const tree = remark().parse(noteText);
 
 	if (!tree.children || tree.children.length === 0) {
@@ -253,16 +248,16 @@ export function getFirstHeadingOrParagraphText(
 	return null;
 }
 
-export interface ExtractedImage {
+export interface Thumbnail {
 	url: string;
 	alt: string;
 	title: string;
 }
 
-export function getFirstImage(noteText: string): ExtractedImage | null {
+export function getNoteThumbnail(noteText: string): Thumbnail | null {
 	const tree: Root = remark().parse(noteText) as Root;
 
-	let firstImage: ExtractedImage | null = null;
+	let firstImage: Thumbnail | null = null;
 
 	function findImage(node: Content | Root): void {
 		if (firstImage) {

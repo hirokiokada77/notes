@@ -1,43 +1,32 @@
 import "./NoteList.css";
 import { produce } from "immer";
-import { useAtomValue, useSetAtom } from "jotai";
 import { type MouseEvent, useEffect, useReducer } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-	deleteSavedNoteByIdAtom,
-	restoreSavedNoteAtom,
-	savedNotesAtom,
-} from "../atoms";
 import { homePath } from "../constants";
-import { getFirstHeadingOrParagraphText, type Note } from "../utils";
+import {
+	deleteSavedNoteById,
+	restoreSavedNote,
+	selectAllSavedNotes,
+} from "../notesSlice";
+import { getNoteTitle, type Note } from "../utils";
 import { Button } from "./Button";
 import { NoteListToolbar } from "./NoteListToolbar";
 import { NoteStatus } from "./NoteStatus";
 
 export function NoteList() {
-	const notes = useAtomValue(savedNotesAtom);
+	const reduxDispatch = useDispatch();
+	const savedNotes = [...useSelector(selectAllSavedNotes)].sort(
+		(a, b) => (b.lastUpdated ?? 0) - (a.lastUpdated ?? 0),
+	);
 	const [{ selected }, dispatch] = useReducer(noteListReducer, initialState);
-	const deleteSavedNoteById = useSetAtom(deleteSavedNoteByIdAtom);
 	const navigate = useNavigate();
-	const someSelected = selected.size > 0;
-	const allSelected = notes.length === selected.size;
-	const handleDelete = () => {
-		if (confirmDelete(selected)) {
-			selected.forEach((id) => {
-				deleteSavedNoteById(id);
-			});
-			dispatch({ type: "DESELECT_ALL" });
-		}
-	};
-	const HandleCreateNote = () => {
-		navigate(homePath);
-	};
 
 	useEffect(() => {
-		const listener = (event: KeyboardEvent) => {
+		const handleKeyDown = (event: KeyboardEvent) => {
 			if ((event.ctrlKey || event.metaKey) && event.key === "a") {
 				event.preventDefault();
-				dispatch({ type: "SELECT_ALL", payload: notes });
+				dispatch({ type: "SELECT_ALL", payload: savedNotes });
 			}
 
 			if ((event.ctrlKey || event.metaKey) && event.key === "d") {
@@ -56,27 +45,35 @@ export function NoteList() {
 			}
 		};
 
-		document.addEventListener("keydown", listener);
-
+		document.addEventListener("keydown", handleKeyDown);
 		return () => {
-			document.removeEventListener("keydown", listener);
+			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [notes, selected, deleteSavedNoteById]);
+	}, [savedNotes, selected]);
 
-	return notes.length > 0 ? (
+	return savedNotes.length > 0 ? (
 		<div className="note-list">
 			<h1 className="sr-only">Saved Notes</h1>
 
 			<NoteListToolbar
-				someSelected={someSelected}
-				allSelected={allSelected}
-				handleSelectAll={() => dispatch({ type: "SELECT_ALL", payload: notes })}
+				someSelected={selected.size > 0}
+				allSelected={savedNotes.length === selected.size}
+				handleSelectAll={() =>
+					dispatch({ type: "SELECT_ALL", payload: savedNotes })
+				}
 				handleDeselectAll={() => dispatch({ type: "DESELECT_ALL" })}
-				handleDelete={handleDelete}
+				handleDelete={() => {
+					if (confirmDelete(selected)) {
+						selected.forEach((id) => {
+							reduxDispatch(deleteSavedNoteById(id));
+						});
+						dispatch({ type: "DESELECT_ALL" });
+					}
+				}}
 			/>
 
 			<ul>
-				{notes.map((note) => {
+				{savedNotes.map((note) => {
 					const handleClick = (event: MouseEvent) => {
 						if (event.ctrlKey || event.metaKey) {
 							if (selected.has(note.id)) {
@@ -107,7 +104,9 @@ export function NoteList() {
 			No saved notes.{" "}
 			<Button
 				level="in-text"
-				onClick={HandleCreateNote}
+				onClick={() => {
+					navigate(homePath);
+				}}
 				accessibilityLabel="Create new note"
 			>
 				Create new
@@ -131,13 +130,13 @@ export function NoteListItem({
 	onDeselect,
 	onClick,
 }: NoteListItemProps) {
-	const title = getFirstHeadingOrParagraphText(note.text) ?? "Untitled";
-	const restoreSavedNote = useSetAtom(restoreSavedNoteAtom);
+	const dispatch = useDispatch();
+	const title = getNoteTitle(note.text) ?? "Untitled";
 	const navigate = useNavigate();
 	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
 		if (onClick(event)) {
 			navigate(homePath);
-			restoreSavedNote(note.id);
+			dispatch(restoreSavedNote([note.id, Date.now()]));
 		}
 	};
 
@@ -166,7 +165,6 @@ export function NoteListItem({
 					onClick={handleClick}
 				>
 					<div className="note-list-item-title">{title}</div>
-
 					<NoteStatus note={note} />
 				</button>
 			</div>

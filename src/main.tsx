@@ -1,10 +1,10 @@
 import "./index.css";
 import { enableMapSet } from "immer";
-import { Provider } from "jotai";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import { App } from "./App";
-import { store } from "./atoms";
+import { store } from "./store";
 
 enableMapSet();
 

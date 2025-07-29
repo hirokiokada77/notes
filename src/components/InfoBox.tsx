@@ -1,24 +1,26 @@
 import "./InfoBox.css";
-import { useAtomValue, useSetAtom } from "jotai";
 import { useRef } from "react";
-import { messagesAtom, noteUrlAtom, toastTextAtom } from "../atoms";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllStringResources } from "../localeSlice";
+import { selectActiveNoteUrl } from "../notesSlice";
+import { updateToastText } from "../toastTextSlice";
 import { Button } from "./Button";
 import { QRCodeView } from "./QRCodeView";
 
 export function InfoBox() {
-	const messages = useAtomValue(messagesAtom);
-	const setToastText = useSetAtom(toastTextAtom);
+	const dispatch = useDispatch();
+	const stringResources = useSelector(selectAllStringResources);
 	const infoBoxUrlRef = useRef<HTMLInputElement>(null);
 	const shareFeatureUnavailable = !navigator.share;
-	const noteUrl = useAtomValue(noteUrlAtom);
+	const activeNoteUrl = useSelector(selectActiveNoteUrl);
 
 	const copy = async () => {
 		try {
-			await navigator.clipboard.writeText(noteUrl);
-			setToastText("copySuccess");
+			await navigator.clipboard.writeText(activeNoteUrl);
+			dispatch(updateToastText(["copySuccess", Date.now()]));
 		} catch (err) {
 			console.error("Error copying to clipboard:", err);
-			setToastText("copyFail");
+			dispatch(updateToastText(["copyFail", Date.now()]));
 		}
 	};
 
@@ -40,16 +42,16 @@ export function InfoBox() {
 			<div className="info-box-main">
 				<input
 					className="info-box-url"
-					value={noteUrl}
+					value={activeNoteUrl}
 					readOnly
 					ref={infoBoxUrlRef}
 					onFocus={handleFocus}
-					aria-label={messages.shareInstruction}
+					aria-label={stringResources.shareInstruction}
 				/>
 
 				<div className="info-box-buttons">
 					<Button level="secondary" onClick={copy}>
-						{messages.copyButton}
+						{stringResources.copyButton}
 					</Button>
 
 					<Button
@@ -57,7 +59,7 @@ export function InfoBox() {
 						onClick={share}
 						hidden={shareFeatureUnavailable}
 					>
-						{messages.shareButton}
+						{stringResources.shareButton}
 					</Button>
 				</div>
 			</div>

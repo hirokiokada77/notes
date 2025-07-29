@@ -1,39 +1,28 @@
 import "./App.css";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import {
-	documentTitleAtom,
-	localeAtom,
-	messagesAtom,
-	themeAtom,
-	updateTimeAtom,
-} from "./atoms";
 import { Toast } from "./components/Toast";
 import { homePath, savedNotesPath } from "./constants";
+import { selectAllStringResources, selectLocale } from "./localeSlice";
 import { Home } from "./pages/Home";
 import { SavedNotes } from "./pages/SavedNotes";
+import { selectTheme, updateTheme } from "./themeSlice";
+import { updateTime } from "./timeSlice";
 
 export function App() {
-	const locale = useAtomValue(localeAtom);
-	const messages = useAtomValue(messagesAtom);
-	const [theme, setTheme] = useAtom(themeAtom);
-	const documentTitle = useAtomValue(documentTitleAtom);
-	const updateTime = useSetAtom(updateTimeAtom);
-
-	useEffect(() => {
-		document.title = documentTitle;
-	}, [documentTitle]);
+	const dispatch = useDispatch();
+	const locale = useSelector(selectLocale);
+	const stringResources = useSelector(selectAllStringResources);
+	const theme = useSelector(selectTheme);
 
 	useEffect(() => {
 		const description = document.querySelector("meta[name=description]");
-
-		description?.setAttribute("content", messages.appDescription);
-	}, [messages.appDescription]);
+		description?.setAttribute("content", stringResources.appDescription);
+	}, [stringResources.appDescription]);
 
 	useEffect(() => {
 		const html = document.querySelector("html");
-
 		html?.setAttribute("lang", locale);
 	}, [locale]);
 
@@ -45,31 +34,29 @@ export function App() {
 	useEffect(() => {
 		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 		const handleThemeChange = (event: MediaQueryListEvent) => {
-			setTheme(event.matches ? "dark" : "light");
+			dispatch(updateTheme(event.matches ? "dark" : "light"));
 		};
 
 		mediaQuery.addEventListener("change", handleThemeChange);
-
 		return () => {
 			mediaQuery.removeEventListener("change", handleThemeChange);
 		};
-	}, [setTheme]);
+	}, [dispatch]);
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
-			updateTime();
+			dispatch(updateTime(Date.now()));
 		}, 1000);
 
 		return () => {
 			clearInterval(intervalId);
 		};
-	}, [updateTime]);
+	}, [dispatch]);
 
 	return (
 		<BrowserRouter>
 			<Routes>
 				<Route path={homePath} element={<Home />} />
-
 				<Route path={savedNotesPath} element={<SavedNotes />} />
 			</Routes>
 

@@ -1,18 +1,33 @@
 import "./Home.css";
-import { useSetAtom } from "jotai";
 import { useEffect } from "react";
-import { noteAtom } from "../atoms";
+import { useDispatch, useSelector } from "react-redux";
 import { InfoBox } from "../components/InfoBox";
 import { InputArea } from "../components/InputArea";
 import { Tab } from "../components/Tab";
+import {
+	initializeActiveNote,
+	selectActiveNote,
+	selectActiveNoteTitle,
+	setActiveNote,
+} from "../notesSlice";
 import type { Note } from "../utils";
 
 export function Home() {
-	const setNote = useSetAtom(noteAtom);
+	const dispatch = useDispatch();
+	const activeNote = useSelector(selectActiveNote);
+	const activeNoteTitle = useSelector(selectActiveNoteTitle);
+
+	useEffect(() => {
+		if (activeNoteTitle) {
+			document.title = `Notes – ${activeNoteTitle}`;
+		} else {
+			document.title = "Notes";
+		}
+	}, [activeNoteTitle]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: initialization
 	useEffect(() => {
-		const listener = () => {
+		const handleHashChange = () => {
 			const params = new URLSearchParams(location.hash.substring(1));
 			const id = params.get("id");
 			const text = params.get("text");
@@ -26,20 +41,24 @@ export function Home() {
 					created: created !== null ? Number(created) : null,
 					lastUpdated: lastUpdated !== null ? Number(lastUpdated) : null,
 				};
-
-				setNote(note);
-
+				dispatch(setActiveNote([note, Date.now()]));
 				location.hash = "";
 			}
 		};
 
-		listener();
+		handleHashChange();
 
-		window.addEventListener("hashchange", listener);
-
+		window.addEventListener("hashchange", handleHashChange);
 		return () => {
-			window.removeEventListener("hashchange", listener);
+			window.removeEventListener("hashchange", handleHashChange);
 		};
+	}, []);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: initialization
+	useEffect(() => {
+		if (!activeNote) {
+			dispatch(initializeActiveNote(Date.now()));
+		}
 	}, []);
 
 	return (

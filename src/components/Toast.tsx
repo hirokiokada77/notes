@@ -1,11 +1,19 @@
 import "./Toast.css";
-import { useAtomValue } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { toastTextAtom } from "../atoms";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllStringResources } from "../localeSlice";
+import { clearToastText, selectToastText } from "../toastTextSlice";
+import type { StringResourceKey } from "../utils";
 
 export function Toast() {
-	const toastText = useAtomValue(toastTextAtom);
-	const [actualToastText, setActualToastText] = useState<string | null>(null);
+	const dispatch = useDispatch();
+	const toastText = useSelector(selectToastText);
+	const [actualToastText, setActualToastText] =
+		useState<StringResourceKey | null>(null);
+	const stringResources = useSelector(selectAllStringResources);
+	const actualToastTextContent = actualToastText
+		? stringResources[actualToastText]
+		: null;
 	const [showToast, setShowToast] = useState(false);
 	const [toastIsHiding, setToastIsHiding] = useState(false);
 	const displayDuration = 4000;
@@ -20,17 +28,11 @@ export function Toast() {
 				clearTimeout(toastDisplayTimeoutRef.current);
 			}
 			toastDisplayTimeoutRef.current = window.setTimeout(() => {
-				setToastIsHiding(true);
-				if (toastHideTimeoutRef.current) {
-					clearTimeout(toastHideTimeoutRef.current);
-				}
-				toastHideTimeoutRef.current = window.setTimeout(() => {
-					setShowToast(false);
-				}, animationDuration);
+				dispatch(clearToastText(Date.now()));
 			}, displayDuration);
 		};
 
-		if (toastText) {
+		if (toastText.content) {
 			if (showToast) {
 				setToastIsHiding(true);
 				if (toastDisplayTimeoutRef.current) {
@@ -51,6 +53,14 @@ export function Toast() {
 				setToastIsHiding(false);
 				startToastDisplayTimer();
 			}
+		} else {
+			setToastIsHiding(true);
+			if (toastHideTimeoutRef.current) {
+				clearTimeout(toastHideTimeoutRef.current);
+			}
+			toastHideTimeoutRef.current = window.setTimeout(() => {
+				setShowToast(false);
+			}, animationDuration);
 		}
 	}, [toastText]);
 
@@ -79,7 +89,7 @@ export function Toast() {
 			aria-live={showToast && !toastIsHiding ? "polite" : "off"}
 			aria-hidden={showToast ? "false" : "true"}
 		>
-			<div className="toast-container">{actualToastText}</div>
+			<div className="toast-container">{actualToastTextContent}</div>
 		</div>
 	);
 }

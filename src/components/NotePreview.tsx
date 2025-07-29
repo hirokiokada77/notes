@@ -1,6 +1,6 @@
 import "katex/dist/katex.css";
-import { useAtomValue } from "jotai";
 import ReactMarkdown from "react-markdown";
+import { useSelector } from "react-redux";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import rehypeKatex from "rehype-katex";
@@ -9,10 +9,10 @@ import rehypeSanitize from "rehype-sanitize";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
-import { noteAtom } from "../atoms";
+import { selectActiveNote } from "../notesSlice";
 
 export function NotePreview() {
-	const note = useAtomValue(noteAtom);
+	const activeNote = useSelector(selectActiveNote);
 
 	return (
 		<ReactMarkdown
@@ -53,7 +53,7 @@ export function NotePreview() {
 				},
 			}}
 		>
-			{note?.text}
+			{activeNote?.text}
 		</ReactMarkdown>
 	);
 }

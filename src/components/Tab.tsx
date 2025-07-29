@@ -7,33 +7,31 @@ import {
 	faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAtomValue, useSetAtom } from "jotai";
 import { type MouseEventHandler, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-	initializeNoteAtom,
-	noteAtom,
-	noteThumbnailImageAtom,
-	savedNotesAtom,
-	saveNoteAtom,
-	shouldWarnBeforeLeavingAtom,
-	store,
-	toastTextAtom,
-	unsavedChangesAtom,
-} from "../atoms";
 import { homePath, savedNotesPath } from "../constants";
-import { getFirstHeadingOrParagraphText, type Note } from "../utils";
+import {
+	hasUnsavedChanges,
+	initializeActiveNote,
+	saveActiveNote,
+	selectActiveNote,
+	selectActiveNoteThumbnail,
+	selectAllSavedNotes,
+	shouldWarnBeforeLeaving,
+} from "../notesSlice";
+import { updateToastText } from "../toastTextSlice";
+import { getNoteTitle, type Note } from "../utils";
 import { Button } from "./Button";
 import { NoteStatus } from "./NoteStatus";
 
 export function Tab() {
-	const note = useAtomValue(noteAtom);
+	const dispatch = useDispatch();
+	const activeNote = useSelector(selectActiveNote);
 	const tabViewListRef = useRef<HTMLUListElement | null>(null);
-	const initializeNote = useSetAtom(initializeNoteAtom);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const setToastText = useSetAtom(toastTextAtom);
-	const saveNote = useSetAtom(saveNoteAtom);
+	const shouldWarn = useSelector(shouldWarnBeforeLeaving);
 
 	const resetScroll = () => {
 		if (tabViewListRef.current) {
@@ -43,13 +41,13 @@ export function Tab() {
 
 	const createNote = () => {
 		if (
-			!store.get(shouldWarnBeforeLeavingAtom) ||
+			!shouldWarn ||
 			window.confirm(
 				"Create a new note without saving? " +
 					"Any unsaved changes will be lost.",
 			)
 		) {
-			initializeNote();
+			dispatch(initializeActiveNote(Date.now()));
 			navigate(homePath);
 			resetScroll();
 		}
@@ -64,8 +62,8 @@ export function Tab() {
 			// Save
 			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
 				event.preventDefault();
-				saveNote();
-				setToastText("saveSuccess");
+				dispatch(saveActiveNote());
+				dispatch(updateToastText(["saveSuccess", Date.now()]));
 			}
 		};
 
@@ -73,7 +71,7 @@ export function Tab() {
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [saveNote, setToastText]);
+	}, [dispatch]);
 
 	return (
 		<div className="tab-view">
@@ -94,7 +92,7 @@ export function Tab() {
 					/>
 				)}
 
-				{note && <TabItem note={note} />}
+				{activeNote && <TabItem note={activeNote} />}
 
 				<TabActionWithLabel
 					onClick={createNote}
@@ -121,14 +119,13 @@ interface TabItemProps {
 }
 
 function TabItem({ note }: TabItemProps) {
-	const noteTitle = getFirstHeadingOrParagraphText(note.text);
-	const thumbnailImage = useAtomValue(noteThumbnailImageAtom);
-	const unsavedChanges = useAtomValue(unsavedChangesAtom);
+	const dispatch = useDispatch();
+	const noteTitle = getNoteTitle(note.text);
+	const thumbnail = useSelector(selectActiveNoteThumbnail);
 	const savedNote =
-		useAtomValue(savedNotesAtom).filter((n) => note && n.id === note.id)[0] ??
-		null;
-	const saveNote = useSetAtom(saveNoteAtom);
-	const setToastText = useSetAtom(toastTextAtom);
+		useSelector(selectAllSavedNotes).filter(
+			(savedNote) => savedNote.id === note.id,
+		)[0] ?? null;
 	const untitled = noteTitle === null;
 
 	const save = () => {
@@ -140,20 +137,20 @@ function TabItem({ note }: TabItemProps) {
 					"Do you want to proceed?",
 			)
 		) {
-			saveNote();
-			setToastText("saveSuccess");
+			dispatch(saveActiveNote());
+			dispatch(updateToastText(["saveSuccess", Date.now()]));
 		}
 	};
 
 	return (
 		<li className="tab-view-status" key={note.id}>
 			<div className="tab-view-item-container">
-				{thumbnailImage && (
+				{thumbnail && (
 					<div className="tab-view-item-icon">
 						<img
-							src={thumbnailImage.url}
-							alt={thumbnailImage.alt}
-							title={thumbnailImage.title}
+							src={thumbnail.url}
+							alt={thumbnail.alt}
+							title={thumbnail.title}
 						/>
 					</div>
 				)}
@@ -173,7 +170,11 @@ function TabItem({ note }: TabItemProps) {
 				</div>
 
 				<div className="tab-view-item-button">
-					<Button level="secondary" onClick={save} disabled={!unsavedChanges}>
+					<Button
+						level="secondary"
+						onClick={save}
+						disabled={!useSelector(hasUnsavedChanges)}
+					>
 						Save
 					</Button>
 				</div>
@@ -234,7 +235,6 @@ function TabActionWithLabel({
 
 				<div className="tab-view-item-content">
 					<div className="tab-view-item-title">{primaryLabel}</div>
-
 					<div className="tab-view-item-status">{secondaryLabel}</div>
 				</div>
 			</button>

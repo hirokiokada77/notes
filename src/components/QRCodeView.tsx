@@ -1,20 +1,19 @@
 import "./QRCodeView.css";
-import { useAtom, useAtomValue } from "jotai";
 import QRCode from "qrcode";
 import { useEffect, useRef, useState } from "react";
-import { messagesAtom, noteUrlAtom, qrCodeViewExpandedAtom } from "../atoms";
+import { useSelector } from "react-redux";
+import { selectAllStringResources } from "../localeSlice";
+import { selectActiveNoteUrl } from "../notesSlice";
 
 export function QRCodeView() {
 	const [qrCode, setQrCode] = useState<string | null>(null);
 	const initialized = useRef(false);
 	const [busy, setBusy] = useState(false);
 	const detailsRef = useRef<HTMLDetailsElement>(null);
-	const [qrCodeViewExpanded, setQrCodeViewExpanded] = useAtom(
-		qrCodeViewExpandedAtom,
-	);
-	const messages = useAtomValue(messagesAtom);
+	const [qrCodeViewExpanded, setQrCodeViewExpanded] = useState(false);
 	const url = useRef<string | null>(null);
-	const noteUrl = useAtomValue(noteUrlAtom);
+	const activeNoteUrl = useSelector(selectActiveNoteUrl);
+	const stringResources = useSelector(selectAllStringResources);
 
 	useEffect(() => {
 		const detailsElement = detailsRef.current;
@@ -25,15 +24,14 @@ export function QRCodeView() {
 		};
 
 		detailsElement?.addEventListener("toggle", handleToggle);
-
 		return () => {
 			detailsElement?.removeEventListener("toggle", handleToggle);
 		};
-	}, [setQrCodeViewExpanded]);
+	}, []);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
 	useEffect(() => {
-		if (url.current !== noteUrl) {
+		if (url.current !== activeNoteUrl) {
 			setBusy(true);
 
 			const debounceDuration = initialized.current
@@ -41,29 +39,26 @@ export function QRCodeView() {
 					? 300
 					: 1000
 				: 0;
+
 			const timeoutId = setTimeout(async () => {
 				initialized.current = true;
-
 				try {
-					const dataUrl = await QRCode.toDataURL(noteUrl, {
+					const dataUrl = await QRCode.toDataURL(activeNoteUrl, {
 						errorCorrectionLevel: "low",
 					});
-
 					setQrCode(dataUrl);
 				} catch {
 					setQrCode(null); // The URL is too long
 				}
-
 				setBusy(false);
-
-				url.current = noteUrl;
+				url.current = activeNoteUrl;
 			}, debounceDuration);
 
 			return () => {
 				clearTimeout(timeoutId);
 			};
 		}
-	}, [noteUrl]);
+	}, [activeNoteUrl]);
 
 	return (
 		<div
@@ -78,9 +73,9 @@ export function QRCodeView() {
 				aria-hidden={initialized && !qrCode}
 				aria-busy={busy}
 			>
-				<summary>{messages.qrCodeViewSummary}</summary>
+				<summary>{stringResources.qrCodeViewSummary}</summary>
 
-				{qrCode && <img src={qrCode} alt={messages.qrCodeImgAlt} />}
+				{qrCode && <img src={qrCode} alt={stringResources.qrCodeImgAlt} />}
 			</details>
 		</div>
 	);
