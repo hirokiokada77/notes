@@ -1,6 +1,6 @@
 import "./NoteStatus.css";
 import { useDispatch, useSelector } from "react-redux";
-import { restoreSavedNote, selectAllSavedNotes } from "../notesSlice";
+import { selectAllSavedNotes, setActiveNote } from "../notesSlice";
 import { selectTime } from "../timeSlice";
 import { formatTimeAgo, type Note } from "../utils";
 import { Button } from "./Button";
@@ -70,7 +70,7 @@ function NewerVersionAvailableIndicator({ note }: NoteStatusProps) {
 
 	const restore = () => {
 		if (savedNote) {
-			dispatch(restoreSavedNote([note.id, Date.now()]));
+			dispatch(setActiveNote(note));
 		}
 	};
 

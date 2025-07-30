@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { homePath } from "../constants";
 import {
 	deleteSavedNoteById,
-	restoreSavedNote,
 	selectAllSavedNotes,
+	setActiveNote,
 } from "../notesSlice";
 import { getNoteTitle, type Note } from "../utils";
 import { Button } from "./Button";
@@ -136,7 +136,7 @@ export function NoteListItem({
 	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
 		if (onClick(event)) {
 			navigate(homePath);
-			dispatch(restoreSavedNote([note.id, Date.now()]));
+			dispatch(setActiveNote(note));
 		}
 	};
 

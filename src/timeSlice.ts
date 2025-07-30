@@ -12,8 +12,13 @@ const timeSlice = createSlice({
 	name: "time",
 	initialState,
 	reducers: {
-		updateTime(state, action: PayloadAction<number>) {
-			state.time = action.payload;
+		updateTime: {
+			reducer: (state, action: PayloadAction<number>) => {
+				state.time = action.payload;
+			},
+			prepare: () => ({
+				payload: Date.now(),
+			}),
 		},
 	},
 	selectors: {

@@ -34,7 +34,7 @@ export function InputArea() {
 			start: event.target.selectionStart,
 			end: event.target.selectionEnd,
 		};
-		dispatch(updateActiveNoteText([newNoteText, newTextSelection]));
+		dispatch(updateActiveNoteText(newNoteText, newTextSelection));
 	};
 
 	const handleCursorChange = () => {
@@ -57,7 +57,7 @@ export function InputArea() {
 		if (activeNote) {
 			const formattedText = await formatNoteText(activeNote.text);
 			if (activeNote.text !== formattedText) {
-				dispatch(updateActiveNoteText([formattedText, textSelection]));
+				dispatch(updateActiveNoteText(formattedText, textSelection));
 			}
 		}
 		dispatch(updateActiveNoteTextSelection(null));
@@ -83,7 +83,7 @@ export function InputArea() {
 							start: selectionStart + pastedMarkdown.length,
 							end: selectionStart + pastedMarkdown.length,
 						};
-						dispatch(updateActiveNoteText([newNoteText, newTextSelection]));
+						dispatch(updateActiveNoteText(newNoteText, newTextSelection));
 					}
 				} catch (error) {
 					console.error(error);
@@ -128,7 +128,7 @@ export function InputArea() {
 						start: start + 1,
 						end: start + 1,
 					};
-					dispatch(updateActiveNoteText([newNoteText, newTextSelection]));
+					dispatch(updateActiveNoteText(newNoteText, newTextSelection));
 				}
 			}
 		};

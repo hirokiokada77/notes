@@ -17,10 +17,10 @@ export function InfoBox() {
 	const copy = async () => {
 		try {
 			await navigator.clipboard.writeText(activeNoteUrl);
-			dispatch(updateToastText(["copySuccess", Date.now()]));
+			dispatch(updateToastText("copySuccess"));
 		} catch (err) {
 			console.error("Error copying to clipboard:", err);
-			dispatch(updateToastText(["copyFail", Date.now()]));
+			dispatch(updateToastText("copyFail"));
 		}
 	};
 

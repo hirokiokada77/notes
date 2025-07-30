@@ -28,11 +28,11 @@ export function Toast() {
 				clearTimeout(toastDisplayTimeoutRef.current);
 			}
 			toastDisplayTimeoutRef.current = window.setTimeout(() => {
-				dispatch(clearToastText(Date.now()));
+				dispatch(clearToastText());
 			}, displayDuration);
 		};
 
-		if (toastText.content) {
+		if (toastText.resourceStringKey) {
 			if (showToast) {
 				setToastIsHiding(true);
 				if (toastDisplayTimeoutRef.current) {
@@ -42,13 +42,13 @@ export function Toast() {
 					clearTimeout(toastHideTimeoutRef.current);
 				}
 				toastHideTimeoutRef.current = window.setTimeout(() => {
-					setActualToastText(toastText.content);
+					setActualToastText(toastText.resourceStringKey);
 					setShowToast(true);
 					setToastIsHiding(false);
 					startToastDisplayTimer();
 				}, animationDuration);
 			} else {
-				setActualToastText(toastText.content);
+				setActualToastText(toastText.resourceStringKey);
 				setShowToast(true);
 				setToastIsHiding(false);
 				startToastDisplayTimer();

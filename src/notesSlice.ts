@@ -66,77 +66,90 @@ export const notesSlice = createSlice({
 				(note) => note.id !== action.payload,
 			);
 		},
-		initializeActiveNote(state, action: PayloadAction<number>) {
-			state.activeNote = createNewNote();
-			state.activeNoteEditHistory = [
-				{
-					text: state.activeNote.text,
-					textSelection: null,
-					created: action.payload,
+		initializeActiveNote: {
+			reducer: (state, action: PayloadAction<number>) => {
+				state.activeNote = createNewNote(action.payload);
+				state.activeNoteEditHistory = [
+					{
+						text: state.activeNote.text,
+						textSelection: null,
+						created: action.payload,
+					},
+				];
+				state.activeNoteEditHistoryPointer = 0;
+			},
+			prepare: () => ({
+				payload: Date.now(),
+			}),
+		},
+		saveActiveNote: {
+			reducer: (state, action: PayloadAction<number>) => {
+				if (state.activeNote) {
+					state.savedNotes = state.savedNotes.filter(
+						// biome-ignore lint/style/noNonNullAssertion: false positive
+						(note) => note.id !== state.activeNote!.id,
+					);
+					state.activeNote.lastUpdated = action.payload;
+					// TODO: Implement format on save
+					state.savedNotes.push(state.activeNote);
+				} else {
+					throw new Error();
+				}
+			},
+			prepare: () => ({
+				payload: Date.now(),
+			}),
+		},
+		setActiveNote: {
+			reducer: (state, action: PayloadAction<{ note: Note; time: number }>) => {
+				state.activeNote = action.payload.note;
+				state.activeNoteEditHistory = [
+					{
+						text: state.activeNote.text,
+						textSelection: null,
+						created: action.payload.time,
+					},
+				];
+			},
+			prepare: (note: Note) => ({
+				payload: {
+					note,
+					time: Date.now(),
 				},
-			];
-			state.activeNoteEditHistoryPointer = 0;
+			}),
 		},
-		restoreSavedNote(state, action: PayloadAction<[string, number]>) {
-			state.activeNote =
-				state.savedNotes.filter(
-					(savedNote) => savedNote.id === action.payload[0],
-				)[0] ?? null;
-			state.activeNoteEditHistory = [
-				{
-					text: state.activeNote.text,
-					textSelection: null,
-					created: action.payload[1],
-				},
-			];
-			state.activeNoteEditHistoryPointer = 0;
-		},
-		saveActiveNote(state, action: PayloadAction<number>) {
-			if (state.activeNote) {
-				state.savedNotes = state.savedNotes.filter(
-					// biome-ignore lint/style/noNonNullAssertion: false positive
-					(note) => note.id !== state.activeNote!.id,
-				);
-				state.activeNote.lastUpdated = action.payload;
-				// TODO: Implement format on save
-				state.savedNotes.push(state.activeNote);
-			} else {
-				throw new Error();
-			}
-		},
-		setActiveNote(state, action: PayloadAction<[Note, number]>) {
-			state.activeNote = action.payload[0];
-			state.activeNoteEditHistory = [
-				{
-					text: state.activeNote.text,
-					textSelection: null,
-					created: action.payload[1],
-				},
-			];
-		},
-		updateActiveNoteText(
-			state,
-			action: PayloadAction<[string, TextSelection | null]>,
-		) {
-			if (state.activeNote) {
-				state.activeNote.text = action.payload[0];
-				state.activeNote.lastUpdated = Date.now();
-				state.activeNoteTextSelection = action.payload[1];
+		updateActiveNoteText: {
+			reducer: (
+				state,
+				action: PayloadAction<{
+					text: string;
+					textSelection: TextSelection | null;
+					time: number;
+				}>,
+			) => {
+				if (state.activeNote) {
+					state.activeNote.text = action.payload.text;
+					state.activeNote.lastUpdated = action.payload.time;
+					state.activeNoteTextSelection = action.payload.textSelection;
 
-				state.activeNoteEditHistory = state.activeNoteEditHistory.slice(
-					0,
-					state.activeNoteEditHistoryPointer + 1,
-				);
-				state.activeNoteEditHistory.push({
-					text: action.payload[0],
-					textSelection: action.payload[1],
-					created: Date.now(),
-				});
+					state.activeNoteEditHistory = state.activeNoteEditHistory.slice(
+						0,
+						state.activeNoteEditHistoryPointer + 1,
+					);
+					state.activeNoteEditHistory.push({
+						text: action.payload.text,
+						textSelection: action.payload.textSelection,
+						created: action.payload.time,
+					});
 
-				state.activeNoteEditHistoryPointer++;
-			} else {
-				throw new Error();
-			}
+					state.activeNoteEditHistoryPointer++;
+				} else {
+					throw new Error();
+				}
+			},
+			prepare: (text: string, textSelection: TextSelection | null) => ({
+				payload: { text, textSelection, time: Date.now() },
+			}),
 		},
 		updateActiveNoteTextSelection(
 			state,
@@ -214,7 +227,6 @@ export const {
 	applyPreviousEditHistory,
 	deleteSavedNoteById,
 	initializeActiveNote,
-	restoreSavedNote,
 	saveActiveNote,
 	setActiveNote,
 	updateActiveNoteText,

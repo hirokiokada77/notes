@@ -160,12 +160,12 @@ export interface Note {
 	lastUpdated: number | null;
 }
 
-export function createNewNote(): Note {
+export function createNewNote(time: number): Note {
 	return {
 		id: createRandomId(),
 		text: "",
-		created: Date.now(),
-		lastUpdated: Date.now(),
+		created: time,
+		lastUpdated: time,
 	};
 }
 

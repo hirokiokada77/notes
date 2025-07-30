@@ -44,7 +44,7 @@ export function Home() {
 					created: created !== null ? Number(created) : null,
 					lastUpdated: lastUpdated !== null ? Number(lastUpdated) : null,
 				};
-				dispatch(setActiveNote([note, Date.now()]));
+				dispatch(setActiveNote(note));
 			}
 		};
 
@@ -79,7 +79,7 @@ export function Home() {
 						`${location.href.split("#")[0]}#${params}`,
 					);
 				} else {
-					dispatch(initializeActiveNote(Date.now()));
+					dispatch(initializeActiveNote());
 				}
 
 				initialized.current = true;

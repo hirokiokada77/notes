@@ -47,7 +47,7 @@ export function Tab() {
 					"Any unsaved changes will be lost.",
 			)
 		) {
-			dispatch(initializeActiveNote(Date.now()));
+			dispatch(initializeActiveNote());
 			navigate(homePath);
 			resetScroll();
 		}
@@ -62,8 +62,8 @@ export function Tab() {
 			// Save
 			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
 				event.preventDefault();
-				dispatch(saveActiveNote(Date.now()));
-				dispatch(updateToastText(["saveSuccess", Date.now()]));
+				dispatch(saveActiveNote());
+				dispatch(updateToastText("saveSuccess"));
 			}
 		};
 
@@ -137,8 +137,8 @@ function TabItem({ note }: TabItemProps) {
 					"Do you want to proceed?",
 			)
 		) {
-			dispatch(saveActiveNote(Date.now()));
-			dispatch(updateToastText(["saveSuccess", Date.now()]));
+			dispatch(saveActiveNote());
+			dispatch(updateToastText("saveSuccess"));
 		}
 	};
 

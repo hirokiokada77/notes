@@ -45,7 +45,7 @@ export function App() {
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
-			dispatch(updateTime(Date.now()));
+			dispatch(updateTime());
 		}, 1000);
 
 		return () => {
