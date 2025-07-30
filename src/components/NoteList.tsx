@@ -1,9 +1,9 @@
 import "./NoteList.css";
 import { produce } from "immer";
 import { type MouseEvent, useEffect, useReducer } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { homePath } from "../constants";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import {
 	clearActiveNote,
 	deleteSavedNoteById,
@@ -17,9 +17,9 @@ import { NoteListToolbar } from "./NoteListToolbar";
 import { NoteStatus } from "./NoteStatus";
 
 export function NoteList() {
-	const appDispatch = useDispatch();
-	const activeNote = useSelector(selectActiveNote);
-	const savedNotes = [...useSelector(selectAllSavedNotes)].sort(
+	const appDispatch = useAppDispatch();
+	const activeNote = useAppSelector(selectActiveNote);
+	const savedNotes = [...useAppSelector(selectAllSavedNotes)].sort(
 		(a, b) => (b.lastUpdated ?? 0) - (a.lastUpdated ?? 0),
 	);
 	const [{ selected }, dispatch] = useReducer(noteListReducer, initialState);
@@ -139,7 +139,7 @@ export function NoteListItem({
 	onDeselect,
 	onClick,
 }: NoteListItemProps) {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const title = getNoteTitle(note.text) ?? "Untitled";
 	const navigate = useNavigate();
 	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {

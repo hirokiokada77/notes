@@ -1,16 +1,16 @@
 import "./Toast.css";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectAllStringResources } from "../localeSlice";
 import { clearToastText, selectToastText } from "../toastTextSlice";
 import type { StringResourceKey } from "../utils";
 
 export function Toast() {
-	const dispatch = useDispatch();
-	const toastText = useSelector(selectToastText);
+	const dispatch = useAppDispatch();
+	const toastText = useAppSelector(selectToastText);
 	const [actualToastText, setActualToastText] =
 		useState<StringResourceKey | null>(null);
-	const stringResources = useSelector(selectAllStringResources);
+	const stringResources = useAppSelector(selectAllStringResources);
 	const actualToastTextContent = actualToastText
 		? stringResources[actualToastText]
 		: null;

@@ -1,7 +1,6 @@
 import "katex/dist/katex.css";
 import type { MouseEvent } from "react";
 import ReactMarkdown from "react-markdown";
-import { useSelector } from "react-redux";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import rehypeKatex from "rehype-katex";
@@ -10,11 +9,12 @@ import rehypeSanitize from "rehype-sanitize";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import { useAppSelector } from "../hooks";
 import { selectActiveNote } from "../notesSlice";
 import { applyAnchor } from "../utils";
 
 export function NotePreview() {
-	const activeNote = useSelector(selectActiveNote);
+	const activeNote = useAppSelector(selectActiveNote);
 
 	return (
 		<ReactMarkdown

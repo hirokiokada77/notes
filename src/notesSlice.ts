@@ -1,5 +1,10 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+	createAsyncThunk,
+	createSlice,
+	type PayloadAction,
+} from "@reduxjs/toolkit";
 import { homePath } from "./constants";
+import type { AppDispatch, RootState } from "./store";
 import {
 	createNewNote,
 	type EditHistory,
@@ -8,6 +13,9 @@ import {
 	type Note,
 	type TextSelection,
 } from "./utils";
+
+const prettier = import("prettier");
+const prettierPluginMarkdown = import("prettier/plugins/markdown");
 
 interface NotesState {
 	activeNote: Note | null;
@@ -95,7 +103,6 @@ export const notesSlice = createSlice({
 						(note) => note.id !== state.activeNote!.id,
 					);
 					state.activeNote.lastUpdated = action.payload;
-					// TODO: Implement format on save
 					state.savedNotes.push(state.activeNote);
 				} else {
 					throw new Error();
@@ -224,6 +231,73 @@ export const notesSlice = createSlice({
 			);
 		},
 	},
+});
+
+const prettierOptions = {
+	parser: "markdown",
+	plugins: [(await prettierPluginMarkdown).default],
+};
+
+export const formatNoteText = createAsyncThunk<
+	void,
+	void,
+	{
+		state: RootState;
+		dispatch: AppDispatch;
+	}
+>("notes/formatNoteText", async (_arg, { dispatch, getState }) => {
+	const state = getState();
+	const { activeNote, activeNoteTextSelection } = state.notes;
+	const format = (await prettier).format;
+	const formatWithCursor = (await prettier).formatWithCursor;
+
+	if (activeNote) {
+		if (activeNoteTextSelection) {
+			const { formatted, cursorOffset: newStart } = await formatWithCursor(
+				activeNote.text,
+				{
+					...prettierOptions,
+					cursorOffset: activeNoteTextSelection.start,
+				},
+			);
+
+			if (activeNoteTextSelection.start !== activeNoteTextSelection.end) {
+				const { cursorOffset: newEnd } = await formatWithCursor(
+					activeNote.text,
+					{
+						...prettierOptions,
+						cursorOffset: activeNoteTextSelection.end,
+					},
+				);
+
+				if (formatted !== activeNote.text) {
+					dispatch(
+						updateActiveNoteText(formatted, {
+							start: newStart,
+							end: newEnd,
+						}),
+					);
+				}
+			} else {
+				if (formatted !== activeNote.text) {
+					dispatch(
+						updateActiveNoteText(formatted, {
+							start: newStart,
+							end: newStart,
+						}),
+					);
+				}
+			}
+		} else {
+			const formatted = await format(activeNote.text, prettierOptions);
+
+			if (formatted !== activeNote.text) {
+				dispatch(updateActiveNoteText(formatted, null));
+			}
+		}
+	} else {
+		throw new Error();
+	}
 });
 
 export const notesReducer = notesSlice.reducer;

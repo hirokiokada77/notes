@@ -1,9 +1,9 @@
 import "./Home.css";
 import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { InfoBox } from "../components/InfoBox";
 import { InputArea } from "../components/InputArea";
 import { Tab } from "../components/Tab";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectAllStringResources } from "../localeSlice";
 import {
 	initializeActiveNote,
@@ -14,10 +14,10 @@ import {
 import type { Note } from "../utils";
 
 export function Home() {
-	const dispatch = useDispatch();
-	const activeNote = useSelector(selectActiveNote);
-	const activeNoteTitle = useSelector(selectActiveNoteTitle);
-	const resourceStrings = useSelector(selectAllStringResources);
+	const dispatch = useAppDispatch();
+	const activeNote = useAppSelector(selectActiveNote);
+	const activeNoteTitle = useAppSelector(selectActiveNoteTitle);
+	const resourceStrings = useAppSelector(selectAllStringResources);
 	const initialized = useRef(false);
 
 	useEffect(() => {

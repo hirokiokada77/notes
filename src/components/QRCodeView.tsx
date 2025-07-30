@@ -1,7 +1,7 @@
 import "./QRCodeView.css";
 import QRCode from "qrcode";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../hooks";
 import { selectAllStringResources } from "../localeSlice";
 import { selectActiveNoteUrl } from "../notesSlice";
 
@@ -12,8 +12,8 @@ export function QRCodeView() {
 	const detailsRef = useRef<HTMLDetailsElement>(null);
 	const [qrCodeViewExpanded, setQrCodeViewExpanded] = useState(false);
 	const url = useRef<string | null>(null);
-	const activeNoteUrl = useSelector(selectActiveNoteUrl);
-	const stringResources = useSelector(selectAllStringResources);
+	const activeNoteUrl = useAppSelector(selectActiveNoteUrl);
+	const stringResources = useAppSelector(selectAllStringResources);
 
 	useEffect(() => {
 		const detailsElement = detailsRef.current;

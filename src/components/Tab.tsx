@@ -8,10 +8,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type MouseEventHandler, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { homePath, savedNotesPath } from "../constants";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import {
+	formatNoteText,
 	hasUnsavedChanges,
 	initializeActiveNote,
 	saveActiveNote,
@@ -26,12 +27,12 @@ import { Button } from "./Button";
 import { NoteStatus } from "./NoteStatus";
 
 export function Tab() {
-	const dispatch = useDispatch();
-	const activeNote = useSelector(selectActiveNote);
+	const dispatch = useAppDispatch();
+	const activeNote = useAppSelector(selectActiveNote);
 	const tabViewListRef = useRef<HTMLUListElement | null>(null);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const shouldWarn = useSelector(shouldWarnBeforeLeaving);
+	const shouldWarn = useAppSelector(shouldWarnBeforeLeaving);
 
 	const resetScroll = () => {
 		if (tabViewListRef.current) {
@@ -58,12 +59,15 @@ export function Tab() {
 	};
 
 	useEffect(() => {
-		const handleKeyDown = (event: KeyboardEvent) => {
+		const handleKeyDown = async (event: KeyboardEvent) => {
 			// Save
 			if ((event.ctrlKey || event.metaKey) && event.key === "s") {
 				event.preventDefault();
-				dispatch(saveActiveNote());
-				dispatch(updateToastText("saveSuccess"));
+				if (activeNote) {
+					await dispatch(formatNoteText());
+					dispatch(saveActiveNote());
+					dispatch(updateToastText("saveSuccess"));
+				}
 			}
 		};
 
@@ -71,7 +75,7 @@ export function Tab() {
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [dispatch]);
+	}, [dispatch, activeNote]);
 
 	return (
 		<div className="tab-view">
@@ -119,11 +123,11 @@ interface TabItemProps {
 }
 
 function TabItem({ note }: TabItemProps) {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const noteTitle = getNoteTitle(note.text);
-	const thumbnail = useSelector(selectActiveNoteThumbnail);
+	const thumbnail = useAppSelector(selectActiveNoteThumbnail);
 	const savedNote =
-		useSelector(selectAllSavedNotes).filter(
+		useAppSelector(selectAllSavedNotes).filter(
 			(savedNote) => savedNote.id === note.id,
 		)[0] ?? null;
 	const untitled = noteTitle === null;
@@ -173,7 +177,7 @@ function TabItem({ note }: TabItemProps) {
 					<Button
 						level="secondary"
 						onClick={save}
-						disabled={!useSelector(hasUnsavedChanges)}
+						disabled={!useAppSelector(hasUnsavedChanges)}
 					>
 						Save
 					</Button>

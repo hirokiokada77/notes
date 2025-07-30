@@ -12,27 +12,6 @@ import pt from "./locales/pt.json";
 import ru from "./locales/ru.json";
 import zh from "./locales/zh.json";
 
-const prettier = import("prettier");
-const prettierPluginMarkdown = import("prettier/plugins/markdown");
-
-export async function formatNoteText(noteText: string) {
-	return await (await prettier).format(noteText, {
-		parser: "markdown",
-		plugins: [(await prettierPluginMarkdown).default],
-	});
-}
-
-export async function formatNoteTextWithCursorResult(
-	noteText: string,
-	cursorOffset: number,
-) {
-	return await (await prettier).formatWithCursor(noteText, {
-		parser: "markdown",
-		plugins: [(await prettierPluginMarkdown).default],
-		cursorOffset,
-	});
-}
-
 export function formatTimeAgo(targetTime: number, currentTime: number) {
 	const seconds = Math.floor((currentTime - targetTime) / 1000);
 

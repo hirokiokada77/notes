@@ -1,9 +1,9 @@
 import "./App.css";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toast } from "./components/Toast";
 import { homePath, savedNotesPath } from "./constants";
+import { useAppDispatch, useAppSelector } from "./hooks";
 import { selectAllStringResources, selectLocale } from "./localeSlice";
 import { Home } from "./pages/Home";
 import { SavedNotes } from "./pages/SavedNotes";
@@ -11,10 +11,10 @@ import { selectTheme, updateTheme } from "./themeSlice";
 import { updateTime } from "./timeSlice";
 
 export function App() {
-	const dispatch = useDispatch();
-	const locale = useSelector(selectLocale);
-	const stringResources = useSelector(selectAllStringResources);
-	const theme = useSelector(selectTheme);
+	const dispatch = useAppDispatch();
+	const locale = useAppSelector(selectLocale);
+	const stringResources = useAppSelector(selectAllStringResources);
+	const theme = useAppSelector(selectTheme);
 
 	useEffect(() => {
 		const description = document.querySelector("meta[name=description]");

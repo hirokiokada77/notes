@@ -1,5 +1,5 @@
 import "./NoteStatus.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectAllSavedNotes, setActiveNote } from "../notesSlice";
 import { selectTime } from "../timeSlice";
 import { formatTimeAgo, type Note } from "../utils";
@@ -23,7 +23,7 @@ export function NoteStatus(props: NoteStatusProps) {
 }
 
 function LastUpdatedIndicator({ note }: NoteStatusProps) {
-	const currentTime = useSelector(selectTime);
+	const currentTime = useAppSelector(selectTime);
 
 	return (
 		note.lastUpdated && <li>{formatTimeAgo(note.lastUpdated, currentTime)}</li>
@@ -32,7 +32,7 @@ function LastUpdatedIndicator({ note }: NoteStatusProps) {
 
 function SavedChangesIndicator({ note }: NoteStatusProps) {
 	const savedNote =
-		useSelector(selectAllSavedNotes).filter(
+		useAppSelector(selectAllSavedNotes).filter(
 			(n) => note && n.id === note.id,
 		)[0] ?? null;
 
@@ -46,7 +46,7 @@ function SavedChangesIndicator({ note }: NoteStatusProps) {
 
 function UnsavedChangesIndicator({ note }: NoteStatusProps) {
 	const savedNote =
-		useSelector(selectAllSavedNotes).filter(
+		useAppSelector(selectAllSavedNotes).filter(
 			(n) => note && n.id === note.id,
 		)[0] ?? null;
 
@@ -62,9 +62,9 @@ function UnsavedChangesIndicator({ note }: NoteStatusProps) {
 }
 
 function NewerVersionAvailableIndicator({ note }: NoteStatusProps) {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const savedNote =
-		useSelector(selectAllSavedNotes).filter(
+		useAppSelector(selectAllSavedNotes).filter(
 			(n) => note && n.id === note.id,
 		)[0] ?? null;
 

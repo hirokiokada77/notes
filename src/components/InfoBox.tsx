@@ -1,6 +1,6 @@
 import "./InfoBox.css";
 import { useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectAllStringResources } from "../localeSlice";
 import { selectActiveNoteUrl } from "../notesSlice";
 import { updateToastText } from "../toastTextSlice";
@@ -8,11 +8,11 @@ import { Button } from "./Button";
 import { QRCodeView } from "./QRCodeView";
 
 export function InfoBox() {
-	const dispatch = useDispatch();
-	const stringResources = useSelector(selectAllStringResources);
+	const dispatch = useAppDispatch();
+	const stringResources = useAppSelector(selectAllStringResources);
 	const infoBoxUrlRef = useRef<HTMLInputElement>(null);
 	const shareFeatureUnavailable = !navigator.share;
-	const activeNoteUrl = useSelector(selectActiveNoteUrl);
+	const activeNoteUrl = useAppSelector(selectActiveNoteUrl);
 
 	const copy = async () => {
 		try {

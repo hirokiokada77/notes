@@ -1,30 +1,31 @@
 import "./InputArea.css";
 import type { ClipboardEvent } from "react";
 import { type ChangeEvent, useEffect, useId, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import TurndownService from "turndown";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectAllStringResources } from "../localeSlice";
 import {
 	applyNextEditHistory,
 	applyPreviousEditHistory,
+	formatNoteText,
 	selectActiveNote,
 	selectActiveNoteTextSelection,
 	updateActiveNoteText,
 	updateActiveNoteTextSelection,
 } from "../notesSlice";
 import { selectStatus, updateStatus } from "../statusSlice";
-import { formatNoteText, type TextSelection } from "../utils";
+import type { TextSelection } from "../utils";
 import { NotePreview } from "./NotePreview";
 
 const turndownService = new TurndownService();
 
 export function InputArea() {
-	const dispatch = useDispatch();
-	const status = useSelector(selectStatus);
-	const stringResources = useSelector(selectAllStringResources);
-	const activeNote = useSelector(selectActiveNote);
+	const dispatch = useAppDispatch();
+	const status = useAppSelector(selectStatus);
+	const stringResources = useAppSelector(selectAllStringResources);
+	const activeNote = useAppSelector(selectActiveNote);
 	const noteInputId = useId();
-	const textSelection = useSelector(selectActiveNoteTextSelection);
+	const textSelection = useAppSelector(selectActiveNoteTextSelection);
 	const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
 	const noteBlank = !(activeNote && activeNote.text.trim().length > 0);
 
@@ -55,10 +56,7 @@ export function InputArea() {
 	const handleBlur = async () => {
 		dispatch(updateStatus("viewing"));
 		if (activeNote) {
-			const formattedText = await formatNoteText(activeNote.text);
-			if (activeNote.text !== formattedText) {
-				dispatch(updateActiveNoteText(formattedText, textSelection));
-			}
+			dispatch(formatNoteText());
 		}
 		dispatch(updateActiveNoteTextSelection(null));
 	};
