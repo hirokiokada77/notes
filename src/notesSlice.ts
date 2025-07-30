@@ -14,9 +14,6 @@ import {
 	type TextSelection,
 } from "./utils";
 
-const prettier = import("prettier");
-const prettierPluginMarkdown = import("prettier/plugins/markdown");
-
 interface NotesState {
 	activeNote: Note | null;
 	activeNoteEditHistory: EditHistory[];
@@ -243,11 +240,6 @@ export const notesSlice = createSlice({
 	},
 });
 
-const prettierOptions = {
-	parser: "markdown",
-	plugins: [(await prettierPluginMarkdown).default],
-};
-
 export const formatNoteText = createAsyncThunk<
 	{ text: string; textSelection: TextSelection | null; time: number },
 	void,
@@ -257,8 +249,11 @@ export const formatNoteText = createAsyncThunk<
 >("notes/formatNoteText", async (_arg, { getState }) => {
 	const state = getState();
 	const { activeNote, activeNoteTextSelection } = state.notes;
-	const format = (await prettier).format;
-	const formatWithCursor = (await prettier).formatWithCursor;
+	const { format, formatWithCursor } = await import("prettier");
+	const prettierOptions = {
+		parser: "markdown",
+		plugins: [(await import("prettier/plugins/markdown")).default],
+	};
 
 	if (activeNote) {
 		if (activeNoteTextSelection) {
