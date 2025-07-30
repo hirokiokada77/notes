@@ -60,24 +60,34 @@ export function Home() {
 		const timeoutId = setTimeout(
 			() => {
 				if (activeNote) {
-					const params = new URLSearchParams(
-						activeNote.created !== null && activeNote.lastUpdated !== null
-							? {
-									id: activeNote.id,
-									text: activeNote.text,
-									created: activeNote.created.toString(),
-									lastUpdated: activeNote.lastUpdated.toString(),
-								}
-							: {
-									id: activeNote.id,
-									text: activeNote.text,
-								},
-					);
-					history.replaceState(
-						null,
-						"",
-						`${location.href.split("#")[0]}#${params}`,
-					);
+					if (activeNote.text.trim().length > 0) {
+						const params = new URLSearchParams(
+							activeNote.created !== null && activeNote.lastUpdated !== null
+								? {
+										id: activeNote.id,
+										text: activeNote.text,
+										created: activeNote.created.toString(),
+										lastUpdated: activeNote.lastUpdated.toString(),
+									}
+								: activeNote.lastUpdated !== null
+									? {
+											id: activeNote.id,
+											text: activeNote.text,
+											lastUpdated: activeNote.lastUpdated.toString(),
+										}
+									: {
+											id: activeNote.id,
+											text: activeNote.text,
+										},
+						);
+						history.replaceState(
+							null,
+							"",
+							`${location.href.split("#")[0]}#${params}`,
+						);
+					} else {
+						history.replaceState(null, "", `${location.href.split("#")[0]}`);
+					}
 				} else {
 					dispatch(initializeActiveNote());
 				}

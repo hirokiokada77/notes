@@ -187,7 +187,7 @@ export const notesSlice = createSlice({
 			state.activeNote ? getNoteTitle(state.activeNote.text) : null,
 		selectActiveNoteUrl: (state) => {
 			const activeNote = state.activeNote;
-			if (activeNote) {
+			if (activeNote && activeNote.text.trim().length > 0) {
 				const id = activeNote.id;
 				const text = activeNote.text;
 				const created =
