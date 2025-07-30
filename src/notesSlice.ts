@@ -115,6 +115,7 @@ export const notesSlice = createSlice({
 						created: action.payload.time,
 					},
 				];
+				state.activeNoteEditHistoryPointer = 0;
 			},
 			prepare: (note: Note) => ({
 				payload: {
