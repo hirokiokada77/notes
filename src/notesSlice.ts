@@ -4,7 +4,7 @@ import {
 	type PayloadAction,
 } from "@reduxjs/toolkit";
 import { homePath } from "./constants";
-import type { AppDispatch, RootState } from "./store";
+import type { RootState } from "./store";
 import {
 	createNewNote,
 	type EditHistory,
@@ -174,6 +174,13 @@ export const notesSlice = createSlice({
 			state.activeNoteTextSelection = action.payload;
 		},
 	},
+	extraReducers: (builder) => {
+		builder.addCase(formatNoteText.fulfilled, (state, action) => {
+			if (state.activeNote && state.activeNote.text !== action.payload.text) {
+				notesSlice.caseReducers.updateActiveNoteText(state, action);
+			}
+		});
+	},
 	selectors: {
 		hasUnsavedChanges: (state) => {
 			const savedNote =
@@ -242,13 +249,12 @@ const prettierOptions = {
 };
 
 export const formatNoteText = createAsyncThunk<
-	void,
+	{ text: string; textSelection: TextSelection | null; time: number },
 	void,
 	{
 		state: RootState;
-		dispatch: AppDispatch;
 	}
->("notes/formatNoteText", async (_arg, { dispatch, getState }) => {
+>("notes/formatNoteText", async (_arg, { getState }) => {
 	const state = getState();
 	const { activeNote, activeNoteTextSelection } = state.notes;
 	const format = (await prettier).format;
@@ -273,30 +279,32 @@ export const formatNoteText = createAsyncThunk<
 					},
 				);
 
-				if (formatted !== activeNote.text) {
-					dispatch(
-						updateActiveNoteText(formatted, {
-							start: newStart,
-							end: newEnd,
-						}),
-					);
-				}
+				return {
+					text: formatted,
+					textSelection: {
+						start: newStart,
+						end: newEnd,
+					},
+					time: Date.now(),
+				};
 			} else {
-				if (formatted !== activeNote.text) {
-					dispatch(
-						updateActiveNoteText(formatted, {
-							start: newStart,
-							end: newStart,
-						}),
-					);
-				}
+				return {
+					text: formatted,
+					textSelection: {
+						start: newStart,
+						end: newStart,
+					},
+					time: Date.now(),
+				};
 			}
 		} else {
 			const formatted = await format(activeNote.text, prettierOptions);
 
-			if (formatted !== activeNote.text) {
-				dispatch(updateActiveNoteText(formatted, null));
-			}
+			return {
+				text: formatted,
+				textSelection: null,
+				time: Date.now(),
+			};
 		}
 	} else {
 		throw new Error();
