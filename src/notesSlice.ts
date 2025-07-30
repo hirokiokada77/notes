@@ -74,6 +74,9 @@ export const notesSlice = createSlice({
 			state.activeNoteEditHistory = [];
 			state.activeNoteEditHistoryPointer = -1;
 		},
+		deleteAllSavedNotes(state) {
+			state.savedNotes = [];
+		},
 		deleteSavedNoteById(state, action: PayloadAction<string>) {
 			state.savedNotes = state.savedNotes.filter(
 				(note) => note.id !== action.payload,
@@ -306,6 +309,7 @@ export const {
 	applyNextEditHistory,
 	applyPreviousEditHistory,
 	clearActiveNote,
+	deleteAllSavedNotes,
 	deleteSavedNoteById,
 	initializeActiveNote,
 	saveActiveNote,

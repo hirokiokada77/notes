@@ -6,6 +6,7 @@ import { homePath } from "../constants";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
 	clearActiveNote,
+	deleteAllSavedNotes,
 	deleteSavedNoteById,
 	selectActiveNote,
 	selectAllSavedNotes,
@@ -35,12 +36,10 @@ export function NoteList() {
 			if ((event.ctrlKey || event.metaKey) && event.key === "d") {
 				if (selected.size > 0 && confirmDelete(selected)) {
 					event.preventDefault();
-					selected.forEach((id) => {
-						appDispatch(deleteSavedNoteById(id));
-						if (activeNote && id === activeNote.id) {
-							appDispatch(clearActiveNote());
-						}
-					});
+					appDispatch(deleteAllSavedNotes());
+					if (activeNote && selected.has(activeNote.id)) {
+						appDispatch(clearActiveNote());
+					}
 					dispatch({ type: "deselectAll" });
 				}
 			}
