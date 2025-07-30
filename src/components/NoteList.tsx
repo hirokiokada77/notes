@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { homePath } from "../constants";
 import {
+	clearActiveNote,
 	deleteSavedNoteById,
+	selectActiveNote,
 	selectAllSavedNotes,
 	setActiveNote,
 } from "../notesSlice";
@@ -16,6 +18,7 @@ import { NoteStatus } from "./NoteStatus";
 
 export function NoteList() {
 	const appDispatch = useDispatch();
+	const activeNote = useSelector(selectActiveNote);
 	const savedNotes = [...useSelector(selectAllSavedNotes)].sort(
 		(a, b) => (b.lastUpdated ?? 0) - (a.lastUpdated ?? 0),
 	);
@@ -34,6 +37,9 @@ export function NoteList() {
 					event.preventDefault();
 					selected.forEach((id) => {
 						appDispatch(deleteSavedNoteById(id));
+						if (activeNote && id === activeNote.id) {
+							appDispatch(clearActiveNote());
+						}
 					});
 					dispatch({ type: "deselectAll" });
 				}
@@ -49,7 +55,7 @@ export function NoteList() {
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [savedNotes, selected, appDispatch]);
+	}, [savedNotes, selected, appDispatch, activeNote]);
 
 	return savedNotes.length > 0 ? (
 		<div className="note-list">
@@ -66,6 +72,9 @@ export function NoteList() {
 					if (confirmDelete(selected)) {
 						selected.forEach((id) => {
 							appDispatch(deleteSavedNoteById(id));
+							if (activeNote && id === activeNote.id) {
+								appDispatch(clearActiveNote());
+							}
 						});
 						dispatch({ type: "deselectAll" });
 					}
