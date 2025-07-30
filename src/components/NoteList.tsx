@@ -15,7 +15,7 @@ import { NoteListToolbar } from "./NoteListToolbar";
 import { NoteStatus } from "./NoteStatus";
 
 export function NoteList() {
-	const reduxDispatch = useDispatch();
+	const appDispatch = useDispatch();
 	const savedNotes = [...useSelector(selectAllSavedNotes)].sort(
 		(a, b) => (b.lastUpdated ?? 0) - (a.lastUpdated ?? 0),
 	);
@@ -33,7 +33,7 @@ export function NoteList() {
 				if (selected.size > 0 && confirmDelete(selected)) {
 					event.preventDefault();
 					selected.forEach((id) => {
-						deleteSavedNoteById(id);
+						appDispatch(deleteSavedNoteById(id));
 					});
 					dispatch({ type: "deselectAll" });
 				}
@@ -49,7 +49,7 @@ export function NoteList() {
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [savedNotes, selected]);
+	}, [savedNotes, selected, appDispatch]);
 
 	return savedNotes.length > 0 ? (
 		<div className="note-list">
@@ -65,7 +65,7 @@ export function NoteList() {
 				handleDelete={() => {
 					if (confirmDelete(selected)) {
 						selected.forEach((id) => {
-							reduxDispatch(deleteSavedNoteById(id));
+							appDispatch(deleteSavedNoteById(id));
 						});
 						dispatch({ type: "deselectAll" });
 					}
