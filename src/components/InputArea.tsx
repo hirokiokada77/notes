@@ -19,7 +19,7 @@ import { NotePreview } from "./NotePreview";
 
 const turndownService = new TurndownService();
 
-export function InputArea() {
+export const InputArea = () => {
 	const dispatch = useAppDispatch();
 	const status = useAppSelector(selectStatus);
 	const stringResources = useAppSelector(selectAllStringResources);
@@ -191,4 +191,4 @@ export function InputArea() {
 			</main>
 		</div>
 	);
-}
+};

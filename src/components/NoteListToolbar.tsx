@@ -11,13 +11,13 @@ export interface NoteListToolbarProps {
 	handleDelete: () => void;
 }
 
-export function NoteListToolbar({
+export const NoteListToolbar = ({
 	someSelected,
 	allSelected,
 	handleSelectAll,
 	handleDeselectAll,
 	handleDelete,
-}: NoteListToolbarProps) {
+}: NoteListToolbarProps) => {
 	const checkboxRef = useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {
@@ -58,4 +58,4 @@ export function NoteListToolbar({
 			</div>
 		</div>
 	);
-}
+};

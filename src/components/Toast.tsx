@@ -5,7 +5,7 @@ import { selectAllStringResources } from "../localeSlice";
 import { clearToastText, selectToastText } from "../toastTextSlice";
 import type { StringResourceKey } from "../utils";
 
-export function Toast() {
+export const Toast = () => {
 	const dispatch = useAppDispatch();
 	const toastText = useAppSelector(selectToastText);
 	const [actualToastText, setActualToastText] =
@@ -91,4 +91,4 @@ export function Toast() {
 			<div className="toast-container">{actualToastTextContent}</div>
 		</div>
 	);
-}
+};

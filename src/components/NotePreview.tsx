@@ -13,7 +13,7 @@ import { useAppSelector } from "../hooks";
 import { selectActiveNote } from "../notesSlice";
 import { applyAnchor } from "../utils";
 
-export function NotePreview() {
+export const NotePreview = () => {
 	const activeNote = useAppSelector(selectActiveNote);
 
 	return (
@@ -77,4 +77,4 @@ export function NotePreview() {
 			{activeNote?.text}
 		</ReactMarkdown>
 	);
-}
+};

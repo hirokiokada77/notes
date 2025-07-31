@@ -13,7 +13,7 @@ import {
 } from "../notesSlice";
 import type { Note } from "../utils";
 
-export function Home() {
+export const Home = () => {
 	const dispatch = useAppDispatch();
 	const activeNote = useAppSelector(selectActiveNote);
 	const activeNoteTitle = useAppSelector(selectActiveNoteTitle);
@@ -112,4 +112,4 @@ export function Home() {
 			</div>
 		</div>
 	);
-}
+};

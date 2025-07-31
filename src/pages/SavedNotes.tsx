@@ -2,7 +2,7 @@ import { NoteList } from "../components/NoteList";
 import { Tab } from "../components/Tab";
 import { useTitle } from "../hooks";
 
-export function SavedNotes() {
+export const SavedNotes = () => {
 	useTitle("Saved Notes");
 
 	return (
@@ -14,4 +14,4 @@ export function SavedNotes() {
 			</div>
 		</div>
 	);
-}
+};

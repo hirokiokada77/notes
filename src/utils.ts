@@ -12,7 +12,7 @@ import pt from "./locales/pt.json";
 import ru from "./locales/ru.json";
 import zh from "./locales/zh.json";
 
-export function formatTimeAgo(targetTime: number, currentTime: number) {
+export const formatTimeAgo = (targetTime: number, currentTime: number) => {
 	const seconds = Math.floor((currentTime - targetTime) / 1000);
 
 	const units = {
@@ -41,7 +41,7 @@ export function formatTimeAgo(targetTime: number, currentTime: number) {
 		const years = Math.floor(seconds / units.year);
 		return `${years} year${years === 1 ? "" : "s"} ago`;
 	}
-}
+};
 
 export type Locale =
 	| "de"
@@ -70,7 +70,7 @@ export const stringResourcesByLocale: { [K in Locale]: StringResources } = {
 
 const supportedLocales = Object.keys(stringResourcesByLocale) as Locale[];
 
-export function getInitialLocale() {
+export const getInitialLocale = () => {
 	const browserLocale = navigator.language.split("-")[0];
 	if ((supportedLocales as string[]).includes(browserLocale)) {
 		return browserLocale as Locale;
@@ -79,7 +79,7 @@ export function getInitialLocale() {
 		return "zh" as Locale;
 	}
 	return "en" as Locale;
-}
+};
 
 export type StringResourceKey =
 	| "appName"
@@ -139,18 +139,18 @@ export interface Note {
 	lastUpdated: number | null;
 }
 
-export function createNewNote(time: number): Note {
+export const createNewNote = (time: number): Note => {
 	return {
 		id: createRandomId(),
 		text: "",
 		created: time,
 		lastUpdated: time,
 	};
-}
+};
 
 export type Status = "viewing" | "editing";
 
-export function createRandomId(): string {
+export const createRandomId = (): string => {
 	const length = 16;
 	const characters = "0123456789abcdef";
 	const charactersLength = characters.length;
@@ -160,14 +160,14 @@ export function createRandomId(): string {
 	).join("");
 
 	return result;
-}
+};
 
 export interface TextSelection {
 	start: number;
 	end: number;
 }
 
-export function applyAnchor(anchor: string) {
+export const applyAnchor = (anchor: string) => {
 	const targetElement = document.getElementById(decodeURIComponent(anchor));
 
 	if (targetElement) {
@@ -183,7 +183,7 @@ export function applyAnchor(anchor: string) {
 	}
 
 	return false;
-}
+};
 
 export interface EditHistory {
 	text: string;
@@ -191,7 +191,7 @@ export interface EditHistory {
 	created: number;
 }
 
-export function getNoteTitle(noteText: string): string | null {
+export const getNoteTitle = (noteText: string): string | null => {
 	const tree = remark().parse(noteText);
 
 	if (!tree.children || tree.children.length === 0) {
@@ -227,7 +227,7 @@ export function getNoteTitle(noteText: string): string | null {
 	}
 
 	return null;
-}
+};
 
 export interface Thumbnail {
 	url: string;
@@ -235,12 +235,12 @@ export interface Thumbnail {
 	title: string;
 }
 
-export function getNoteThumbnail(noteText: string): Thumbnail | null {
+export const getNoteThumbnail = (noteText: string): Thumbnail | null => {
 	const tree: Root = remark().parse(noteText) as Root;
 
 	let firstImage: Thumbnail | null = null;
 
-	function findImage(node: Content | Root): void {
+	const findImage = (node: Content | Root): void => {
 		if (firstImage) {
 			return;
 		}
@@ -270,9 +270,9 @@ export function getNoteThumbnail(noteText: string): Thumbnail | null {
 				}
 			}
 		}
-	}
+	};
 
 	findImage(tree);
 
 	return firstImage;
-}
+};

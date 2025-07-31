@@ -5,7 +5,7 @@ import { useAppSelector } from "../hooks";
 import { selectAllStringResources } from "../localeSlice";
 import { selectActiveNoteUrl } from "../notesSlice";
 
-export function QRCodeView() {
+export const QRCodeView = () => {
 	const [qrCode, setQrCode] = useState<string | null>(null);
 	const initialized = useRef(false);
 	const [busy, setBusy] = useState(false);
@@ -79,4 +79,4 @@ export function QRCodeView() {
 			</details>
 		</div>
 	);
-}
+};

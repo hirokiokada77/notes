@@ -17,7 +17,7 @@ import { Button } from "./Button";
 import { NoteListToolbar } from "./NoteListToolbar";
 import { NoteStatus } from "./NoteStatus";
 
-export function NoteList() {
+export const NoteList = () => {
 	const appDispatch = useAppDispatch();
 	const activeNote = useAppSelector(selectActiveNote);
 	const savedNotes = [...useAppSelector(selectAllSavedNotes)].sort(
@@ -121,7 +121,7 @@ export function NoteList() {
 			</Button>
 		</p>
 	);
-}
+};
 
 interface NoteListItemProps {
 	note: Note;
@@ -131,13 +131,13 @@ interface NoteListItemProps {
 	onClick: (event: MouseEvent<HTMLButtonElement>) => boolean;
 }
 
-export function NoteListItem({
+const NoteListItem = ({
 	note,
 	selected,
 	onSelect,
 	onDeselect,
 	onClick,
-}: NoteListItemProps) {
+}: NoteListItemProps) => {
 	const dispatch = useAppDispatch();
 	const title = getNoteTitle(note.text) ?? "Untitled";
 	const navigate = useNavigate();
@@ -178,15 +178,15 @@ export function NoteListItem({
 			</div>
 		</li>
 	);
-}
+};
 
-function confirmDelete(selected: Set<string>) {
+const confirmDelete = (selected: Set<string>) => {
 	return window.confirm(
 		selected.size > 1
 			? `Delete ${selected.size} notes?`
 			: "Delete selected note?",
 	);
-}
+};
 
 interface NoteListState {
 	selected: Set<string>;

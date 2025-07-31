@@ -7,7 +7,7 @@ import { updateToastText } from "../toastTextSlice";
 import { Button } from "./Button";
 import { QRCodeView } from "./QRCodeView";
 
-export function InfoBox() {
+export const InfoBox = () => {
 	const dispatch = useAppDispatch();
 	const stringResources = useAppSelector(selectAllStringResources);
 	const infoBoxUrlRef = useRef<HTMLInputElement>(null);
@@ -67,4 +67,4 @@ export function InfoBox() {
 			<QRCodeView />
 		</div>
 	);
-}
+};

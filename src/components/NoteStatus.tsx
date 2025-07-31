@@ -9,7 +9,7 @@ export interface NoteStatusProps {
 	note: Note;
 }
 
-export function NoteStatus(props: NoteStatusProps) {
+export const NoteStatus = (props: NoteStatusProps) => {
 	return (
 		<div className="note-status">
 			<ul className="note-status-list">
@@ -20,17 +20,17 @@ export function NoteStatus(props: NoteStatusProps) {
 			</ul>
 		</div>
 	);
-}
+};
 
-function LastUpdatedIndicator({ note }: NoteStatusProps) {
+const LastUpdatedIndicator = ({ note }: NoteStatusProps) => {
 	const currentTime = useAppSelector(selectTime);
 
 	return (
 		note.lastUpdated && <li>{formatTimeAgo(note.lastUpdated, currentTime)}</li>
 	);
-}
+};
 
-function SavedChangesIndicator({ note }: NoteStatusProps) {
+const SavedChangesIndicator = ({ note }: NoteStatusProps) => {
 	const savedNote =
 		useAppSelector(selectAllSavedNotes).filter(
 			(n) => note && n.id === note.id,
@@ -42,9 +42,9 @@ function SavedChangesIndicator({ note }: NoteStatusProps) {
 		note.id === savedNote.id &&
 		note.text === savedNote.text && <li>Saved to browser</li>
 	);
-}
+};
 
-function UnsavedChangesIndicator({ note }: NoteStatusProps) {
+const UnsavedChangesIndicator = ({ note }: NoteStatusProps) => {
 	const savedNote =
 		useAppSelector(selectAllSavedNotes).filter(
 			(n) => note && n.id === note.id,
@@ -59,9 +59,9 @@ function UnsavedChangesIndicator({ note }: NoteStatusProps) {
 		savedNote.lastUpdated &&
 		note.lastUpdated >= savedNote.lastUpdated && <li>Unsaved changes</li>
 	);
-}
+};
 
-function NewerVersionAvailableIndicator({ note }: NoteStatusProps) {
+const NewerVersionAvailableIndicator = ({ note }: NoteStatusProps) => {
 	const dispatch = useAppDispatch();
 	const savedNote =
 		useAppSelector(selectAllSavedNotes).filter(
@@ -93,4 +93,4 @@ function NewerVersionAvailableIndicator({ note }: NoteStatusProps) {
 			</>
 		)
 	);
-}
+};

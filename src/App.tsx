@@ -10,7 +10,7 @@ import { SavedNotes } from "./pages/SavedNotes";
 import { selectTheme, updateTheme } from "./themeSlice";
 import { updateTime } from "./timeSlice";
 
-export function App() {
+export const App = () => {
 	const dispatch = useAppDispatch();
 	const locale = useAppSelector(selectLocale);
 	const stringResources = useAppSelector(selectAllStringResources);
@@ -63,4 +63,4 @@ export function App() {
 			<Toast />
 		</BrowserRouter>
 	);
-}
+};

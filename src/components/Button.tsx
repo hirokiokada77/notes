@@ -10,7 +10,7 @@ export interface ButtonProps {
 	accessibilityLabel?: string;
 }
 
-export function Button(props: ButtonProps) {
+export const Button = (props: ButtonProps) => {
 	return (
 		<button
 			className={["button", `${props.level}-button`].join(" ")}
@@ -23,4 +23,4 @@ export function Button(props: ButtonProps) {
 			{props.children}
 		</button>
 	);
-}
+};

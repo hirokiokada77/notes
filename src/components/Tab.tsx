@@ -26,7 +26,7 @@ import { getNoteTitle, type Note } from "../utils";
 import { Button } from "./Button";
 import { NoteStatus } from "./NoteStatus";
 
-export function Tab() {
+export const Tab = () => {
 	const dispatch = useAppDispatch();
 	const activeNote = useAppSelector(selectActiveNote);
 	const tabViewListRef = useRef<HTMLUListElement | null>(null);
@@ -116,13 +116,13 @@ export function Tab() {
 			</ul>
 		</div>
 	);
-}
+};
 
 interface TabItemProps {
 	note: Note;
 }
 
-function TabItem({ note }: TabItemProps) {
+const TabItem = ({ note }: TabItemProps) => {
 	const dispatch = useAppDispatch();
 	const noteTitle = getNoteTitle(note.text);
 	const thumbnail = useAppSelector(selectActiveNoteThumbnail);
@@ -185,7 +185,7 @@ function TabItem({ note }: TabItemProps) {
 			</div>
 		</li>
 	);
-}
+};
 
 interface TabActionProps {
 	onClick: MouseEventHandler<HTMLButtonElement>;
@@ -193,7 +193,7 @@ interface TabActionProps {
 	accessibilityLabel: string;
 }
 
-function TabAction({ onClick, icon, accessibilityLabel }: TabActionProps) {
+const TabAction = ({ onClick, icon, accessibilityLabel }: TabActionProps) => {
 	return (
 		<li className="tab-view-action tab-view-action-with-no-label">
 			<button
@@ -208,7 +208,7 @@ function TabAction({ onClick, icon, accessibilityLabel }: TabActionProps) {
 			</button>
 		</li>
 	);
-}
+};
 
 interface TabActionWithLabelProps {
 	onClick: MouseEventHandler<HTMLButtonElement>;
@@ -218,13 +218,13 @@ interface TabActionWithLabelProps {
 	accessibilityLabel: string;
 }
 
-function TabActionWithLabel({
+const TabActionWithLabel = ({
 	onClick,
 	icon,
 	primaryLabel,
 	secondaryLabel,
 	accessibilityLabel,
-}: TabActionWithLabelProps) {
+}: TabActionWithLabelProps) => {
 	return (
 		<li className="tab-view-action tab-view-action-with-label">
 			<button
@@ -244,4 +244,4 @@ function TabActionWithLabel({
 			</button>
 		</li>
 	);
-}
+};
