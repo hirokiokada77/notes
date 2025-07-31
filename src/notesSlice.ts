@@ -1,11 +1,6 @@
-import {
-	createAsyncThunk,
-	createSlice,
-	type PayloadAction,
-} from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import TurndownService from "turndown";
 import { homePath } from "./constants";
-import type { RootState } from "./store";
 import {
 	createNewNote,
 	type EditHistoryState,
@@ -14,6 +9,7 @@ import {
 	type Note,
 	type TextSelection,
 } from "./utils";
+import { createAppAsyncThunk } from "./withTypes";
 
 interface NotesState {
 	activeNote: Note | null;
@@ -290,71 +286,68 @@ export const notesSlice = createSlice({
 	},
 });
 
-export const formatNoteText = createAsyncThunk<
-	{ text: string; textSelection: TextSelection | null; time: number },
-	void,
-	{
-		state: RootState;
-	}
->("notes/formatNoteText", async (_arg, { getState }) => {
-	const state = getState();
-	const { activeNote, activeNoteTextSelection } = state.notes;
-	const { format, formatWithCursor } = await import("prettier");
-	const prettierOptions = {
-		parser: "markdown",
-		plugins: [(await import("prettier/plugins/markdown")).default],
-	};
+export const formatNoteText = createAppAsyncThunk(
+	"notes/formatNoteText",
+	async (_arg, { getState }) => {
+		const state = getState();
+		const { activeNote, activeNoteTextSelection } = state.notes;
+		const { format, formatWithCursor } = await import("prettier");
+		const prettierOptions = {
+			parser: "markdown",
+			plugins: [(await import("prettier/plugins/markdown")).default],
+		};
 
-	if (activeNote) {
-		if (activeNoteTextSelection) {
-			const { formatted, cursorOffset: newStart } = await formatWithCursor(
-				activeNote.text,
-				{
-					...prettierOptions,
-					cursorOffset: activeNoteTextSelection.start,
-				},
-			);
-
-			if (activeNoteTextSelection.start !== activeNoteTextSelection.end) {
-				const { cursorOffset: newEnd } = await formatWithCursor(
+		if (activeNote) {
+			if (activeNoteTextSelection) {
+				const { formatted, cursorOffset: newStart } = await formatWithCursor(
 					activeNote.text,
 					{
 						...prettierOptions,
-						cursorOffset: activeNoteTextSelection.end,
+						cursorOffset: activeNoteTextSelection.start,
 					},
 				);
 
-				return {
-					text: formatted,
-					textSelection: {
-						start: newStart,
-						end: newEnd,
-					},
-					time: Date.now(),
-				};
+				if (activeNoteTextSelection.start !== activeNoteTextSelection.end) {
+					const { cursorOffset: newEnd } = await formatWithCursor(
+						activeNote.text,
+						{
+							...prettierOptions,
+							cursorOffset: activeNoteTextSelection.end,
+						},
+					);
+
+					return {
+						text: formatted,
+						textSelection: {
+							start: newStart,
+							end: newEnd,
+						},
+						time: Date.now(),
+					};
+				} else {
+					return {
+						text: formatted,
+						textSelection: {
+							start: newStart,
+							end: newStart,
+						},
+						time: Date.now(),
+					};
+				}
 			} else {
+				const formatted = await format(activeNote.text, prettierOptions);
+
 				return {
 					text: formatted,
-					textSelection: {
-						start: newStart,
-						end: newStart,
-					},
+					textSelection: null,
 					time: Date.now(),
 				};
 			}
 		} else {
-			const formatted = await format(activeNote.text, prettierOptions);
-
-			return {
-				text: formatted,
-				textSelection: null,
-				time: Date.now(),
-			};
+			throw new Error();
 		}
-	} else {
-		throw new Error();
-	}
-});
+	},
+);
 
 export const notesReducer = notesSlice.reducer;
 
