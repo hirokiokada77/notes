@@ -141,6 +141,7 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			input: {
+				404: resolve(__dirname, "404.html"),
 				index: resolve(__dirname, "index.html"),
 				savedNotes: resolve(__dirname, "saved-notes.html"),
 			},
