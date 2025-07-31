@@ -35,38 +35,6 @@ export const notesSlice = createSlice({
 	name: "notes",
 	initialState,
 	reducers: {
-		applyNextEditHistory(state) {
-			if (state.activeNote) {
-				if (
-					state.activeNoteEditHistory.length -
-						state.activeNoteEditHistoryPointer >=
-					2
-				) {
-					const { text, textSelection } =
-						state.activeNoteEditHistory[state.activeNoteEditHistoryPointer + 1];
-					state.activeNote.text = text;
-					state.activeNoteTextSelection = textSelection;
-
-					state.activeNoteEditHistoryPointer++;
-				}
-			} else {
-				throw new Error();
-			}
-		},
-		applyPreviousEditHistory(state) {
-			if (state.activeNote) {
-				if (state.activeNoteEditHistoryPointer >= 1) {
-					const { text, textSelection } =
-						state.activeNoteEditHistory[state.activeNoteEditHistoryPointer - 1];
-					state.activeNote.text = text;
-					state.activeNoteTextSelection = textSelection;
-
-					state.activeNoteEditHistoryPointer--;
-				}
-			} else {
-				throw new Error();
-			}
-		},
 		clearActiveNote(state) {
 			state.activeNote = null;
 			state.activeNoteEditHistory = [];
@@ -142,6 +110,24 @@ export const notesSlice = createSlice({
 				},
 			}),
 		},
+		redo(state) {
+			if (state.activeNote) {
+				if (
+					state.activeNoteEditHistory.length -
+						state.activeNoteEditHistoryPointer >=
+					2
+				) {
+					const { text, textSelection } =
+						state.activeNoteEditHistory[state.activeNoteEditHistoryPointer + 1];
+					state.activeNote.text = text;
+					state.activeNoteTextSelection = textSelection;
+
+					state.activeNoteEditHistoryPointer++;
+				}
+			} else {
+				throw new Error();
+			}
+		},
 		saveActiveNote: {
 			reducer: (state, action: PayloadAction<number>) => {
 				if (state.activeNote) {
@@ -177,6 +163,20 @@ export const notesSlice = createSlice({
 					time: Date.now(),
 				},
 			}),
+		},
+		undo(state) {
+			if (state.activeNote) {
+				if (state.activeNoteEditHistoryPointer >= 1) {
+					const { text, textSelection } =
+						state.activeNoteEditHistory[state.activeNoteEditHistoryPointer - 1];
+					state.activeNote.text = text;
+					state.activeNoteTextSelection = textSelection;
+
+					state.activeNoteEditHistoryPointer--;
+				}
+			} else {
+				throw new Error();
+			}
 		},
 		updateActiveNoteText: {
 			reducer: (
@@ -359,15 +359,15 @@ export const formatNoteText = createAsyncThunk<
 export const notesReducer = notesSlice.reducer;
 
 export const {
-	applyNextEditHistory,
-	applyPreviousEditHistory,
 	clearActiveNote,
 	deleteAllSavedNotes,
 	deleteSavedNoteById,
 	initializeActiveNote,
 	insertHtmlContent,
+	redo,
 	saveActiveNote,
 	setActiveNote,
+	undo,
 	updateActiveNoteText,
 	updateActiveNoteTextSelection,
 } = notesSlice.actions;

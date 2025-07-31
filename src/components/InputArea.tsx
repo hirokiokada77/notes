@@ -4,12 +4,12 @@ import { type ChangeEvent, useEffect, useId, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectAllStringResources } from "../localeSlice";
 import {
-	applyNextEditHistory,
-	applyPreviousEditHistory,
 	formatNoteText,
 	insertHtmlContent,
+	redo,
 	selectActiveNote,
 	selectActiveNoteTextSelection,
+	undo,
 	updateActiveNoteText,
 	updateActiveNoteTextSelection,
 } from "../notesSlice";
@@ -79,7 +79,7 @@ export const InputArea = () => {
 				!event.shiftKey
 			) {
 				event.preventDefault();
-				dispatch(applyPreviousEditHistory());
+				dispatch(undo());
 			}
 
 			// Redo
@@ -88,7 +88,7 @@ export const InputArea = () => {
 				(event.key === "y" || (event.key === "z" && event.shiftKey))
 			) {
 				event.preventDefault();
-				dispatch(applyNextEditHistory());
+				dispatch(redo());
 			}
 
 			// Tab
