@@ -185,9 +185,12 @@ export const applyAnchor = (anchor: string) => {
 	return false;
 };
 
+export type EditHistory = EditHistoryState[];
+
 export interface EditHistoryState {
 	text: string;
-	textSelection: TextSelection | null;
+	textSelectionBefore: TextSelection | null;
+	textSelectionAfter: TextSelection | null;
 	created: number;
 }
 

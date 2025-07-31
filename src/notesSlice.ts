@@ -3,7 +3,7 @@ import TurndownService from "turndown";
 import { homePath } from "./constants";
 import {
 	createNewNote,
-	type EditHistoryState,
+	type EditHistory,
 	getNoteThumbnail,
 	getNoteTitle,
 	type Note,
@@ -13,7 +13,7 @@ import { createAppAsyncThunk } from "./withTypes";
 
 interface NotesState {
 	activeNote: Note | null;
-	activeNoteEditHistory: EditHistoryState[];
+	activeNoteEditHistory: EditHistory;
 	activeNoteEditHistoryPointer: number;
 	activeNoteTextSelection: TextSelection | null;
 	savedNotes: Note[];
@@ -50,7 +50,8 @@ export const notesSlice = createSlice({
 				state.activeNoteEditHistory = [
 					{
 						text: state.activeNote.text,
-						textSelection: null,
+						textSelectionBefore: null,
+						textSelectionAfter: null,
 						created: action.payload,
 					},
 				];
@@ -84,17 +85,18 @@ export const notesSlice = createSlice({
 
 					state.activeNote.text = text;
 					state.activeNote.lastUpdated = action.payload.time;
-					state.activeNoteTextSelection = textSelection;
 					state.activeNoteEditHistory = state.activeNoteEditHistory.slice(
 						0,
 						state.activeNoteEditHistoryPointer + 1,
 					);
 					state.activeNoteEditHistory.push({
 						text,
-						textSelection,
+						textSelectionBefore: state.activeNoteTextSelection,
+						textSelectionAfter: textSelection,
 						created: action.payload.time,
 					});
 					state.activeNoteEditHistoryPointer++;
+					state.activeNoteTextSelection = textSelection;
 				} else {
 					throw new Error();
 				}
@@ -113,12 +115,11 @@ export const notesSlice = createSlice({
 						state.activeNoteEditHistoryPointer >=
 					2
 				) {
-					const { text, textSelection } =
+					const { text, textSelectionAfter: textSelection } =
 						state.activeNoteEditHistory[state.activeNoteEditHistoryPointer + 1];
 					state.activeNote.text = text;
-					state.activeNoteTextSelection = textSelection;
-
 					state.activeNoteEditHistoryPointer++;
+					state.activeNoteTextSelection = textSelection;
 				}
 			} else {
 				throw new Error();
@@ -147,7 +148,8 @@ export const notesSlice = createSlice({
 				state.activeNoteEditHistory = [
 					{
 						text: state.activeNote.text,
-						textSelection: null,
+						textSelectionBefore: null,
+						textSelectionAfter: null,
 						created: action.payload.time,
 					},
 				];
@@ -163,12 +165,15 @@ export const notesSlice = createSlice({
 		undo(state) {
 			if (state.activeNote) {
 				if (state.activeNoteEditHistoryPointer >= 1) {
-					const { text, textSelection } =
-						state.activeNoteEditHistory[state.activeNoteEditHistoryPointer - 1];
+					const text =
+						state.activeNoteEditHistory[state.activeNoteEditHistoryPointer - 1]
+							.text;
+					const textSelection =
+						state.activeNoteEditHistory[state.activeNoteEditHistoryPointer]
+							.textSelectionBefore;
 					state.activeNote.text = text;
-					state.activeNoteTextSelection = textSelection;
-
 					state.activeNoteEditHistoryPointer--;
+					state.activeNoteTextSelection = textSelection;
 				}
 			} else {
 				throw new Error();
@@ -186,19 +191,18 @@ export const notesSlice = createSlice({
 				if (state.activeNote) {
 					state.activeNote.text = action.payload.text;
 					state.activeNote.lastUpdated = action.payload.time;
-					state.activeNoteTextSelection = action.payload.textSelection;
-
 					state.activeNoteEditHistory = state.activeNoteEditHistory.slice(
 						0,
 						state.activeNoteEditHistoryPointer + 1,
 					);
 					state.activeNoteEditHistory.push({
 						text: action.payload.text,
-						textSelection: action.payload.textSelection,
+						textSelectionBefore: state.activeNoteTextSelection,
+						textSelectionAfter: action.payload.textSelection,
 						created: action.payload.time,
 					});
-
 					state.activeNoteEditHistoryPointer++;
+					state.activeNoteTextSelection = action.payload.textSelection;
 				} else {
 					throw new Error();
 				}
@@ -212,9 +216,6 @@ export const notesSlice = createSlice({
 			action: PayloadAction<TextSelection | null>,
 		) {
 			state.activeNoteTextSelection = action.payload;
-			state.activeNoteEditHistory[
-				state.activeNoteEditHistoryPointer
-			].textSelection = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
