@@ -1,13 +1,13 @@
 import "./InputArea.css";
 import type { ClipboardEvent } from "react";
 import { type ChangeEvent, useEffect, useId, useRef } from "react";
-import TurndownService from "turndown";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectAllStringResources } from "../localeSlice";
 import {
 	applyNextEditHistory,
 	applyPreviousEditHistory,
 	formatNoteText,
+	insertHtmlContent,
 	selectActiveNote,
 	selectActiveNoteTextSelection,
 	updateActiveNoteText,
@@ -16,8 +16,6 @@ import {
 import { selectStatus, updateStatus } from "../statusSlice";
 import type { TextSelection } from "../utils";
 import { NotePreview } from "./NotePreview";
-
-const turndownService = new TurndownService();
 
 export const InputArea = () => {
 	const dispatch = useAppDispatch();
@@ -66,26 +64,8 @@ export const InputArea = () => {
 		if (clipboardData) {
 			const htmlContent = clipboardData.getData("text/html");
 			if (htmlContent) {
-				try {
-					event.preventDefault();
-					const pastedMarkdown = turndownService.turndown(htmlContent);
-					const textarea = noteInputRef.current;
-					if (textarea) {
-						const selectionStart = textarea.selectionStart;
-						const selectionEnd = textarea.selectionEnd;
-						const newNoteText =
-							(activeNote?.text ?? "").substring(0, selectionStart) +
-							pastedMarkdown +
-							(activeNote?.text ?? "").substring(selectionEnd);
-						const newTextSelection: TextSelection = {
-							start: selectionStart + pastedMarkdown.length,
-							end: selectionStart + pastedMarkdown.length,
-						};
-						dispatch(updateActiveNoteText(newNoteText, newTextSelection));
-					}
-				} catch (error) {
-					console.error(error);
-				}
+				event.preventDefault();
+				dispatch(insertHtmlContent(htmlContent));
 			}
 		}
 	};

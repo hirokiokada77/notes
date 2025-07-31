@@ -3,6 +3,7 @@ import {
 	createSlice,
 	type PayloadAction,
 } from "@reduxjs/toolkit";
+import TurndownService from "turndown";
 import { homePath } from "./constants";
 import type { RootState } from "./store";
 import {
@@ -93,6 +94,52 @@ export const notesSlice = createSlice({
 			},
 			prepare: () => ({
 				payload: Date.now(),
+			}),
+		},
+		insertHtmlContent: {
+			reducer: (
+				state,
+				action: PayloadAction<{ htmlContent: string; time: number }>,
+			) => {
+				if (state.activeNote && state.activeNoteTextSelection) {
+					const turndownService = new TurndownService();
+					const pastedMarkdown = turndownService.turndown(
+						action.payload.htmlContent,
+					);
+					const text =
+						state.activeNote.text.substring(
+							0,
+							state.activeNoteTextSelection.start,
+						) +
+						pastedMarkdown +
+						state.activeNote.text.substring(state.activeNoteTextSelection.end);
+					const textSelection = {
+						start: state.activeNoteTextSelection.start + pastedMarkdown.length,
+						end: state.activeNoteTextSelection.start + pastedMarkdown.length,
+					};
+
+					state.activeNote.text = text;
+					state.activeNote.lastUpdated = action.payload.time;
+					state.activeNoteTextSelection = textSelection;
+					state.activeNoteEditHistory = state.activeNoteEditHistory.slice(
+						0,
+						state.activeNoteEditHistoryPointer + 1,
+					);
+					state.activeNoteEditHistory.push({
+						text,
+						textSelection,
+						created: action.payload.time,
+					});
+					state.activeNoteEditHistoryPointer++;
+				} else {
+					throw new Error();
+				}
+			},
+			prepare: (htmlContent: string) => ({
+				payload: {
+					htmlContent,
+					time: Date.now(),
+				},
 			}),
 		},
 		saveActiveNote: {
@@ -315,6 +362,7 @@ export const {
 	deleteAllSavedNotes,
 	deleteSavedNoteById,
 	initializeActiveNote,
+	insertHtmlContent,
 	saveActiveNote,
 	setActiveNote,
 	updateActiveNoteText,
