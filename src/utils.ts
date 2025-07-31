@@ -185,7 +185,7 @@ export const applyAnchor = (anchor: string) => {
 	return false;
 };
 
-export interface EditHistory {
+export interface EditHistoryState {
 	text: string;
 	textSelection: TextSelection | null;
 	created: number;

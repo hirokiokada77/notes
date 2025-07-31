@@ -8,7 +8,7 @@ import { homePath } from "./constants";
 import type { RootState } from "./store";
 import {
 	createNewNote,
-	type EditHistory,
+	type EditHistoryState,
 	getNoteThumbnail,
 	getNoteTitle,
 	type Note,
@@ -17,7 +17,7 @@ import {
 
 interface NotesState {
 	activeNote: Note | null;
-	activeNoteEditHistory: EditHistory[];
+	activeNoteEditHistory: EditHistoryState[];
 	activeNoteEditHistoryPointer: number;
 	activeNoteTextSelection: TextSelection | null;
 	savedNotes: Note[];
