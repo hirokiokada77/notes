@@ -118,7 +118,7 @@ export const InputArea = () => {
 	}, [activeNote, dispatch]);
 
 	useEffect(() => {
-		if (activeNote === null) {
+		if (activeNote === null || activeNote.text.trim().length === 0) {
 			noteInputRef.current?.focus();
 		}
 	}, [activeNote]);
