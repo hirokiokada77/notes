@@ -1,6 +1,6 @@
 import "./App.css";
 import { useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toast } from "./components/Toast";
 import { homePath, savedNotesPath } from "./constants";
 import { useAppDispatch, useAppSelector } from "./hooks";
@@ -58,6 +58,7 @@ export const App = () => {
 			<Routes>
 				<Route path={homePath} element={<Home />} />
 				<Route path={savedNotesPath} element={<SavedNotes />} />
+				<Route path="*" element={<Navigate to={homePath} replace />} />
 			</Routes>
 
 			<Toast />
