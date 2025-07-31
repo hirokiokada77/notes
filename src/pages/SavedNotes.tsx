@@ -1,11 +1,9 @@
-import { useEffect } from "react";
 import { NoteList } from "../components/NoteList";
 import { Tab } from "../components/Tab";
+import { useTitle } from "../hooks";
 
 export function SavedNotes() {
-	useEffect(() => {
-		document.title = "Saved Notes";
-	}, []);
+	useTitle("Saved Notes");
 
 	return (
 		<div className="saved-notes">

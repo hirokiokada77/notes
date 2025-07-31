@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { InfoBox } from "../components/InfoBox";
 import { InputArea } from "../components/InputArea";
 import { Tab } from "../components/Tab";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector, useTitle } from "../hooks";
 import { selectAllStringResources } from "../localeSlice";
 import {
 	initializeActiveNote,
@@ -19,14 +19,11 @@ export function Home() {
 	const activeNoteTitle = useAppSelector(selectActiveNoteTitle);
 	const resourceStrings = useAppSelector(selectAllStringResources);
 	const initialized = useRef(false);
-
-	useEffect(() => {
-		if (activeNoteTitle) {
-			document.title = `${resourceStrings.appName} – ${activeNoteTitle}`;
-		} else {
-			document.title = resourceStrings.appName;
-		}
-	}, [activeNoteTitle, resourceStrings]);
+	useTitle(
+		activeNoteTitle
+			? `${resourceStrings.appName} – ${activeNoteTitle}`
+			: resourceStrings.appName,
+	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: initialization
 	useEffect(() => {
