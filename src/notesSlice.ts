@@ -216,6 +216,9 @@ export const notesSlice = createSlice({
 			action: PayloadAction<TextSelection | null>,
 		) {
 			state.activeNoteTextSelection = action.payload;
+			state.activeNoteEditHistory[
+				state.activeNoteEditHistoryPointer
+			].textSelection = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
