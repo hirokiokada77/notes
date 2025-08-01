@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectAllStringResources } from "../localeSlice";
 import {
 	clearActiveNote,
-	deleteAllSavedNotes,
 	deleteSavedNoteById,
 	selectActiveNote,
 	selectAllSavedNotes,
@@ -39,10 +38,12 @@ export const NoteList = () => {
 				if (selected.size > 0) {
 					event.preventDefault();
 					if (confirmDelete(selected)) {
-						appDispatch(deleteAllSavedNotes());
-						if (activeNote && selected.has(activeNote.id)) {
-							appDispatch(clearActiveNote());
-						}
+						selected.forEach((id) => {
+							appDispatch(deleteSavedNoteById(id));
+							if (activeNote && id === activeNote.id) {
+								appDispatch(clearActiveNote());
+							}
+						});
 						dispatch(deselectAll());
 						appDispatch(updateToastText("messageDeleteSuccess"));
 					}
