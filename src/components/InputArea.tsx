@@ -136,7 +136,7 @@ export const InputArea = () => {
 	return (
 		<div className="input-area">
 			<label htmlFor={noteInputId} className="sr-only">
-				{stringResources.textareaPlaceholder}
+				{stringResources.textFieldPlaceholder}
 			</label>
 
 			<div className="note-input">
@@ -151,8 +151,8 @@ export const InputArea = () => {
 					onFocus={handleFocus}
 					onBlur={handleBlur}
 					onPaste={handlePaste}
-					placeholder={stringResources.textareaPlaceholder}
-					aria-label={stringResources.textareaPlaceholder}
+					placeholder={stringResources.textFieldPlaceholder}
+					aria-label={stringResources.textFieldPlaceholder}
 				/>
 			</div>
 

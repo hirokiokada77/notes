@@ -8,9 +8,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type MouseEventHandler, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { homePath, savedNotesPath } from "../constants";
 import { useAppDispatch, useAppSelector } from "../hooks";
+import { selectAllStringResources } from "../localeSlice";
 import {
 	formatNoteText,
 	hasUnsavedChanges,
@@ -28,6 +30,7 @@ import { NoteStatus } from "./NoteStatus";
 
 export const Tab = () => {
 	const dispatch = useAppDispatch();
+	const stringResources = useSelector(selectAllStringResources);
 	const activeNote = useAppSelector(selectActiveNote);
 	const tabViewListRef = useRef<HTMLUListElement | null>(null);
 	const navigate = useNavigate();
@@ -41,13 +44,7 @@ export const Tab = () => {
 	};
 
 	const createNote = () => {
-		if (
-			!shouldWarn ||
-			window.confirm(
-				"Create a new note without saving? " +
-					"Any unsaved changes will be lost.",
-			)
-		) {
+		if (!shouldWarn || window.confirm(stringResources.messageUnsavedChanges)) {
 			dispatch(initializeActiveNote());
 			navigate(homePath);
 			resetScroll();
@@ -66,7 +63,7 @@ export const Tab = () => {
 				if (activeNote) {
 					await dispatch(formatNoteText());
 					dispatch(saveActiveNote());
-					dispatch(updateToastText("saveSuccess"));
+					dispatch(updateToastText("messageSaveSuccess"));
 				}
 			}
 		};
@@ -84,7 +81,7 @@ export const Tab = () => {
 					<TabAction
 						onClick={() => navigate(savedNotesPath)}
 						icon={faBars}
-						accessibilityLabel="See saved notes"
+						accessibilityLabel={stringResources.savedNotes}
 					/>
 				)}
 
@@ -92,7 +89,7 @@ export const Tab = () => {
 					<TabAction
 						onClick={() => navigate(homePath)}
 						icon={faArrowLeft}
-						accessibilityLabel="Back to home"
+						accessibilityLabel={stringResources.home}
 					/>
 				)}
 
@@ -101,17 +98,17 @@ export const Tab = () => {
 				<TabActionWithLabel
 					onClick={createNote}
 					icon={faPlus}
-					primaryLabel="New"
-					secondaryLabel="in browser"
-					accessibilityLabel="Create new note in browser"
+					primaryLabel={stringResources.create}
+					secondaryLabel={stringResources.createLabel}
+					accessibilityLabel={stringResources.createAccessibilityLabel}
 				/>
 
 				<TabActionWithLabel
 					onClick={importNote}
 					icon={faFile}
-					primaryLabel="Import"
-					secondaryLabel="from file"
-					accessibilityLabel="Import note from file"
+					primaryLabel={stringResources.import}
+					secondaryLabel={stringResources.importLabel}
+					accessibilityLabel={stringResources.importAccessibilityLabel}
 				/>
 			</ul>
 		</div>
@@ -131,6 +128,7 @@ const TabItem = ({ note }: TabItemProps) => {
 			(savedNote) => savedNote.id === note.id,
 		)[0] ?? null;
 	const untitled = noteTitle === null;
+	const stringResources = useSelector(selectAllStringResources);
 
 	const save = () => {
 		if (
@@ -142,7 +140,7 @@ const TabItem = ({ note }: TabItemProps) => {
 			)
 		) {
 			dispatch(saveActiveNote());
-			dispatch(updateToastText("saveSuccess"));
+			dispatch(updateToastText("messageSaveSuccess"));
 		}
 	};
 
@@ -162,7 +160,9 @@ const TabItem = ({ note }: TabItemProps) => {
 				<div className="tab-view-item-content">
 					<div className="tab-view-item-title">
 						{untitled ? (
-							<span className="tab-view-item-title-untitled">Untitled</span>
+							<span className="tab-view-item-title-untitled">
+								{stringResources.untitled}
+							</span>
 						) : (
 							<span title={noteTitle}>{noteTitle}</span>
 						)}
@@ -179,7 +179,7 @@ const TabItem = ({ note }: TabItemProps) => {
 						onClick={save}
 						disabled={!useAppSelector(hasUnsavedChanges)}
 					>
-						Save
+						{stringResources.save}
 					</Button>
 				</div>
 			</div>

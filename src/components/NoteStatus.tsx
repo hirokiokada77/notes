@@ -1,5 +1,7 @@
 import "./NoteStatus.css";
+import { useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../hooks";
+import { selectAllStringResources } from "../localeSlice";
 import { selectAllSavedNotes, setActiveNote } from "../notesSlice";
 import { selectTime } from "../timeSlice";
 import { formatTimeAgo, type Note } from "../utils";
@@ -31,6 +33,7 @@ const LastUpdatedIndicator = ({ note }: NoteStatusProps) => {
 };
 
 const SavedChangesIndicator = ({ note }: NoteStatusProps) => {
+	const stringResources = useSelector(selectAllStringResources);
 	const savedNote =
 		useAppSelector(selectAllSavedNotes).filter(
 			(n) => note && n.id === note.id,
@@ -40,11 +43,12 @@ const SavedChangesIndicator = ({ note }: NoteStatusProps) => {
 		note &&
 		savedNote &&
 		note.id === savedNote.id &&
-		note.text === savedNote.text && <li>Saved to browser</li>
+		note.text === savedNote.text && <li>{stringResources.savedToBrowser}</li>
 	);
 };
 
 const UnsavedChangesIndicator = ({ note }: NoteStatusProps) => {
+	const stringResources = useSelector(selectAllStringResources);
 	const savedNote =
 		useAppSelector(selectAllSavedNotes).filter(
 			(n) => note && n.id === note.id,
@@ -57,7 +61,9 @@ const UnsavedChangesIndicator = ({ note }: NoteStatusProps) => {
 		note.text !== savedNote.text &&
 		note.lastUpdated &&
 		savedNote.lastUpdated &&
-		note.lastUpdated >= savedNote.lastUpdated && <li>Unsaved changes</li>
+		note.lastUpdated >= savedNote.lastUpdated && (
+			<li>{stringResources.unsavedChanges}</li>
+		)
 	);
 };
 

@@ -1,9 +1,11 @@
 import "./NoteList.css";
 import { produce } from "immer";
 import { type MouseEvent, useEffect, useReducer } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { homePath } from "../constants";
 import { useAppDispatch, useAppSelector } from "../hooks";
+import { selectAllStringResources } from "../localeSlice";
 import {
 	clearActiveNote,
 	deleteAllSavedNotes,
@@ -12,19 +14,19 @@ import {
 	selectAllSavedNotes,
 	setActiveNote,
 } from "../notesSlice";
+import { updateToastText } from "../toastTextSlice";
 import { getNoteTitle, type Note } from "../utils";
-import { Button } from "./Button";
 import { NoteListToolbar } from "./NoteListToolbar";
 import { NoteStatus } from "./NoteStatus";
 
 export const NoteList = () => {
 	const appDispatch = useAppDispatch();
+	const stringResources = useSelector(selectAllStringResources);
 	const activeNote = useAppSelector(selectActiveNote);
 	const savedNotes = [...useAppSelector(selectAllSavedNotes)].sort(
 		(a, b) => (b.lastUpdated ?? 0) - (a.lastUpdated ?? 0),
 	);
 	const [{ selected }, dispatch] = useReducer(noteListReducer, initialState);
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
@@ -41,6 +43,7 @@ export const NoteList = () => {
 						appDispatch(clearActiveNote());
 					}
 					dispatch(deselectAll());
+					appDispatch(updateToastText("messageDeleteSuccess"));
 				}
 			}
 
@@ -74,6 +77,7 @@ export const NoteList = () => {
 							}
 						});
 						dispatch(deselectAll());
+						appDispatch(updateToastText("messageDeleteSuccess"));
 					}
 				}}
 			/>
@@ -107,16 +111,7 @@ export const NoteList = () => {
 		</div>
 	) : (
 		<p className="note-list-no-saved-notes-indicator">
-			No saved notes.{" "}
-			<Button
-				level="in-text"
-				onClick={() => {
-					navigate(homePath);
-				}}
-				accessibilityLabel="Create new note"
-			>
-				Create new
-			</Button>
+			{stringResources.messageNoSavedNotes}
 		</p>
 	);
 };
@@ -137,7 +132,8 @@ const NoteListItem = ({
 	onClick,
 }: NoteListItemProps) => {
 	const dispatch = useAppDispatch();
-	const title = getNoteTitle(note.text) ?? "Untitled";
+	const stringResources = useSelector(selectAllStringResources);
+	const title = getNoteTitle(note.text);
 	const navigate = useNavigate();
 	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
 		if (onClick(event)) {
@@ -170,7 +166,16 @@ const NoteListItem = ({
 					type="button"
 					onClick={handleClick}
 				>
-					<div className="note-list-item-title">{title}</div>
+					<div className="note-list-item-title">
+						{title ? (
+							title
+						) : (
+							<span className="note-list-item-title-untitled">
+								{stringResources.untitled}
+							</span>
+						)}
+					</div>
+
 					<NoteStatus note={note} />
 				</button>
 			</div>

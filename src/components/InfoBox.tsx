@@ -17,10 +17,10 @@ export const InfoBox = () => {
 	const copy = async () => {
 		try {
 			await navigator.clipboard.writeText(activeNoteUrl);
-			dispatch(updateToastText("copySuccess"));
-		} catch (err) {
-			console.error("Error copying to clipboard:", err);
-			dispatch(updateToastText("copyFail"));
+			dispatch(updateToastText("messageCopySuccess"));
+		} catch (error) {
+			console.error(error);
+			dispatch(updateToastText("messageCopyFail"));
 		}
 	};
 
@@ -46,12 +46,11 @@ export const InfoBox = () => {
 					readOnly
 					ref={infoBoxUrlRef}
 					onFocus={handleFocus}
-					aria-label={stringResources.shareInstruction}
 				/>
 
 				<div className="info-box-buttons">
 					<Button level="secondary" onClick={copy}>
-						{stringResources.copyButton}
+						{stringResources.copy}
 					</Button>
 
 					<Button
@@ -59,7 +58,7 @@ export const InfoBox = () => {
 						onClick={share}
 						hidden={shareFeatureUnavailable}
 					>
-						{stringResources.shareButton}
+						{stringResources.share}
 					</Button>
 				</div>
 			</div>

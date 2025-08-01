@@ -73,9 +73,9 @@ export const QRCodeView = () => {
 				aria-hidden={initialized && !qrCode}
 				aria-busy={busy}
 			>
-				<summary>{stringResources.qrCodeViewSummary}</summary>
+				<summary>{stringResources.qrCodeLabel}</summary>
 
-				{qrCode && <img src={qrCode} alt={stringResources.qrCodeImgAlt} />}
+				{qrCode && <img src={qrCode} alt={stringResources.qrCode} />}
 			</details>
 		</div>
 	);

@@ -56,16 +56,16 @@ export type Locale =
 	| "zh";
 
 export const stringResourcesByLocale: { [K in Locale]: StringResources } = {
-	de,
+	de: Object.assign({}, en, de),
 	en,
-	es,
-	fr,
-	it,
-	ja,
-	ko,
-	pt,
-	ru,
-	zh,
+	es: Object.assign({}, en, es),
+	fr: Object.assign({}, en, fr),
+	it: Object.assign({}, en, it),
+	ja: Object.assign({}, en, ja),
+	ko: Object.assign({}, en, ko),
+	pt: Object.assign({}, en, pt),
+	ru: Object.assign({}, en, ru),
+	zh: Object.assign({}, en, zh),
 };
 
 const supportedLocales = Object.keys(stringResourcesByLocale) as Locale[];
@@ -81,56 +81,9 @@ export const getInitialLocale = () => {
 	return "en" as Locale;
 };
 
-export type StringResourceKey =
-	| "appName"
-	| "appDescription"
-	| "textareaPlaceholder"
-	| "currentUrlLabel"
-	| "copyButton"
-	| "shareButton"
-	| "copySuccess"
-	| "copyFail"
-	| "shareInstruction"
-	| "localeSelectorLabel"
-	| "darkModeLabel"
-	| "saveButton"
-	| "saveSuccess"
-	| "noteLoadedFromBrowser"
-	| "saveFail"
-	| "clearButton"
-	| "clearConfirm"
-	| "clearSuccess"
-	| "clearFail"
-	| "viewButton"
-	| "editButton"
-	| "qrCodeViewSummary"
-	| "qrCodeImgAlt";
+export type StringResources = typeof en;
 
-export interface StringResources {
-	appName: string;
-	appDescription: string;
-	textareaPlaceholder: string;
-	currentUrlLabel: string;
-	copyButton: string;
-	shareButton: string;
-	copySuccess: string;
-	copyFail: string;
-	shareInstruction: string;
-	localeSelectorLabel: string;
-	darkModeLabel: string;
-	saveButton: string;
-	saveSuccess: string;
-	noteLoadedFromBrowser: string;
-	saveFail: string;
-	clearButton: string;
-	clearConfirm: string;
-	clearSuccess: string;
-	clearFail: string;
-	viewButton: string;
-	editButton: string;
-	qrCodeViewSummary: string;
-	qrCodeImgAlt: string;
-}
+export type StringResourceKey = keyof StringResources;
 
 export interface Note {
 	id: string;

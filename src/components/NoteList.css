@@ -48,6 +48,10 @@
 	line-height: 1.5;
 }
 
+.note-list-item-title-untitled {
+	color: var(--secondary-text-color);
+}
+
 .note-list-no-saved-notes-indicator {
 	text-align: center;
 	font-size: calc(1rem * 18 / 16);

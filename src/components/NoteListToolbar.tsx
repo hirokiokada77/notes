@@ -2,6 +2,8 @@ import "./NoteListToolbar.css";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import { selectAllStringResources } from "../localeSlice";
 
 export interface NoteListToolbarProps {
 	someSelected: boolean;
@@ -18,6 +20,7 @@ export const NoteListToolbar = ({
 	handleDeselectAll,
 	handleDelete,
 }: NoteListToolbarProps) => {
+	const stringResources = useSelector(selectAllStringResources);
 	const checkboxRef = useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {
@@ -33,7 +36,11 @@ export const NoteListToolbar = ({
 					type="checkbox"
 					checked={allSelected}
 					onChange={allSelected ? handleDeselectAll : handleSelectAll}
-					title={allSelected ? "Deselect all" : "Select all"}
+					title={
+						allSelected
+							? stringResources.deselectAll
+							: stringResources.selectAll
+					}
 					ref={checkboxRef}
 				/>
 			</div>
@@ -50,7 +57,7 @@ export const NoteListToolbar = ({
 					className="note-list-toolbar-actions-button"
 					type="button"
 					onClick={handleDelete}
-					title="Delete selected"
+					title={stringResources.delete}
 					disabled={!someSelected}
 				>
 					<FontAwesomeIcon icon={faTrash} />
