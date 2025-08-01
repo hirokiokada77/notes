@@ -232,3 +232,14 @@ export const getNoteThumbnail = (noteText: string): Thumbnail | null => {
 
 	return firstImage;
 };
+
+const markdownExtensions = [".md", ".markdown", ".mdown", ".mkdn", ".mkd"];
+
+export function isMarkdownFile(fileName: string) {
+	const lastDotIndex = fileName.lastIndexOf(".");
+	if (lastDotIndex === -1) {
+		return false;
+	}
+	const extension = fileName.substring(lastDotIndex).toLowerCase();
+	return markdownExtensions.includes(extension);
+}

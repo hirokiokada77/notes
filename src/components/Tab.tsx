@@ -7,7 +7,12 @@ import {
 	faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type MouseEventHandler, useEffect, useRef } from "react";
+import {
+	type ChangeEvent,
+	type MouseEventHandler,
+	useEffect,
+	useRef,
+} from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { homePath, savedNotesPath } from "../constants";
@@ -22,9 +27,10 @@ import {
 	selectActiveNoteThumbnail,
 	selectAllSavedNotes,
 	shouldWarnBeforeLeaving,
+	updateActiveNoteText,
 } from "../notesSlice";
 import { updateToastText } from "../toastTextSlice";
-import { getNoteTitle, type Note } from "../utils";
+import { getNoteTitle, isMarkdownFile, type Note } from "../utils";
 import { Button } from "./Button";
 import { NoteStatus } from "./NoteStatus";
 
@@ -36,6 +42,7 @@ export const Tab = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const shouldWarn = useAppSelector(shouldWarnBeforeLeaving);
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
 	const resetScroll = () => {
 		if (tabViewListRef.current) {
@@ -43,7 +50,7 @@ export const Tab = () => {
 		}
 	};
 
-	const createNote = () => {
+	const handleCreateButtonClick = () => {
 		if (!shouldWarn || window.confirm(stringResources.messageUnsavedChanges)) {
 			dispatch(initializeActiveNote());
 			navigate(homePath);
@@ -51,8 +58,31 @@ export const Tab = () => {
 		}
 	};
 
-	const importNote = () => {
-		alert("Not implemented");
+	const handleImportButtonClick = () => {
+		if (!shouldWarn || window.confirm(stringResources.messageUnsavedChanges)) {
+			fileInputRef.current!.click();
+		}
+	};
+
+	const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+		if (event.target.files) {
+			const selectedFile = event.target.files[0];
+			if (isMarkdownFile(selectedFile.name)) {
+				const reader = new FileReader();
+				reader.onload = async (event) => {
+					if (event.target) {
+						const fileContent = event.target.result as string;
+						dispatch(initializeActiveNote());
+						dispatch(updateActiveNoteText(fileContent, null));
+						await dispatch(formatNoteText());
+						dispatch(updateToastText("messageFileLoadSuccess"));
+					}
+				};
+				reader.readAsText(selectedFile);
+			} else {
+				dispatch(updateToastText("messageFileNotMarkdown"));
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -96,7 +126,7 @@ export const Tab = () => {
 				{activeNote && <TabItem note={activeNote} />}
 
 				<TabActionWithLabel
-					onClick={createNote}
+					onClick={handleCreateButtonClick}
 					icon={faPlus}
 					primaryLabel={stringResources.create}
 					secondaryLabel={stringResources.createLabel}
@@ -104,13 +134,20 @@ export const Tab = () => {
 				/>
 
 				<TabActionWithLabel
-					onClick={importNote}
+					onClick={handleImportButtonClick}
 					icon={faFile}
 					primaryLabel={stringResources.import}
 					secondaryLabel={stringResources.importLabel}
 					accessibilityLabel={stringResources.importAccessibilityLabel}
 				/>
 			</ul>
+
+			<input
+				type="file"
+				ref={fileInputRef}
+				hidden
+				onChange={handleFileInputChange}
+			/>
 		</div>
 	);
 };

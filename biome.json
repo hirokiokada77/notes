@@ -22,6 +22,9 @@
 				"noStaticElementInteractions": "off",
 				"useSemanticElements": "off",
 				"useValidAnchor": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off"
 			}
 		}
 	},
