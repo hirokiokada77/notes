@@ -79,8 +79,8 @@ export const Toast = () => {
 		<div
 			className={[
 				"toast",
-				showToast && !toastIsHiding ? "show" : [],
-				toastIsHiding ? "hide" : [],
+				showToast && !toastIsHiding ? "toast--visible" : [],
+				toastIsHiding ? "toast--hidden" : [],
 			]
 				.flat()
 				.join(" ")}

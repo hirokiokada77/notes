@@ -40,13 +40,13 @@ body.light-mode {
 	}
 }
 
-.toast.show {
+.toast--visible {
 	transform: translateY(0);
 	opacity: 1;
 	pointer-events: auto;
 }
 
-.toast.hide {
+.toast--hidden {
 	transform: translateY(76px);
 	opacity: 0;
 	pointer-events: none;
