@@ -53,6 +53,13 @@ export const Home = () => {
 		};
 	}, []);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: initialization
+	useEffect(() => {
+		if (!activeNote || activeNote.text.trim().length === 0) {
+			dispatch(initializeActiveNote());
+		}
+	}, []);
+
 	useEffect(() => {
 		const timeoutId = setTimeout(
 			() => {
@@ -86,7 +93,7 @@ export const Home = () => {
 						history.replaceState(null, "", `${location.href.split("#")[0]}`);
 					}
 				} else {
-					dispatch(initializeActiveNote());
+					throw new Error();
 				}
 
 				initialized.current = true;
@@ -97,7 +104,7 @@ export const Home = () => {
 		return () => {
 			clearTimeout(timeoutId);
 		};
-	}, [activeNote, dispatch]);
+	}, [activeNote]);
 
 	return (
 		<div className="home">
