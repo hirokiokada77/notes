@@ -74,6 +74,7 @@ export const Tab = () => {
 						const fileContent = event.target.result as string;
 						dispatch(initializeActiveNote());
 						dispatch(updateActiveNoteText(fileContent, null));
+						navigate(homePath);
 						await dispatch(formatNoteText());
 						dispatch(updateToastText("messageFileLoadSuccess"));
 					}
