@@ -36,14 +36,16 @@ export const NoteList = () => {
 			}
 
 			if ((event.ctrlKey || event.metaKey) && event.key === "d") {
-				if (selected.size > 0 && confirmDelete(selected)) {
+				if (selected.size > 0) {
 					event.preventDefault();
-					appDispatch(deleteAllSavedNotes());
-					if (activeNote && selected.has(activeNote.id)) {
-						appDispatch(clearActiveNote());
+					if (confirmDelete(selected)) {
+						appDispatch(deleteAllSavedNotes());
+						if (activeNote && selected.has(activeNote.id)) {
+							appDispatch(clearActiveNote());
+						}
+						dispatch(deselectAll());
+						appDispatch(updateToastText("messageDeleteSuccess"));
 					}
-					dispatch(deselectAll());
-					appDispatch(updateToastText("messageDeleteSuccess"));
 				}
 			}
 
