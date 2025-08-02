@@ -243,3 +243,5 @@ export function isMarkdownFile(fileName: string) {
 	const extension = fileName.substring(lastDotIndex).toLowerCase();
 	return markdownExtensions.includes(extension);
 }
+
+export type Theme = "light" | "dark";

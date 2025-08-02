@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage";
 import { localeReducer } from "./localeSlice";
 import { notesReducer } from "./notesSlice";
 import { statusReducer } from "./statusSlice";
+import { stringResourcesReducer } from "./stringResourcesSlice";
 import { themeReducer } from "./themeSlice";
 import { timeReducer } from "./timeSlice";
 import { toastTextReducer } from "./toastTextSlice";
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
 	locale: localeReducer,
 	notes: notesReducer,
 	status: statusReducer,
+	stringResources: stringResourcesReducer,
 	theme: themeReducer,
 	time: timeReducer,
 	toastText: toastTextReducer,

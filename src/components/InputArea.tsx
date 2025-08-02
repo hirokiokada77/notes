@@ -2,7 +2,6 @@ import "./InputArea.css";
 import type { ClipboardEvent } from "react";
 import { type ChangeEvent, useEffect, useId, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { selectAllStringResources } from "../localeSlice";
 import {
 	formatNoteText,
 	insertHtmlContent,
@@ -14,13 +13,14 @@ import {
 	updateActiveNoteTextSelection,
 } from "../notesSlice";
 import { selectStatus, updateStatus } from "../statusSlice";
+import { selectStringResources } from "../stringResourcesSlice";
 import type { TextSelection } from "../utils";
 import { NotePreview } from "./NotePreview";
 
 export const InputArea = () => {
 	const dispatch = useAppDispatch();
 	const status = useAppSelector(selectStatus);
-	const stringResources = useAppSelector(selectAllStringResources);
+	const stringResources = useAppSelector(selectStringResources);
 	const activeNote = useAppSelector(selectActiveNote);
 	const noteInputId = useId();
 	const textSelection = useAppSelector(selectActiveNoteTextSelection);

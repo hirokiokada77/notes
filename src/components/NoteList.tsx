@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { homePath } from "../constants";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { selectAllStringResources } from "../localeSlice";
 import {
 	clearActiveNote,
 	deleteSavedNoteById,
@@ -13,6 +12,7 @@ import {
 	selectAllSavedNotes,
 	setActiveNote,
 } from "../notesSlice";
+import { selectStringResources } from "../stringResourcesSlice";
 import { updateToastText } from "../toastTextSlice";
 import { getNoteTitle, type Note } from "../utils";
 import { NoteListToolbar } from "./NoteListToolbar";
@@ -20,7 +20,7 @@ import { NoteStatus } from "./NoteStatus";
 
 export const NoteList = () => {
 	const appDispatch = useAppDispatch();
-	const stringResources = useSelector(selectAllStringResources);
+	const stringResources = useSelector(selectStringResources);
 	const activeNote = useAppSelector(selectActiveNote);
 	const savedNotes = [...useAppSelector(selectAllSavedNotes)].sort(
 		(a, b) => (b.lastUpdated ?? 0) - (a.lastUpdated ?? 0),
@@ -135,7 +135,7 @@ const NoteListItem = ({
 	onClick,
 }: NoteListItemProps) => {
 	const dispatch = useAppDispatch();
-	const stringResources = useSelector(selectAllStringResources);
+	const stringResources = useSelector(selectStringResources);
 	const title = getNoteTitle(note.text);
 	const navigate = useNavigate();
 	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {

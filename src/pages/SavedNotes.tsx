@@ -2,10 +2,10 @@ import { useSelector } from "react-redux";
 import { NoteList } from "../components/NoteList";
 import { Tab } from "../components/Tab";
 import { useTitle } from "../hooks";
-import { selectAllStringResources } from "../localeSlice";
+import { selectStringResources } from "../stringResourcesSlice";
 
 export const SavedNotes = () => {
-	const stringResources = useSelector(selectAllStringResources);
+	const stringResources = useSelector(selectStringResources);
 
 	useTitle(stringResources.savedNotes);
 

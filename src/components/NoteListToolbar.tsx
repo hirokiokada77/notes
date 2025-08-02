@@ -3,7 +3,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { selectAllStringResources } from "../localeSlice";
+import { selectStringResources } from "../stringResourcesSlice";
 
 export interface NoteListToolbarProps {
 	someSelected: boolean;
@@ -20,7 +20,7 @@ export const NoteListToolbar = ({
 	handleDeselectAll,
 	handleDelete,
 }: NoteListToolbarProps) => {
-	const stringResources = useSelector(selectAllStringResources);
+	const stringResources = useSelector(selectStringResources);
 	const checkboxRef = useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {

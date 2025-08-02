@@ -4,16 +4,17 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toast } from "./components/Toast";
 import { homePath, savedNotesPath } from "./constants";
 import { useAppDispatch, useAppSelector } from "./hooks";
-import { selectAllStringResources, selectLocale } from "./localeSlice";
+import { selectLocale } from "./localeSlice";
 import { Home } from "./pages/Home";
 import { SavedNotes } from "./pages/SavedNotes";
+import { selectStringResources } from "./stringResourcesSlice";
 import { selectTheme, updateTheme } from "./themeSlice";
 import { updateTime } from "./timeSlice";
 
 export const App = () => {
 	const dispatch = useAppDispatch();
 	const locale = useAppSelector(selectLocale);
-	const stringResources = useAppSelector(selectAllStringResources);
+	const stringResources = useAppSelector(selectStringResources);
 	const theme = useAppSelector(selectTheme);
 
 	useEffect(() => {

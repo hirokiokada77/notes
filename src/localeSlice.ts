@@ -1,19 +1,12 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import {
-	getInitialLocale,
-	type Locale,
-	type StringResources,
-	stringResourcesByLocale,
-} from "./utils";
+import { getInitialLocale, type Locale } from "./utils";
 
 export interface LocaleState {
 	locale: Locale;
-	stringResources: StringResources;
 }
 
 const initialState: LocaleState = {
 	locale: getInitialLocale(),
-	stringResources: stringResourcesByLocale[getInitialLocale()],
 };
 
 const localeSlice = createSlice({
@@ -25,7 +18,6 @@ const localeSlice = createSlice({
 		},
 	},
 	selectors: {
-		selectAllStringResources: (state) => stringResourcesByLocale[state.locale],
 		selectLocale: (state) => state.locale,
 	},
 });
@@ -34,4 +26,4 @@ export const localeReducer = localeSlice.reducer;
 
 export const { updateLocale } = localeSlice.actions;
 
-export const { selectAllStringResources, selectLocale } = localeSlice.selectors;
+export const { selectLocale } = localeSlice.selectors;

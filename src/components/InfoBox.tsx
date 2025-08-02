@@ -1,15 +1,15 @@
 import "./InfoBox.css";
 import { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { selectAllStringResources } from "../localeSlice";
 import { selectActiveNoteUrl } from "../notesSlice";
+import { selectStringResources } from "../stringResourcesSlice";
 import { updateToastText } from "../toastTextSlice";
 import { Button } from "./Button";
 import { QRCodeView } from "./QRCodeView";
 
 export const InfoBox = () => {
 	const dispatch = useAppDispatch();
-	const stringResources = useAppSelector(selectAllStringResources);
+	const stringResources = useAppSelector(selectStringResources);
 	const infoBoxUrlRef = useRef<HTMLInputElement>(null);
 	const shareFeatureUnavailable = !navigator.share;
 	const activeNoteUrl = useAppSelector(selectActiveNoteUrl);

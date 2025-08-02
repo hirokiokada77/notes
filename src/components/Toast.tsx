@@ -1,7 +1,7 @@
 import "./Toast.css";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { selectAllStringResources } from "../localeSlice";
+import { selectStringResources } from "../stringResourcesSlice";
 import { clearToastText, selectToastText } from "../toastTextSlice";
 import type { StringResourceKey } from "../utils";
 
@@ -10,7 +10,7 @@ export const Toast = () => {
 	const toastText = useAppSelector(selectToastText);
 	const [actualToastText, setActualToastText] =
 		useState<StringResourceKey | null>(null);
-	const stringResources = useAppSelector(selectAllStringResources);
+	const stringResources = useAppSelector(selectStringResources);
 	const actualToastTextContent = actualToastText
 		? stringResources[actualToastText]
 		: null;

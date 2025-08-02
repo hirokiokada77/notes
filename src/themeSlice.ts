@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-
-export type Theme = "light" | "dark";
+import type { Theme } from "./utils";
 
 interface ThemeState {
 	theme: Theme;

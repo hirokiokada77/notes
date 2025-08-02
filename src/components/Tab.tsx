@@ -17,7 +17,6 @@ import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { homePath, savedNotesPath } from "../constants";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { selectAllStringResources } from "../localeSlice";
 import {
 	formatNoteText,
 	hasUnsavedChanges,
@@ -29,6 +28,7 @@ import {
 	shouldWarnBeforeLeaving,
 	updateActiveNoteText,
 } from "../notesSlice";
+import { selectStringResources } from "../stringResourcesSlice";
 import { updateToastText } from "../toastTextSlice";
 import { getNoteTitle, isMarkdownFile, type Note } from "../utils";
 import { Button } from "./Button";
@@ -36,7 +36,7 @@ import { NoteStatus } from "./NoteStatus";
 
 export const Tab = () => {
 	const dispatch = useAppDispatch();
-	const stringResources = useSelector(selectAllStringResources);
+	const stringResources = useSelector(selectStringResources);
 	const activeNote = useAppSelector(selectActiveNote);
 	const tabViewListRef = useRef<HTMLUListElement | null>(null);
 	const navigate = useNavigate();
@@ -166,7 +166,7 @@ const TabItem = ({ note }: TabItemProps) => {
 			(savedNote) => savedNote.id === note.id,
 		)[0] ?? null;
 	const untitled = noteTitle === null;
-	const stringResources = useSelector(selectAllStringResources);
+	const stringResources = useSelector(selectStringResources);
 
 	const save = () => {
 		if (

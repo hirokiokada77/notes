@@ -4,20 +4,20 @@ import { InfoBox } from "../components/InfoBox";
 import { InputArea } from "../components/InputArea";
 import { Tab } from "../components/Tab";
 import { useAppDispatch, useAppSelector, useTitle } from "../hooks";
-import { selectAllStringResources } from "../localeSlice";
 import {
 	initializeActiveNote,
 	selectActiveNote,
 	selectActiveNoteTitle,
 	setActiveNote,
 } from "../notesSlice";
+import { selectStringResources } from "../stringResourcesSlice";
 import type { Note } from "../utils";
 
 export const Home = () => {
 	const dispatch = useAppDispatch();
 	const activeNote = useAppSelector(selectActiveNote);
 	const activeNoteTitle = useAppSelector(selectActiveNoteTitle);
-	const resourceStrings = useAppSelector(selectAllStringResources);
+	const resourceStrings = useAppSelector(selectStringResources);
 	const initialized = useRef(false);
 	useTitle(
 		activeNoteTitle
