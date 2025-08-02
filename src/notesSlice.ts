@@ -9,7 +9,7 @@ import {
 	type Note,
 	type TextSelection,
 } from "./utils";
-import { createAppAsyncThunk } from "./withTypes";
+import { createAppAsyncThunk, createAppSelector } from "./withTypes";
 
 interface NotesState {
 	activeNote: Note | null;
@@ -265,7 +265,6 @@ export const notesSlice = createSlice({
 			return `${location.protocol}//${location.host}${homePath}`;
 		},
 		selectActiveNoteTextSelection: (state) => state.activeNoteTextSelection,
-		selectAllSavedNotes: (state) => state.savedNotes,
 		shouldWarnBeforeLeaving: (state) => {
 			const savedNote =
 				state.savedNotes.filter(
@@ -368,6 +367,11 @@ export const {
 	selectActiveNoteTitle,
 	selectActiveNoteUrl,
 	selectActiveNoteTextSelection,
-	selectAllSavedNotes,
 	shouldWarnBeforeLeaving,
 } = notesSlice.selectors;
+
+export const selectAllSavedNotes = createAppSelector(
+	[(state) => state.notes.savedNotes],
+	(savedNotes) =>
+		[...savedNotes].sort((a, b) => (b.lastUpdated ?? 0) - (a.lastUpdated ?? 0)),
+);

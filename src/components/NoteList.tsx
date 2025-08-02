@@ -22,9 +22,7 @@ export const NoteList = () => {
 	const appDispatch = useAppDispatch();
 	const stringResources = useSelector(selectStringResources);
 	const activeNote = useAppSelector(selectActiveNote);
-	const savedNotes = [...useAppSelector(selectAllSavedNotes)].sort(
-		(a, b) => (b.lastUpdated ?? 0) - (a.lastUpdated ?? 0),
-	);
+	const savedNotes = useAppSelector(selectAllSavedNotes);
 	const [{ selected }, dispatch] = useReducer(noteListReducer, initialState);
 
 	useEffect(() => {
