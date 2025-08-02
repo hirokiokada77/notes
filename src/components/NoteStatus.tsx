@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectAllSavedNotes, setActiveNote } from "../notesSlice";
 import { selectStringResources } from "../stringResourcesSlice";
 import { selectTime } from "../timeSlice";
+import { updateToastText } from "../toastTextSlice";
 import { formatTimeAgo, type Note } from "../utils";
 import { Button } from "./Button";
 
@@ -75,9 +76,8 @@ const NewerVersionAvailableIndicator = ({ note }: NoteStatusProps) => {
 		)[0] ?? null;
 
 	const restore = () => {
-		if (savedNote) {
-			dispatch(setActiveNote(note));
-		}
+		dispatch(setActiveNote(savedNote));
+		dispatch(updateToastText("messageLoadedFromBrowser"));
 	};
 
 	return (
