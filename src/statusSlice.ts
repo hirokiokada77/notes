@@ -1,24 +1,16 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Status } from "./utils";
+import { getInitialStatus, type Status } from "./utils";
 
-interface StatusState {
-	status: Status;
-}
-
-const initialState: StatusState = {
-	status: "viewing",
-};
+const initialState = getInitialStatus();
 
 const statusSlice = createSlice({
 	name: "status",
 	initialState,
 	reducers: {
-		updateStatus(state, action: PayloadAction<Status>) {
-			state.status = action.payload;
-		},
+		updateStatus: (_state, action: PayloadAction<Status>) => action.payload,
 	},
 	selectors: {
-		selectStatus: (state) => state.status,
+		selectStatus: (state) => state,
 	},
 });
 

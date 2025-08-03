@@ -55,7 +55,7 @@ export type Locale =
 	| "ru"
 	| "zh";
 
-export const stringResourcesByLocale: { [K in Locale]: StringResources } = {
+const stringResources: { [K in Locale]: StringResources } = {
 	de: Object.assign({}, en, de),
 	en,
 	es: Object.assign({}, en, es),
@@ -68,7 +68,12 @@ export const stringResourcesByLocale: { [K in Locale]: StringResources } = {
 	zh: Object.assign({}, en, zh),
 };
 
-const supportedLocales = Object.keys(stringResourcesByLocale) as Locale[];
+export const getStringResources = (locale: Locale) => stringResources[locale];
+
+export const getInitialStringResources = () =>
+	getStringResources(getInitialLocale());
+
+const supportedLocales = Object.keys(stringResources) as Locale[];
 
 export const getInitialLocale = () => {
 	const browserLocale = navigator.language.split("-")[0];
@@ -80,6 +85,13 @@ export const getInitialLocale = () => {
 	}
 	return "en" as Locale;
 };
+
+export const getInitialStatus = () => "viewing" as Status;
+
+export const getInitialTheme = () =>
+	(window.matchMedia("(prefers-color-scheme: dark)").matches
+		? "dark"
+		: "light") as Theme;
 
 export type StringResources = typeof en;
 
