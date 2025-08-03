@@ -5,13 +5,13 @@
 ## Overview
 
 This is a web-based Markdown editor, formatter, and previewer with
-support for [LaTeX](https://www.latex-project.org/) math formulas. It
-automatically formats Markdown documents using
-[Prettier](https://prettier.io/), displays previews, and converts them
-into [URI fragments](https://en.wikipedia.org/wiki/URI_fragment), making
-it easy to save documents quickly by bookmarking or to share them with
-others. You can also save your Markdown documents to your browser's
-[local
+support for syntax highlighting and
+[LaTeX](https://www.latex-project.org/) math formulas. It automatically
+formats Markdown documents using [Prettier](https://prettier.io/),
+displays previews, and converts them into [URI
+fragments](https://en.wikipedia.org/wiki/URI_fragment), making it easy
+to save documents quickly by bookmarking or to share them with others.
+You can also save your Markdown documents to your browser's [local
 storage](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API).
 
 ### Privacy
