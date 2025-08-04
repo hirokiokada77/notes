@@ -6,7 +6,7 @@ import {
 	formatNoteText,
 	insertHtmlContent,
 	redo,
-	selectActiveNote,
+	selectActiveNoteText,
 	selectActiveNoteTextSelection,
 	undo,
 	updateActiveNoteText,
@@ -21,11 +21,11 @@ export const InputArea = () => {
 	const dispatch = useAppDispatch();
 	const status = useAppSelector(selectStatus);
 	const stringResources = useAppSelector(selectStringResources);
-	const activeNote = useAppSelector(selectActiveNote);
+	const activeNoteText = useAppSelector(selectActiveNoteText);
 	const noteInputId = useId();
 	const textSelection = useAppSelector(selectActiveNoteTextSelection);
 	const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
-	const noteBlank = !(activeNote && activeNote.text.trim().length > 0);
+	const noteBlank = !(activeNoteText && activeNoteText.trim().length > 0);
 
 	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
 		const newNoteText = event.target.value;
@@ -53,7 +53,7 @@ export const InputArea = () => {
 
 	const handleBlur = async () => {
 		dispatch(updateStatus("viewing"));
-		if (activeNote) {
+		if (activeNoteText) {
 			dispatch(formatNoteText());
 		}
 		dispatch(updateActiveNoteTextSelection(null));
@@ -99,9 +99,9 @@ export const InputArea = () => {
 					const start = textarea.selectionStart;
 					const end = textarea.selectionEnd;
 					const newNoteText =
-						(activeNote?.text ?? "").substring(0, start) +
+						(activeNoteText ?? "").substring(0, start) +
 						"\t" +
-						(activeNote?.text ?? "").substring(end);
+						(activeNoteText ?? "").substring(end);
 					const newTextSelection: TextSelection = {
 						start: start + 1,
 						end: start + 1,
@@ -115,13 +115,13 @@ export const InputArea = () => {
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [activeNote, dispatch]);
+	}, [activeNoteText, dispatch]);
 
 	useEffect(() => {
-		if (activeNote === null || activeNote.text.trim().length === 0) {
+		if (noteBlank) {
 			noteInputRef.current?.focus();
 		}
-	}, [activeNote]);
+	}, [noteBlank]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: expected behavior
 	useEffect(() => {
@@ -131,7 +131,7 @@ export const InputArea = () => {
 				textSelection.end,
 			);
 		}
-	}, [textSelection, activeNote]);
+	}, [textSelection, activeNoteText]);
 
 	return (
 		<div className="input-area">
@@ -144,7 +144,7 @@ export const InputArea = () => {
 					id={noteInputId}
 					ref={noteInputRef}
 					className="note-input-container"
-					value={activeNote ? activeNote.text : ""}
+					value={activeNoteText ?? ""}
 					onChange={handleChange}
 					onKeyUp={handleCursorChange}
 					onMouseUp={handleCursorChange}

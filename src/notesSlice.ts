@@ -239,6 +239,8 @@ export const notesSlice = createSlice({
 			);
 		},
 		selectActiveNote: (state) => state.activeNote,
+		selectActiveNoteId: (state) => state.activeNote?.id ?? null,
+		selectActiveNoteText: (state) => state.activeNote?.text ?? null,
 		selectActiveNoteThumbnail: (state) =>
 			state.activeNote ? getNoteThumbnail(state.activeNote.text) : null,
 		selectActiveNoteTitle: (state) =>
@@ -363,6 +365,8 @@ export const {
 export const {
 	hasUnsavedChanges,
 	selectActiveNote,
+	selectActiveNoteId,
+	selectActiveNoteText,
 	selectActiveNoteThumbnail,
 	selectActiveNoteTitle,
 	selectActiveNoteUrl,

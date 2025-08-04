@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import {
 	clearActiveNote,
 	deleteSavedNoteById,
-	selectActiveNote,
+	selectActiveNoteId,
 	selectAllSavedNotes,
 	setActiveNote,
 } from "../notesSlice";
@@ -21,7 +21,7 @@ import { NoteStatus } from "./NoteStatus";
 export const NoteList = () => {
 	const appDispatch = useAppDispatch();
 	const stringResources = useSelector(selectStringResources);
-	const activeNote = useAppSelector(selectActiveNote);
+	const activeNoteId = useAppSelector(selectActiveNoteId);
 	const savedNotes = useAppSelector(selectAllSavedNotes);
 	const [{ selected }, dispatch] = useReducer(noteListReducer, initialState);
 
@@ -38,7 +38,7 @@ export const NoteList = () => {
 					if (confirmDelete(selected)) {
 						selected.forEach((id) => {
 							appDispatch(deleteSavedNoteById(id));
-							if (activeNote && id === activeNote.id) {
+							if (id === activeNoteId) {
 								appDispatch(clearActiveNote());
 							}
 						});
@@ -58,11 +58,11 @@ export const NoteList = () => {
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [savedNotes, selected, appDispatch, activeNote]);
+	}, [savedNotes, selected, appDispatch, activeNoteId]);
 
 	return savedNotes.length > 0 ? (
 		<div className="note-list">
-			<h1 className="sr-only">Saved Notes</h1>
+			<h1 className="sr-only">{stringResources.savedNotes}</h1>
 
 			<NoteListToolbar
 				someSelected={selected.size > 0}
@@ -73,7 +73,7 @@ export const NoteList = () => {
 					if (confirmDelete(selected)) {
 						selected.forEach((id) => {
 							appDispatch(deleteSavedNoteById(id));
-							if (activeNote && id === activeNote.id) {
+							if (id === activeNoteId) {
 								appDispatch(clearActiveNote());
 							}
 						});

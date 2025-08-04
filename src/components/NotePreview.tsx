@@ -10,11 +10,11 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import { useAppSelector } from "../hooks";
-import { selectActiveNote } from "../notesSlice";
+import { selectActiveNoteText } from "../notesSlice";
 import { applyAnchor } from "../utils";
 
 export const NotePreview = () => {
-	const activeNote = useAppSelector(selectActiveNote);
+	const activeNoteText = useAppSelector(selectActiveNoteText);
 
 	return (
 		<ReactMarkdown
@@ -74,7 +74,7 @@ export const NotePreview = () => {
 				},
 			}}
 		>
-			{activeNote?.text}
+			{activeNoteText}
 		</ReactMarkdown>
 	);
 };
