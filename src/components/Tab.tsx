@@ -24,7 +24,6 @@ import {
 	saveActiveNote,
 	selectActiveNote,
 	selectActiveNoteThumbnail,
-	selectAllSavedNotes,
 	shouldWarnBeforeLeaving,
 	updateActiveNoteText,
 } from "../notesSlice";
@@ -161,25 +160,12 @@ const TabItem = ({ note }: TabItemProps) => {
 	const dispatch = useAppDispatch();
 	const noteTitle = getNoteTitle(note.text);
 	const thumbnail = useAppSelector(selectActiveNoteThumbnail);
-	const savedNote =
-		useAppSelector(selectAllSavedNotes).filter(
-			(savedNote) => savedNote.id === note.id,
-		)[0] ?? null;
 	const untitled = noteTitle === null;
 	const stringResources = useSelector(selectStringResources);
 
-	const save = () => {
-		if (
-			savedNote === null ||
-			note?.id === savedNote.id ||
-			window.confirm(
-				"You are about to overwrite an existing note. " +
-					"Do you want to proceed?",
-			)
-		) {
-			dispatch(saveActiveNote());
-			dispatch(updateToastText("messageSaveSuccess"));
-		}
+	const handleSaveButtonClick = () => {
+		dispatch(saveActiveNote());
+		dispatch(updateToastText("messageSaveSuccess"));
 	};
 
 	return (
@@ -214,7 +200,7 @@ const TabItem = ({ note }: TabItemProps) => {
 				<div className="tab-view-item-button">
 					<Button
 						level="secondary"
-						onClick={save}
+						onClick={handleSaveButtonClick}
 						disabled={!useAppSelector(hasUnsavedChanges)}
 					>
 						{stringResources.save}
