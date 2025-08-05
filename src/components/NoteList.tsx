@@ -24,6 +24,7 @@ export const NoteList = () => {
 	const activeNoteId = useAppSelector(selectActiveNoteId);
 	const savedNotes = useAppSelector(selectAllSavedNotes);
 	const [{ selected }, dispatch] = useReducer(noteListReducer, initialState);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
@@ -50,15 +51,20 @@ export const NoteList = () => {
 
 			if (event.key === "Escape" || event.key === "Esc") {
 				event.preventDefault();
-				dispatch(deselectAll());
+				if (selected.size > 0) {
+					dispatch(deselectAll());
+				} else {
+					navigate(homePath);
+				}
 			}
 		};
 
 		document.addEventListener("keydown", handleKeyDown);
+
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [savedNotes, selected, appDispatch, activeNoteId]);
+	}, [savedNotes, selected, appDispatch, activeNoteId, navigate]);
 
 	return savedNotes.length > 0 ? (
 		<div className="note-list">
