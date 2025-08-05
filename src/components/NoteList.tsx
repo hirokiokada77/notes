@@ -1,8 +1,8 @@
 import "./NoteList.css";
-import { produce } from "immer";
-import { type MouseEvent, useEffect, useReducer } from "react";
+import { type MouseEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useImmerReducer } from "use-immer";
 import { homePath } from "../constants";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
@@ -23,7 +23,10 @@ export const NoteList = () => {
 	const stringResources = useSelector(selectStringResources);
 	const activeNoteId = useAppSelector(selectActiveNoteId);
 	const savedNotes = useAppSelector(selectAllSavedNotes);
-	const [{ selected }, dispatch] = useReducer(noteListReducer, initialState);
+	const [{ selected }, dispatch] = useImmerReducer(
+		noteListReducer,
+		initialState,
+	);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -64,7 +67,7 @@ export const NoteList = () => {
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [savedNotes, selected, appDispatch, activeNoteId, navigate]);
+	}, [savedNotes, selected, appDispatch, activeNoteId, navigate, dispatch]);
 
 	return savedNotes.length > 0 ? (
 		<div className="note-list">
@@ -212,32 +215,30 @@ type NoteListAction =
 	| { type: "selectAll"; payload: Note[] }
 	| { type: "deselectAll" };
 
-const noteListReducer = produce(
-	(draft: NoteListState, action: NoteListAction) => {
-		switch (action.type) {
-			case "select":
-				draft.selected.add(action.payload.id);
-				break;
+const noteListReducer = (draft: NoteListState, action: NoteListAction) => {
+	switch (action.type) {
+		case "select":
+			draft.selected.add(action.payload.id);
+			break;
 
-			case "deselect":
-				draft.selected.delete(action.payload.id);
-				break;
+		case "deselect":
+			draft.selected.delete(action.payload.id);
+			break;
 
-			case "selectAll":
-				action.payload.forEach((note) => {
-					draft.selected.add(note.id);
-				});
-				break;
+		case "selectAll":
+			action.payload.forEach((note) => {
+				draft.selected.add(note.id);
+			});
+			break;
 
-			case "deselectAll":
-				draft.selected.clear();
-				break;
+		case "deselectAll":
+			draft.selected.clear();
+			break;
 
-			default:
-				throw new Error();
-		}
-	},
-);
+		default:
+			throw new Error();
+	}
+};
 
 const select = (note: Note): NoteListAction => ({
 	type: "select",
