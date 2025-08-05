@@ -1,4 +1,5 @@
 import "./NoteStatus.css";
+import { createContext, useContext } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectAllSavedNotes, setActiveNote } from "../notesSlice";
@@ -8,32 +9,38 @@ import { updateToastText } from "../toastTextSlice";
 import { formatTimeAgo, type Note } from "../utils";
 import { Button } from "./Button";
 
+const NoteStatusContext = createContext<Note | null>(null);
+
 export interface NoteStatusProps {
 	note: Note;
 }
 
-export const NoteStatus = (props: NoteStatusProps) => {
+export const NoteStatus = ({ note }: NoteStatusProps) => {
 	return (
-		<div className="note-status">
-			<ul className="note-status-list">
-				<LastUpdatedIndicator {...props} />
-				<SavedChangesIndicator {...props} />
-				<UnsavedChangesIndicator {...props} />
-				<NewerVersionAvailableIndicator {...props} />
-			</ul>
-		</div>
+		<NoteStatusContext.Provider value={note}>
+			<div className="note-status">
+				<ul className="note-status-list">
+					<LastUpdatedIndicator />
+					<SavedChangesIndicator />
+					<UnsavedChangesIndicator />
+					<NewerVersionAvailableIndicator />
+				</ul>
+			</div>
+		</NoteStatusContext.Provider>
 	);
 };
 
-const LastUpdatedIndicator = ({ note }: NoteStatusProps) => {
+const LastUpdatedIndicator = () => {
+	const note = useContext(NoteStatusContext);
 	const currentTime = useAppSelector(selectTime);
 
 	return (
-		note.lastUpdated && <li>{formatTimeAgo(note.lastUpdated, currentTime)}</li>
+		note?.lastUpdated && <li>{formatTimeAgo(note.lastUpdated, currentTime)}</li>
 	);
 };
 
-const SavedChangesIndicator = ({ note }: NoteStatusProps) => {
+const SavedChangesIndicator = () => {
+	const note = useContext(NoteStatusContext);
 	const stringResources = useSelector(selectStringResources);
 	const savedNote =
 		useAppSelector(selectAllSavedNotes).filter(
@@ -48,7 +55,8 @@ const SavedChangesIndicator = ({ note }: NoteStatusProps) => {
 	);
 };
 
-const UnsavedChangesIndicator = ({ note }: NoteStatusProps) => {
+const UnsavedChangesIndicator = () => {
+	const note = useContext(NoteStatusContext);
 	const stringResources = useSelector(selectStringResources);
 	const savedNote =
 		useAppSelector(selectAllSavedNotes).filter(
@@ -68,14 +76,15 @@ const UnsavedChangesIndicator = ({ note }: NoteStatusProps) => {
 	);
 };
 
-const NewerVersionAvailableIndicator = ({ note }: NoteStatusProps) => {
+const NewerVersionAvailableIndicator = () => {
+	const note = useContext(NoteStatusContext);
 	const dispatch = useAppDispatch();
 	const savedNote =
 		useAppSelector(selectAllSavedNotes).filter(
 			(n) => note && n.id === note.id,
 		)[0] ?? null;
 
-	const restore = () => {
+	const handleRestoreButtonClick = () => {
 		dispatch(setActiveNote(savedNote));
 		dispatch(updateToastText("messageLoadedFromBrowser"));
 	};
@@ -92,7 +101,7 @@ const NewerVersionAvailableIndicator = ({ note }: NoteStatusProps) => {
 				<li>Newer version in browser</li>
 
 				<li>
-					<Button level="in-text" onClick={restore}>
+					<Button level="in-text" onClick={handleRestoreButtonClick}>
 						Restore
 					</Button>
 				</li>
