@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { getInitialStatus, type Status } from "./utils";
+import { initialStatus, type Status } from "./utils";
 
-const initialState = getInitialStatus();
+const initialState = initialStatus;
 
 const statusSlice = createSlice({
 	name: "status",

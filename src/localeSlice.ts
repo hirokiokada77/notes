@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { getInitialLocale, type Locale } from "./utils";
+import { initialLocale, type Locale } from "./utils";
 
-const initialState = getInitialLocale();
+const initialState = initialLocale;
 
 const localeSlice = createSlice({
 	name: "locale",

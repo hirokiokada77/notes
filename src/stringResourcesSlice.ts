@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { updateLocale } from "./localeSlice";
-import { getInitialStringResources, getStringResources } from "./utils";
+import { getStringResources, initialStringResources } from "./utils";
 
-const initialState = getInitialStringResources();
+const initialState = initialStringResources;
 
 const stringResourcesSlice = createSlice({
 	name: "stringResources",
