@@ -169,7 +169,7 @@ const TabItem = ({ note }: TabItemProps) => {
 	};
 
 	return (
-		<li className="tab-view-status" key={note.id}>
+		<li className="tab-view-status">
 			<div className="tab-view-item-container">
 				{thumbnail && (
 					<div className="tab-view-item-icon">

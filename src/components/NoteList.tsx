@@ -153,7 +153,7 @@ const NoteListItem = ({
 	};
 
 	return (
-		<li key={note.id}>
+		<li>
 			<div
 				className={[
 					"note-list-item",
