@@ -100,16 +100,16 @@ export type StringResourceKey = keyof StringResources;
 export interface Note {
 	id: string;
 	text: string;
-	created: number | null;
-	lastUpdated: number | null;
+	createdAt: number | null;
+	lastUpdatedAt: number | null;
 }
 
-export const createNewNote = (time: number): Note => {
+export const createNewNote = (timestamp: number): Note => {
 	return {
 		id: createRandomId(),
 		text: "",
-		created: time,
-		lastUpdated: time,
+		createdAt: timestamp,
+		lastUpdatedAt: timestamp,
 	};
 };
 
@@ -156,7 +156,7 @@ export interface EditHistoryState {
 	text: string;
 	textSelectionBefore: TextSelection | null;
 	textSelectionAfter: TextSelection | null;
-	created: number;
+	createdAt: number;
 }
 
 export const getNoteTitle = (noteText: string): string | null => {

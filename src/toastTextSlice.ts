@@ -3,12 +3,12 @@ import type { StringResourceKey } from "./utils";
 
 interface ToastTextState {
 	resourceStringKey: StringResourceKey | null;
-	created: number;
+	createdAt: number;
 }
 
 const initialState: ToastTextState = {
 	resourceStringKey: null,
-	created: 0,
+	createdAt: 0,
 };
 
 const toastTextSlice = createSlice({
@@ -18,7 +18,7 @@ const toastTextSlice = createSlice({
 		clearToastText: {
 			reducer: (state, action: PayloadAction<number>) => {
 				state.resourceStringKey = null;
-				state.created = action.payload;
+				state.createdAt = action.payload;
 			},
 			prepare: () => ({
 				payload: Date.now(),
@@ -29,15 +29,15 @@ const toastTextSlice = createSlice({
 				state,
 				action: PayloadAction<{
 					stringResourceKey: StringResourceKey | null;
-					time: number;
+					timestamp: number;
 				}>,
 			) => {
 				state.resourceStringKey = action.payload.stringResourceKey;
-				state.created = action.payload.time;
+				state.createdAt = action.payload.timestamp;
 			},
 			prepare: (stringResourceKey: StringResourceKey) => {
 				return {
-					payload: { stringResourceKey, time: Date.now() },
+					payload: { stringResourceKey, timestamp: Date.now() },
 				};
 			},
 		},

@@ -31,15 +31,15 @@ export const Home = () => {
 			const params = new URLSearchParams(location.hash.substring(1));
 			const id = params.get("id");
 			const text = params.get("text");
-			const created = params.get("created");
-			const lastUpdated = params.get("lastUpdated");
+			const createdAt = params.get("createdAt");
+			const lastUpdatedAt = params.get("lastUpdatedAt");
 
 			if (id !== null && text !== null) {
 				const note: Note = {
 					id,
 					text,
-					created: created !== null ? Number(created) : null,
-					lastUpdated: lastUpdated !== null ? Number(lastUpdated) : null,
+					createdAt: createdAt !== null ? Number(createdAt) : null,
+					lastUpdatedAt: lastUpdatedAt !== null ? Number(lastUpdatedAt) : null,
 				};
 				dispatch(setActiveNote(note));
 			}
@@ -59,18 +59,18 @@ export const Home = () => {
 				if (activeNote) {
 					if (activeNote.text.trim().length > 0) {
 						const params = new URLSearchParams(
-							activeNote.created !== null && activeNote.lastUpdated !== null
+							activeNote.createdAt !== null && activeNote.lastUpdatedAt !== null
 								? {
 										id: activeNote.id,
 										text: activeNote.text,
-										created: activeNote.created.toString(),
-										lastUpdated: activeNote.lastUpdated.toString(),
+										createdAt: activeNote.createdAt.toString(),
+										lastUpdatedAt: activeNote.lastUpdatedAt.toString(),
 									}
-								: activeNote.lastUpdated !== null
+								: activeNote.lastUpdatedAt !== null
 									? {
 											id: activeNote.id,
 											text: activeNote.text,
-											lastUpdated: activeNote.lastUpdated.toString(),
+											lastUpdated: activeNote.lastUpdatedAt.toString(),
 										}
 									: {
 											id: activeNote.id,

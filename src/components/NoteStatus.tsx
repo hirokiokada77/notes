@@ -35,7 +35,9 @@ const LastUpdatedIndicator = () => {
 	const currentTime = useAppSelector(selectTime);
 
 	return (
-		note?.lastUpdated && <li>{formatTimeAgo(note.lastUpdated, currentTime)}</li>
+		note?.lastUpdatedAt && (
+			<li>{formatTimeAgo(note.lastUpdatedAt, currentTime)}</li>
+		)
 	);
 };
 
@@ -66,9 +68,9 @@ const UnsavedChangesIndicator = () => {
 		savedNote &&
 		note.id === savedNote.id &&
 		note.text !== savedNote.text &&
-		note.lastUpdated &&
-		savedNote.lastUpdated &&
-		note.lastUpdated >= savedNote.lastUpdated && (
+		note.lastUpdatedAt &&
+		savedNote.lastUpdatedAt &&
+		note.lastUpdatedAt >= savedNote.lastUpdatedAt && (
 			<li>{stringResources.unsavedChanges}</li>
 		)
 	);
@@ -91,9 +93,9 @@ const NewerVersionAvailableIndicator = () => {
 		savedNote &&
 		note.id === savedNote.id &&
 		note.text !== savedNote.text &&
-		note.lastUpdated &&
-		savedNote.lastUpdated &&
-		note.lastUpdated < savedNote.lastUpdated && (
+		note.lastUpdatedAt &&
+		savedNote.lastUpdatedAt &&
+		note.lastUpdatedAt < savedNote.lastUpdatedAt && (
 			<>
 				<li>Newer version in browser</li>
 

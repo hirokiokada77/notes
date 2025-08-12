@@ -49,7 +49,7 @@ export const notesSlice = createSlice({
 						text: state.activeNote.text,
 						textSelectionBefore: null,
 						textSelectionAfter: null,
-						created: action.payload,
+						createdAt: action.payload,
 					},
 				];
 				state.activeNoteEditHistoryPointer = 0;
@@ -61,7 +61,7 @@ export const notesSlice = createSlice({
 		insertHtmlContent: {
 			reducer: (
 				state,
-				action: PayloadAction<{ htmlContent: string; time: number }>,
+				action: PayloadAction<{ htmlContent: string; timestamp: number }>,
 			) => {
 				if (state.activeNote && state.activeNoteTextSelection) {
 					const turndownService = new TurndownService();
@@ -81,7 +81,7 @@ export const notesSlice = createSlice({
 					};
 
 					state.activeNote.text = text;
-					state.activeNote.lastUpdated = action.payload.time;
+					state.activeNote.lastUpdatedAt = action.payload.timestamp;
 					state.activeNoteEditHistory = state.activeNoteEditHistory.slice(
 						0,
 						state.activeNoteEditHistoryPointer + 1,
@@ -90,7 +90,7 @@ export const notesSlice = createSlice({
 						text,
 						textSelectionBefore: state.activeNoteTextSelection,
 						textSelectionAfter: textSelection,
-						created: action.payload.time,
+						createdAt: action.payload.timestamp,
 					});
 					state.activeNoteEditHistoryPointer++;
 					state.activeNoteTextSelection = textSelection;
@@ -101,7 +101,7 @@ export const notesSlice = createSlice({
 			prepare: (htmlContent: string) => ({
 				payload: {
 					htmlContent,
-					time: Date.now(),
+					timestamp: Date.now(),
 				},
 			}),
 		},
@@ -128,7 +128,7 @@ export const notesSlice = createSlice({
 					state.savedNotes = state.savedNotes.filter(
 						(note) => note.id !== state.activeNote!.id,
 					);
-					state.activeNote.lastUpdated = action.payload;
+					state.activeNote.lastUpdatedAt = action.payload;
 					state.savedNotes.push(state.activeNote);
 				} else {
 					throw new Error();
@@ -139,14 +139,17 @@ export const notesSlice = createSlice({
 			}),
 		},
 		setActiveNote: {
-			reducer: (state, action: PayloadAction<{ note: Note; time: number }>) => {
+			reducer: (
+				state,
+				action: PayloadAction<{ note: Note; timestamp: number }>,
+			) => {
 				state.activeNote = action.payload.note;
 				state.activeNoteEditHistory = [
 					{
 						text: state.activeNote.text,
 						textSelectionBefore: null,
 						textSelectionAfter: null,
-						created: action.payload.time,
+						createdAt: action.payload.timestamp,
 					},
 				];
 				state.activeNoteEditHistoryPointer = 0;
@@ -154,7 +157,7 @@ export const notesSlice = createSlice({
 			prepare: (note: Note) => ({
 				payload: {
 					note,
-					time: Date.now(),
+					timestamp: Date.now(),
 				},
 			}),
 		},
@@ -181,12 +184,12 @@ export const notesSlice = createSlice({
 				action: PayloadAction<{
 					text: string;
 					textSelection: TextSelection | null;
-					time: number;
+					timestamp: number;
 				}>,
 			) => {
 				if (state.activeNote) {
 					state.activeNote.text = action.payload.text;
-					state.activeNote.lastUpdated = action.payload.time;
+					state.activeNote.lastUpdatedAt = action.payload.timestamp;
 					state.activeNoteEditHistory = state.activeNoteEditHistory.slice(
 						0,
 						state.activeNoteEditHistoryPointer + 1,
@@ -195,7 +198,7 @@ export const notesSlice = createSlice({
 						text: action.payload.text,
 						textSelectionBefore: state.activeNoteTextSelection,
 						textSelectionAfter: action.payload.textSelection,
-						created: action.payload.time,
+						createdAt: action.payload.timestamp,
 					});
 					state.activeNoteEditHistoryPointer++;
 					state.activeNoteTextSelection = action.payload.textSelection;
@@ -204,7 +207,7 @@ export const notesSlice = createSlice({
 				}
 			},
 			prepare: (text: string, textSelection: TextSelection | null) => ({
-				payload: { text, textSelection, time: Date.now() },
+				payload: { text, textSelection, timestamp: Date.now() },
 			}),
 		},
 		updateActiveNoteTextSelection(
@@ -248,17 +251,17 @@ export const notesSlice = createSlice({
 			if (activeNote && activeNote.text.trim().length > 0) {
 				const id = activeNote.id;
 				const text = activeNote.text;
-				const created =
-					activeNote.created !== null ? activeNote.created.toString() : "";
-				const lastUpdated =
-					activeNote.lastUpdated !== null
-						? activeNote.lastUpdated.toString()
+				const createdAt =
+					activeNote.createdAt !== null ? activeNote.createdAt.toString() : "";
+				const lastUpdatedAt =
+					activeNote.lastUpdatedAt !== null
+						? activeNote.lastUpdatedAt.toString()
 						: "";
 				const hash = new URLSearchParams({
 					id,
 					text,
-					created,
-					lastUpdated,
+					createdAt,
+					lastUpdatedAt,
 				}).toString();
 				return `${location.protocol}//${location.host}${homePath}#${hash}`;
 			}
@@ -316,7 +319,7 @@ export const formatNoteText = createAppAsyncThunk(
 							start: newStart,
 							end: newEnd,
 						},
-						time: Date.now(),
+						timestamp: Date.now(),
 					};
 				} else {
 					return {
@@ -325,7 +328,7 @@ export const formatNoteText = createAppAsyncThunk(
 							start: newStart,
 							end: newStart,
 						},
-						time: Date.now(),
+						timestamp: Date.now(),
 					};
 				}
 			} else {
@@ -334,7 +337,7 @@ export const formatNoteText = createAppAsyncThunk(
 				return {
 					text: formatted,
 					textSelection: null,
-					time: Date.now(),
+					timestamp: Date.now(),
 				};
 			}
 		} else {
@@ -373,5 +376,7 @@ export const {
 export const selectAllSavedNotes = createAppSelector(
 	[(state) => state.notes.savedNotes],
 	(savedNotes) =>
-		[...savedNotes].sort((a, b) => (b.lastUpdated ?? 0) - (a.lastUpdated ?? 0)),
+		[...savedNotes].sort(
+			(a, b) => (b.lastUpdatedAt ?? 0) - (a.lastUpdatedAt ?? 0),
+		),
 );
