@@ -223,11 +223,9 @@ export const notesSlice = createSlice({
 	},
 	selectors: {
 		hasUnsavedChanges: (state) => {
-			const savedNote =
-				state.savedNotes.filter(
-					(savedNote) =>
-						state.activeNote && savedNote.id === state.activeNote.id,
-				)[0] ?? null;
+			const savedNote = state.savedNotes.find(
+				(savedNote) => state.activeNote && savedNote.id === state.activeNote.id,
+			);
 			return (
 				!(!state.activeNote && !savedNote) &&
 				!(
@@ -268,11 +266,9 @@ export const notesSlice = createSlice({
 		},
 		selectActiveNoteTextSelection: (state) => state.activeNoteTextSelection,
 		shouldWarnBeforeLeaving: (state) => {
-			const savedNote =
-				state.savedNotes.filter(
-					(savedNote) =>
-						state.activeNote && savedNote.id === state.activeNote.id,
-				)[0] ?? null;
+			const savedNote = state.savedNotes.find(
+				(savedNote) => state.activeNote && savedNote.id === state.activeNote.id,
+			);
 			return (
 				((!savedNote && (state.activeNote?.text ?? "").trim().length > 0) ||
 					(state.activeNote &&

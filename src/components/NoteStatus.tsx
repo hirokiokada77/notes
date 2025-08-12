@@ -42,10 +42,9 @@ const LastUpdatedIndicator = () => {
 const SavedChangesIndicator = () => {
 	const note = useContext(NoteStatusContext);
 	const stringResources = useSelector(selectStringResources);
-	const savedNote =
-		useAppSelector(selectAllSavedNotes).filter(
-			(n) => note && n.id === note.id,
-		)[0] ?? null;
+	const savedNote = useAppSelector(selectAllSavedNotes).find(
+		(n) => note && n.id === note.id,
+	);
 
 	return (
 		note &&
@@ -58,10 +57,9 @@ const SavedChangesIndicator = () => {
 const UnsavedChangesIndicator = () => {
 	const note = useContext(NoteStatusContext);
 	const stringResources = useSelector(selectStringResources);
-	const savedNote =
-		useAppSelector(selectAllSavedNotes).filter(
-			(n) => note && n.id === note.id,
-		)[0] ?? null;
+	const savedNote = useAppSelector(selectAllSavedNotes).find(
+		(n) => note && n.id === note.id,
+	);
 
 	return (
 		note &&
@@ -79,13 +77,12 @@ const UnsavedChangesIndicator = () => {
 const NewerVersionAvailableIndicator = () => {
 	const note = useContext(NoteStatusContext);
 	const dispatch = useAppDispatch();
-	const savedNote =
-		useAppSelector(selectAllSavedNotes).filter(
-			(n) => note && n.id === note.id,
-		)[0] ?? null;
+	const savedNote = useAppSelector(selectAllSavedNotes).find(
+		(n) => note && n.id === note.id,
+	);
 
 	const handleRestoreButtonClick = () => {
-		dispatch(setActiveNote(savedNote));
+		dispatch(setActiveNote(savedNote!));
 		dispatch(updateToastText("messageLoadedFromBrowser"));
 	};
 
