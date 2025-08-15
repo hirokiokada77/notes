@@ -55,7 +55,7 @@ export const NotePreview = () => {
 						return (
 							<SyntaxHighlighter
 								className="note-preview-code-block"
-								// @ts-ignore
+								// @ts-expect-error
 								style={dracula}
 								language={match[1]}
 								PreTag="div"
