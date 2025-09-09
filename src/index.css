@@ -52,7 +52,7 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-font-smoothing: antialiased;
 	background-color: var(--md-sys-color-background);
-	color: var(--md-sys-color-on-surface);
+	color: var(--md-sys-color-on-background);
 	font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
 	min-height: 100vh;
 	padding: 24px;
