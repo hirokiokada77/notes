@@ -58,6 +58,7 @@ body {
 	padding: 24px;
 
 	@media print {
+		background-color: #fff;
 		padding: 0;
 	}
 }
