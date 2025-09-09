@@ -1,8 +1,5 @@
 .note-edit-field {
 	min-height: 100vh;
-}
-
-.note-edit-field {
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
