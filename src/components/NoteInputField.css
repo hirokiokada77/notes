@@ -9,6 +9,7 @@
 	padding: 24px;
 	resize: none;
 	font-family: "Roboto Mono", monospace;
+	font-size: calc(1rem * 14 / 16);
 
 	@media (max-width: 768px) {
 		min-height: 50vh;
@@ -21,4 +22,5 @@
 
 .note-input-field::placeholder {
 	font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+	font-size: 1rem;
 }
