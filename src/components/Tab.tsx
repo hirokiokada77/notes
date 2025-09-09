@@ -37,16 +37,14 @@ export const Tab = () => {
 	const dispatch = useAppDispatch();
 	const stringResources = useSelector(selectStringResources);
 	const activeNote = useAppSelector(selectActiveNote);
-	const tabViewListRef = useRef<HTMLUListElement | null>(null);
+	const tabListRef = useRef<HTMLUListElement | null>(null);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const shouldWarn = useAppSelector(shouldWarnBeforeLeaving);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
 	const resetScroll = () => {
-		if (tabViewListRef.current) {
-			tabViewListRef.current.scrollTo({ left: 0 });
-		}
+		tabListRef.current?.scrollTo({ left: 0 });
 	};
 
 	const handleCreateButtonClick = () => {
@@ -111,8 +109,8 @@ export const Tab = () => {
 	}, [dispatch, activeNote]);
 
 	return (
-		<div className="tab-view">
-			<ul className="tab-view-list" ref={tabViewListRef}>
+		<div className="tab">
+			<ul className="tab-list" ref={tabListRef}>
 				{location.pathname === homePath && (
 					<TabAction
 						onClick={() => navigate(savedNotesPath)}
@@ -174,10 +172,10 @@ const TabItem = ({ note }: TabItemProps) => {
 	};
 
 	return (
-		<li className="tab-view-status">
-			<div className="tab-view-item-container">
+		<li className="tab-status">
+			<div className="tab-item-container">
 				{thumbnail && (
-					<div className="tab-view-item-icon">
+					<div className="tab-item-icon">
 						<img
 							src={thumbnail.url}
 							alt={thumbnail.alt}
@@ -186,8 +184,8 @@ const TabItem = ({ note }: TabItemProps) => {
 					</div>
 				)}
 
-				<div className="tab-view-item-content">
-					<div className="tab-view-item-title">
+				<div className="tab-item-content">
+					<div className="tab-item-title">
 						{noteTitle ? (
 							<span title={noteTitle}>{noteTitle}</span>
 						) : (
@@ -195,12 +193,12 @@ const TabItem = ({ note }: TabItemProps) => {
 						)}
 					</div>
 
-					<div className="tab-view-item-status">
+					<div className="tab-item-status">
 						<NoteStatus note={note} />
 					</div>
 				</div>
 
-				<div className="tab-view-item-button">
+				<div className="tab-item-button">
 					<Button
 						level="secondary"
 						onClick={handleSaveButtonClick}
@@ -222,14 +220,14 @@ interface TabActionProps {
 
 const TabAction = ({ onClick, icon, accessibilityLabel }: TabActionProps) => {
 	return (
-		<li className="tab-view-action tab-view-action-with-no-label">
+		<li className="tab-action tab-action-with-no-label">
 			<button
-				className="tab-view-item-container"
+				className="tab-item-container"
 				type="button"
 				onClick={onClick}
 				title={accessibilityLabel}
 			>
-				<div className="tab-view-item-icon">
+				<div className="tab-item-icon">
 					<FontAwesomeIcon icon={icon} />
 				</div>
 			</button>
@@ -253,20 +251,20 @@ const TabActionWithLabel = ({
 	accessibilityLabel,
 }: TabActionWithLabelProps) => {
 	return (
-		<li className="tab-view-action tab-view-action-with-label">
+		<li className="tab-action tab-action-with-label">
 			<button
-				className="tab-view-item-container"
+				className="tab-item-container"
 				type="button"
 				onClick={onClick}
 				title={accessibilityLabel}
 			>
-				<div className="tab-view-item-icon">
+				<div className="tab-item-icon">
 					<FontAwesomeIcon icon={icon} />
 				</div>
 
-				<div className="tab-view-item-content">
-					<div className="tab-view-item-title">{primaryLabel}</div>
-					<div className="tab-view-item-status">{secondaryLabel}</div>
+				<div className="tab-item-content">
+					<div className="tab-item-title">{primaryLabel}</div>
+					<div className="tab-item-status">{secondaryLabel}</div>
 				</div>
 			</button>
 		</li>
