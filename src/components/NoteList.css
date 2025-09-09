@@ -1,0 +1,55 @@
+.note-list > ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.note-list-item {
+	border-bottom: 0;
+	padding: 8px;
+	width: 100%;
+	display: flex;
+	border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.note-list-item--selected {
+	background: var(--md-sys-color-primary-container);
+}
+
+.note-list-item-checkbox {
+	padding: 8px;
+	display: flex;
+	cursor: pointer;
+
+	@media print {
+		display: none;
+	}
+}
+
+.note-list-item-content {
+	padding: 8px;
+	cursor: pointer;
+	text-align: unset;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.note-list-item-title {
+	font-weight: 500;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: 1.5;
+}
+
+.note-list-no-saved-notes-indicator {
+	text-align: center;
+	font-size: calc(1rem * 18 / 16);
+	margin: 18px 0;
+}

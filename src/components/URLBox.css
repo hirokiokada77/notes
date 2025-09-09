@@ -1,0 +1,39 @@
+.url-box {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	padding: 24px 0;
+
+	@media print {
+		display: none;
+	}
+}
+
+.url-box-container {
+	display: flex;
+}
+
+.url-box-buttons {
+	display: flex;
+	margin: 0 auto;
+}
+
+.url-box-container,
+.url-box-buttons {
+	gap: 16px;
+}
+
+@media (max-width: 480px) {
+	.url-box-container {
+		flex-direction: column;
+	}
+}
+
+.url-box-content {
+	border-radius: 99px;
+	border: 1px solid var(--md-sys-color-outline-variant);
+	color: var(--md-sys-color-secondary);
+	flex: 1;
+	padding: 16px 24px;
+	width: 100%;
+}

@@ -1,0 +1,13 @@
+.home,
+.saved-notes {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.home-section,
+.saved-notes-section {
+	margin: 0 auto;
+	max-width: 760px;
+	width: 100%;
+}

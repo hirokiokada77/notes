@@ -1,0 +1,26 @@
+.note-status {
+	color: var(--md-sys-color-on-surface-variant);
+	font-size: calc(1rem * 12 / 16);
+}
+
+.note-status-list {
+	margin: 0 -6px;
+	padding: 0;
+	height: 1em;
+	line-height: 1;
+	list-style-type: none;
+}
+
+.note-status-list li {
+	display: inline-block;
+	padding: 0 6px;
+	position: relative;
+}
+
+.note-status-list li:not(:first-child)::before {
+	content: "・";
+	position: absolute;
+	left: -0.5em;
+	top: 50%;
+	transform: translateY(-50%);
+}

@@ -1,0 +1,78 @@
+* {
+	overflow-wrap: break-word;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+}
+
+button {
+	user-select: none;
+}
+
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: none;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+	outline: 2px solid var(--md-sys-color-primary);
+}
+
+button:focus-visible {
+	outline-offset: -2px;
+}
+
+input[type="checkbox"] {
+	accent-color: var(--md-sys-color-primary);
+}
+
+body {
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	background-color: var(--md-sys-color-background);
+	color: var(--md-sys-color-on-surface);
+	font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+	min-height: 100vh;
+	padding: 24px;
+
+	@media print {
+		padding: 0;
+	}
+}
+
+summary {
+	cursor: pointer;
+}
+
+.sr-only {
+	border: 0;
+	clip: rect(0, 0, 0, 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}

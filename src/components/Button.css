@@ -1,0 +1,42 @@
+.button-primary,
+.button-secondary {
+	border-radius: 99px;
+	cursor: pointer;
+	font-weight: 500;
+	padding: 16px 24px;
+}
+
+.button-primary[disabled],
+.button-secondary[disabled] {
+	cursor: default;
+}
+
+.button-primary {
+	background-color: var(--md-sys-color-primary);
+	color: var(--md-sys-color-on-primary);
+}
+
+.button-primary[disabled] {
+	background-color: var(--md-sys-color-secondary-container);
+	color: var(--md-sys-color-on-secondary-container);
+	opacity: 0.38;
+}
+
+.button-secondary {
+	color: var(--md-sys-color-primary);
+}
+
+.button-secondary[disabled] {
+	color: var(--md-sys-color-on-surface);
+	opacity: 0.38;
+}
+
+.button-in-text {
+	text-decoration: underline;
+	cursor: pointer;
+	line-height: inherit;
+}
+
+.button-in-text:hover {
+	text-decoration: none;
+}

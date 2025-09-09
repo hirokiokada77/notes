@@ -1,0 +1,26 @@
+.note-list-toolbar {
+	color: var(--md-sys-color-on-surface-variant);
+	padding: 8px;
+	display: flex;
+
+	@media print {
+		display: none;
+	}
+}
+
+.note-list-toolbar-checkbox {
+	padding: 8px;
+}
+
+.note-list-toolbar-actions svg {
+	padding: 8px;
+	cursor: pointer;
+}
+
+.note-list-toolbar-actions--disabled {
+	opacity: 0.38;
+}
+
+.note-list-toolbar-actions--disabled svg {
+	cursor: default;
+}

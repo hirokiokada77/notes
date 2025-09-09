@@ -1,0 +1,136 @@
+.tab-view {
+	margin: 0 -24px;
+
+	@media print {
+		display: none;
+	}
+}
+
+.tab-view-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	overflow-x: scroll;
+	display: flex;
+	vertical-align: middle;
+	white-space: nowrap;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.tab-view-list::-webkit-scrollbar {
+	display: none;
+}
+
+.tab-view-list > li {
+	margin-right: 16px;
+}
+
+.tab-view-list > li:first-child {
+	margin-left: 24px;
+}
+
+.tab-view-list > li:last-child {
+	margin-right: 24px;
+}
+
+.tab-view-item-title,
+.tab-view-item-description {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.tab-view-status .tab-view-item-title,
+.tab-view-status .tab-view-item-description {
+	min-width: min(50vw, 240px);
+	max-width: min(50vw, 320px);
+}
+
+.tab-view-action-with-no-label {
+	display: flex;
+}
+
+.tab-view-status .tab-view-item-container,
+.tab-view-action-with-label .tab-view-item-container {
+	text-align: unset;
+	border-radius: 8px;
+	display: flex;
+	padding: 0 16px;
+	gap: 16px;
+}
+
+.tab-view-status .tab-view-item-container {
+	border: 1px solid var(--md-sys-color-surface-container);
+	background: var(--md-sys-color-surface-container);
+}
+
+.tab-view-action-with-label .tab-view-item-container {
+	border: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.tab-view-item-icon,
+.tab-view-item-content {
+	margin: 12px 0;
+}
+
+.tab-view-item-button {
+	margin: 0 -16px;
+	display: flex;
+}
+
+.tab-view-action .tab-view-item-container {
+	cursor: pointer;
+}
+
+.tab-view-item-icon {
+	width: 36px;
+	height: 36px;
+	display: flex;
+	flex-direction: column;
+}
+
+.tab-view-action-with-label .tab-view-item-icon {
+	border-radius: 99px;
+	background: var(--md-sys-color-surface-container);
+}
+
+.tab-view-item-icon svg,
+.tab-view-item-icon img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	flex: 1;
+}
+
+.tab-view-item-icon svg {
+	margin: 0 auto;
+	color: var(--md-sys-color-on-surface-variant);
+	padding: 8px;
+	box-sizing: border-box;
+}
+
+.tab-view-item-icon img {
+	border-radius: 99px;
+}
+
+.tab-view-item-content {
+	flex: 1;
+	display: flex;
+	gap: 8px;
+	flex-direction: column;
+}
+
+.tab-view-item-title,
+.tab-view-item-status {
+	line-height: 1;
+	height: 1em;
+}
+
+.tab-view-item-title {
+	font-weight: 500;
+}
+
+.tab-view-item-status {
+	font-size: calc(1rem * 12 / 16);
+	color: var(--md-sys-color-on-surface-variant);
+}
