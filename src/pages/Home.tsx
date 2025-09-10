@@ -69,7 +69,7 @@ export const Home = () => {
 									? {
 											id: activeNote.id,
 											text: activeNote.text,
-											lastUpdated: activeNote.lastUpdatedAt.toString(),
+											lastUpdatedAt: activeNote.lastUpdatedAt.toString(),
 										}
 									: {
 											id: activeNote.id,
