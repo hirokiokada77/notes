@@ -1,16 +1,24 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { initialLocale, type Locale } from "./utils";
 
-const initialState = initialLocale;
+interface LocaleState {
+	locale: Locale;
+}
+
+const initialState: LocaleState = {
+	locale: initialLocale,
+};
 
 const localeSlice = createSlice({
 	name: "locale",
 	initialState,
 	reducers: {
-		updateLocale: (_state, action: PayloadAction<Locale>) => action.payload,
+		updateLocale: (state, action: PayloadAction<Locale>) => {
+			state.locale = action.payload;
+		},
 	},
 	selectors: {
-		selectLocale: (state) => state,
+		selectLocale: (state) => state.locale,
 	},
 });
 

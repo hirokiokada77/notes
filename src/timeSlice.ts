@@ -1,20 +1,28 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = Date.now();
+interface TimeState {
+	time: number;
+}
+
+const initialState: TimeState = {
+	time: Date.now(),
+};
 
 const timeSlice = createSlice({
 	name: "time",
 	initialState,
 	reducers: {
 		updateTime: {
-			reducer: (_state, action: PayloadAction<number>) => action.payload,
+			reducer: (state, action: PayloadAction<number>) => {
+				state.time = action.payload;
+			},
 			prepare: () => ({
 				payload: Date.now(),
 			}),
 		},
 	},
 	selectors: {
-		selectTime: (state) => state,
+		selectTime: (state) => state.time,
 	},
 });
 

@@ -1,20 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { updateLocale } from "./localeSlice";
-import { getStringResources, initialStringResources } from "./utils";
+import {
+	getStringResources,
+	initialStringResources,
+	type StringResources,
+} from "./utils";
 
-const initialState = initialStringResources;
+interface StringResourcesState {
+	stringResources: StringResources;
+}
+
+const initialState: StringResourcesState = {
+	stringResources: initialStringResources,
+};
 
 const stringResourcesSlice = createSlice({
 	name: "stringResources",
 	initialState,
 	reducers: {},
 	extraReducers: (builder) => {
-		builder.addCase(updateLocale, (_state, action) =>
-			getStringResources(action.payload),
-		);
+		builder.addCase(updateLocale, (state, action) => {
+			state.stringResources = getStringResources(action.payload);
+		});
 	},
 	selectors: {
-		selectStringResources: (state) => state,
+		selectStringResources: (state) => state.stringResources,
 	},
 });
 
