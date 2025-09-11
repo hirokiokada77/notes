@@ -19,8 +19,6 @@
 }
 
 .note-edit-field-end {
-	border-radius: 16px;
-	color: var(--md-sys-color-on-surface);
 	line-height: 1.5;
 	width: 0;
 }

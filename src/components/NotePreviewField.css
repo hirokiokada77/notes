@@ -117,7 +117,6 @@
 	display: inline-block;
 	overflow-x: scroll;
 	background-color: var(--md-sys-color-surface-container);
-	color: var(--primary-heading-color);
 	border-radius: 8px;
 	font-size: calc(1rem * 14 / 16);
 }
