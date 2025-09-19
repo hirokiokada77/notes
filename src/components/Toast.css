@@ -1,9 +1,9 @@
 .toast {
 	position: fixed;
-	bottom: 20px;
-	left: 20px;
+	inset-block-end: 20px;
+	inset-inline-start: 20px;
 	z-index: 1000;
-	max-width: calc(100% - 40px);
+	max-inline-size: calc(100% - 40px);
 	padding: 20px;
 	line-height: 1.5;
 	color: var(--md-sys-color-inverse-on-surface);
@@ -21,10 +21,10 @@
 		opacity 0.1s ease;
 
 	@media (max-width: 480px) {
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		max-width: 100%;
+		inset-block-end: 0;
+		inset-inline-start: 0;
+		inline-size: 100%;
+		max-inline-size: 100%;
 		border-radius: 0;
 	}
 

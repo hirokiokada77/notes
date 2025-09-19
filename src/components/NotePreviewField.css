@@ -11,7 +11,7 @@
 }
 
 .note-preview-field > *:first-child {
-	margin-top: 0;
+	margin-block-start: 0;
 }
 
 .note-preview-field > ol,
@@ -21,7 +21,7 @@
 
 .note-preview-field ol,
 .note-preview-field ul {
-	padding-left: 28px;
+	padding-inline-start: 28px;
 }
 
 .note-preview-field a {
@@ -56,8 +56,8 @@
 
 .note-preview-field hr {
 	margin: 8px 0;
-	border-top: 1px solid var(--md-sys-color-outline-variant);
-	border-bottom: 0;
+	border-block-start: 1px solid var(--md-sys-color-outline-variant);
+	border-block-end: 0;
 }
 
 .note-preview-field h1 {
@@ -112,13 +112,13 @@
 }
 
 .note-preview-field blockquote {
-	padding-left: 40px;
+	padding-inline-start: 40px;
 	margin: 1em 0;
 }
 
 .note-preview-field table {
 	display: inline-block;
-	max-width: 100%;
+	max-inline-size: 100%;
 	overflow-x: scroll;
 	font-size: calc(1rem * 14 / 16);
 	background-color: var(--md-sys-color-surface-container);
@@ -139,5 +139,5 @@
 }
 
 .note-preview-field img {
-	max-width: 100%;
+	max-inline-size: 100%;
 }

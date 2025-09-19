@@ -49,7 +49,7 @@ input[type="checkbox"] {
 }
 
 body {
-	min-height: 100vh;
+	min-block-size: 100vh;
 	padding: 24px;
 	font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
@@ -69,8 +69,8 @@ summary {
 
 .sr-only {
 	position: absolute;
-	width: 1px;
-	height: 1px;
+	inline-size: 1px;
+	block-size: 1px;
 	padding: 0;
 	margin: -1px;
 	overflow: hidden;

@@ -4,7 +4,7 @@
 }
 
 .note-status-list {
-	height: 1em;
+	block-size: 1em;
 	padding: 0;
 	margin: 0 -6px;
 	line-height: 1;
@@ -19,8 +19,8 @@
 
 .note-status-list li:not(:first-child)::before {
 	position: absolute;
-	top: 50%;
-	left: -0.5em;
+	inset-block-start: 50%;
+	inset-inline-start: -0.5em;
 	content: "・";
 	transform: translateY(-50%);
 }

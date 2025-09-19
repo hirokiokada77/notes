@@ -7,7 +7,7 @@
 
 .home-section,
 .saved-notes-section {
-	width: 100%;
-	max-width: 760px;
+	inline-size: 100%;
+	max-inline-size: 760px;
 	margin: 0 auto;
 }
