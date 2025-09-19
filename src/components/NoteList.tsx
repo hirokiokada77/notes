@@ -180,7 +180,6 @@ const NoteListItem = ({
 				<div className="note-list-item-checkbox">
 					<input
 						type="checkbox"
-						value={note.id}
 						checked={selected}
 						onChange={handleItemCheckboxChange}
 					/>
