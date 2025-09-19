@@ -88,7 +88,9 @@ export const Toast = () => {
 			aria-live={showToast && !toastIsHiding ? "polite" : "off"}
 			aria-hidden={showToast ? "false" : "true"}
 		>
-			<div className="toast-container">{actualToastTextContent}</div>
+			<div className="toast-container">
+				{showToast ? actualToastTextContent : ""}
+			</div>
 		</div>
 	);
 };
