@@ -1,8 +1,8 @@
 .note-edit-field {
-	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+	min-height: 100vh;
 	tab-size: 4;
 }
 
@@ -19,8 +19,8 @@
 }
 
 .note-edit-field-end {
-	line-height: 1.5;
 	width: 0;
+	line-height: 1.5;
 }
 
 @media (min-width: 769px) {

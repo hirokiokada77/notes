@@ -1,9 +1,9 @@
 .button-primary,
 .button-secondary {
-	border-radius: 99px;
-	cursor: pointer;
-	font-weight: 500;
 	padding: 16px 24px;
+	font-weight: 500;
+	cursor: pointer;
+	border-radius: 99px;
 }
 
 .button-primary[disabled],
@@ -12,13 +12,13 @@
 }
 
 .button-primary {
-	background-color: var(--md-sys-color-primary);
 	color: var(--md-sys-color-on-primary);
+	background-color: var(--md-sys-color-primary);
 }
 
 .button-primary[disabled] {
-	background-color: var(--md-sys-color-secondary-container);
 	color: var(--md-sys-color-on-secondary-container);
+	background-color: var(--md-sys-color-secondary-container);
 	opacity: 0.38;
 }
 
@@ -32,9 +32,9 @@
 }
 
 .button-in-text {
+	line-height: inherit;
 	text-decoration: underline;
 	cursor: pointer;
-	line-height: inherit;
 }
 
 .button-in-text:hover {

@@ -1,7 +1,7 @@
 .note-list-toolbar {
-	color: var(--md-sys-color-on-surface-variant);
-	padding: 8px;
 	display: flex;
+	padding: 8px;
+	color: var(--md-sys-color-on-surface-variant);
 
 	@media print {
 		display: none;

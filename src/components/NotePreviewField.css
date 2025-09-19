@@ -55,9 +55,9 @@
 }
 
 .note-preview-field hr {
+	margin: 8px 0;
 	border-top: 1px solid var(--md-sys-color-outline-variant);
 	border-bottom: 0;
-	margin: 8px 0;
 }
 
 .note-preview-field h1 {
@@ -83,10 +83,10 @@
 }
 
 .note-preview-field code {
+	padding: 1px 6px;
+	font-family: "Roboto Mono", monospace;
 	background-color: var(--md-sys-color-surface-container);
 	border-radius: 6px;
-	font-family: "Roboto Mono", monospace;
-	padding: 1px 6px;
 }
 
 .note-preview-field pre {
@@ -95,47 +95,47 @@
 
 .note-preview-field-code-block {
 	margin: 0 !important;
-	border-radius: 8px !important;
 	font-family: "Roboto Mono", monospace !important;
+	border-radius: 8px !important;
 }
 
 .note-preview-field pre:not(:has([class^="language-"])) {
+	padding: 14px;
+	overflow-x: auto;
 	background-color: var(--md-sys-color-surface-container);
 	border-radius: 8px;
-	overflow-x: auto;
-	padding: 14px;
 }
 
 .note-preview-field pre code {
-	border-radius: 0;
 	padding: 0;
+	border-radius: 0;
 }
 
 .note-preview-field blockquote {
-	margin: 1em 0;
 	padding-left: 40px;
+	margin: 1em 0;
 }
 
 .note-preview-field table {
-	max-width: 100%;
 	display: inline-block;
+	max-width: 100%;
 	overflow-x: scroll;
+	font-size: calc(1rem * 14 / 16);
 	background-color: var(--md-sys-color-surface-container);
 	border-radius: 8px;
-	font-size: calc(1rem * 14 / 16);
 }
 
 .note-preview-field th,
 .note-preview-field td {
-	vertical-align: top;
 	padding: 8px 12px;
+	vertical-align: top;
 }
 
 .note-preview-field th {
-	background-color: inherit;
-	color: inherit;
 	font-weight: unset;
+	color: inherit;
 	text-align: unset;
+	background-color: inherit;
 }
 
 .note-preview-field img {
