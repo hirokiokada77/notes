@@ -145,7 +145,21 @@ const NoteListItem = ({
 	const stringResources = useSelector(selectStringResources);
 	const title = getNoteTitle(note.text);
 	const navigate = useNavigate();
-	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+
+	const toggleSelection = () => {
+		(selected ? onDeselect : onSelect)();
+	};
+
+	const handleItemContextMenu = (event: MouseEvent) => {
+		event.preventDefault();
+		toggleSelection();
+	};
+
+	const handleItemCheckboxChange = () => {
+		toggleSelection();
+	};
+
+	const handleItemContentClick = (event: MouseEvent<HTMLButtonElement>) => {
 		if (onClick(event)) {
 			navigate(homePath);
 			dispatch(setActiveNote(note));
@@ -161,20 +175,21 @@ const NoteListItem = ({
 				]
 					.flat()
 					.join(" ")}
+				onContextMenu={handleItemContextMenu}
 			>
 				<div className="note-list-item-checkbox">
 					<input
 						type="checkbox"
 						value={note.id}
 						checked={selected}
-						onChange={selected ? onDeselect : onSelect}
+						onChange={handleItemCheckboxChange}
 					/>
 				</div>
 
 				<button
 					className="note-list-item-content"
 					type="button"
-					onClick={handleClick}
+					onClick={handleItemContentClick}
 				>
 					<div className="note-list-item-title">
 						{title ? title : stringResources["statusMessages/untitled"]}
