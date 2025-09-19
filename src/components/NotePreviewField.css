@@ -1,6 +1,10 @@
 .note-preview-field {
 	margin: 24px;
 
+	@media (max-width: 768px) {
+		margin: 16px;
+	}
+
 	@media print {
 		margin: 16px 0;
 	}
