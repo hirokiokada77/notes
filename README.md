@@ -2,8 +2,8 @@
 
 ![Screenshot of Notes](screenshot.png)
 
-Notes is an online Markdown editor that supports [LaTeX] math rendering
-and syntax highlighting for code blocks.
+Notes is a web-based Markdown editor that supports [LaTeX] math
+rendering and syntax highlighting for code blocks.
 
 The content of the note is converted into a [URI fragment], which you
 can easily save by bookmarking or share with others. You can also save
