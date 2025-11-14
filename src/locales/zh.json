@@ -12,7 +12,7 @@
 	"buttonLabels/share": "分享",
 	"buttonSubLabels/create": "保存到浏览器",
 	"buttonSubLabels/import": "从文件加载",
-	"common/appName": "笔记",
+	"common/appName": "ClearMark",
 	"pageTitles/home": "主页",
 	"pageTitles/savedNotes": "已保存的笔记",
 	"placeholders/noteInputField": "在此处开始输入您的笔记",

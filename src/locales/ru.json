@@ -12,7 +12,7 @@
 	"buttonLabels/share": "Поделиться",
 	"buttonSubLabels/create": "Сохранить в браузере",
 	"buttonSubLabels/import": "Загрузить из файла",
-	"common/appName": "Заметки",
+	"common/appName": "ClearMark",
 	"pageTitles/home": "Главная",
 	"pageTitles/savedNotes": "Сохраненные заметки",
 	"placeholders/noteInputField": "Начните вводить свои заметки здесь",

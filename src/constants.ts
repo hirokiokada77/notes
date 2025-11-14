@@ -1,2 +1,2 @@
-export const homePath = "/notes/";
-export const savedNotesPath = "/notes/saved-notes";
+export const homePath = "/clearmark/";
+export const savedNotesPath = "/clearmark/saved-notes";

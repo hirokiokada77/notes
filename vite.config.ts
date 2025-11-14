@@ -9,7 +9,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import { "common/appName" as appName } from "./src/locales/en.json";
 
 export default defineConfig({
-	base: "/notes/",
+	base: "/clearmark/",
 	plugins: [
 		react(),
 		VitePWA({

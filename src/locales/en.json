@@ -12,7 +12,7 @@
 	"buttonLabels/share": "Share",
 	"buttonSubLabels/create": "Save to browser",
 	"buttonSubLabels/import": "Load from file",
-	"common/appName": "Notes",
+	"common/appName": "ClearMark",
 	"pageTitles/home": "Home",
 	"pageTitles/savedNotes": "Saved Notes",
 	"placeholders/noteInputField": "Start typing your notes here",

@@ -1,8 +1,8 @@
-# Notes
+# ClearMark
 
-![Screenshot of Notes](screenshot.png)
+![Screenshot of ClearMark](screenshot.png)
 
-Notes is a web-based Markdown editor that supports [LaTeX] math
+ClearMark is a web-based Markdown editor that supports [LaTeX] math
 rendering and syntax highlighting for code blocks.
 
 The content of the note is converted into a [URI fragment], which you

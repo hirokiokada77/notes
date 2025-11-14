@@ -12,7 +12,7 @@
 	"buttonLabels/share": "공유",
 	"buttonSubLabels/create": "브라우저에 저장",
 	"buttonSubLabels/import": "파일에서 불러오기",
-	"common/appName": "메모",
+	"common/appName": "ClearMark",
 	"pageTitles/home": "홈",
 	"pageTitles/savedNotes": "저장된 메모",
 	"placeholders/noteInputField": "여기에 메모를 입력하세요",
