@@ -3,7 +3,7 @@
 ![Screenshot of ClearMark](screenshot.png)
 
 ClearMark is a web-based Markdown editor that supports [LaTeX] math
-rendering and syntax highlighting for code blocks.
+expressions and syntax highlighting for code blocks.
 
 The content of the note is converted into a [URI fragment], which you
 can easily save by bookmarking or share with others. You can also save
