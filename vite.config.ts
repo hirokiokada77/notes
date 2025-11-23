@@ -108,6 +108,7 @@ export default defineConfig({
 						`<meta http-equiv="Content-Security-Policy" content="` +
 							[
 								["default-src", ["'none'"]],
+								["connect-src", ["'self'"]],
 								["font-src", ["'self'", "data:"]],
 								["img-src", ["*"]],
 								["manifest-src", ["'self'"]],
