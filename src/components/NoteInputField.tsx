@@ -13,7 +13,7 @@ import {
 	updateActiveNoteTextSelection,
 } from "../notesSlice";
 import { selectStringResources } from "../stringResourcesSlice";
-import type { TextSelection } from "../utils";
+import { dedentText, type IndentResult, insertTab } from "../utils";
 
 export function NoteInputField() {
 	const dispatch = useAppDispatch();
@@ -82,19 +82,23 @@ export function NoteInputField() {
 
 			if (event.key === "Tab") {
 				const textarea = noteInputFieldRef.current;
+
 				if (textarea && event.target === textarea) {
 					event.preventDefault();
+
 					const start = textarea.selectionStart;
 					const end = textarea.selectionEnd;
-					const newNoteText =
-						(activeNoteText ?? "").substring(0, start) +
-						"\t" +
-						(activeNoteText ?? "").substring(end);
-					const newTextSelection: TextSelection = {
-						start: start + 1,
-						end: start + 1,
-					};
-					dispatch(updateActiveNoteText(newNoteText, newTextSelection));
+					const currentText = activeNoteText ?? "";
+
+					let result: IndentResult;
+
+					if (event.shiftKey) {
+						result = dedentText(currentText, start, end);
+					} else {
+						result = insertTab(currentText, start, end);
+					}
+
+					dispatch(updateActiveNoteText(result.text, result.selection));
 				}
 			}
 		};

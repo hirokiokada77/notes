@@ -247,3 +247,169 @@ export function isMarkdownFile(fileName: string) {
 	const extension = fileName.substring(lastDotIndex).toLowerCase();
 	return markdownExtensions.includes(extension);
 }
+
+export interface IndentResult {
+	text: string;
+	selection: TextSelection;
+}
+
+const TAB = "\t";
+const TAB_LENGTH = 1;
+const SPACE_LENGTH = 4;
+
+const getLineIndices = (
+	text: string,
+	start: number,
+	end: number,
+): { startLineIndex: number; endLineIndex: number } => {
+	const lines = text.split("\n");
+	let startLineIndex = -1;
+	let endLineIndex = -1;
+	let currentOffset = 0;
+
+	for (let i = 0; i < lines.length; i++) {
+		const lineLengthWithNewline = lines[i].length + 1;
+
+		if (
+			startLineIndex === -1 &&
+			(currentOffset + lines[i].length >= start ||
+				(start === currentOffset && lines[i].length > 0) ||
+				(start === 0 && i === 0))
+		) {
+			startLineIndex = i;
+		}
+
+		if (currentOffset < end || (start === end && i === startLineIndex)) {
+			endLineIndex = i;
+		}
+
+		if (currentOffset + lineLengthWithNewline > end && i >= startLineIndex) {
+			break;
+		}
+
+		currentOffset += lineLengthWithNewline;
+	}
+
+	if (startLineIndex === -1) {
+		startLineIndex = 0;
+	}
+	if (endLineIndex === -1) {
+		endLineIndex = startLineIndex;
+	}
+
+	return { startLineIndex, endLineIndex };
+};
+
+export const insertTab = (
+	text: string,
+	start: number,
+	end: number,
+): IndentResult => {
+	const { startLineIndex, endLineIndex } = getLineIndices(text, start, end);
+	const lines = text.split("\n");
+
+	if (startLineIndex === endLineIndex) {
+		const newText = text.substring(0, start) + TAB + text.substring(end);
+		const newOffset = start + TAB_LENGTH;
+
+		return {
+			text: newText,
+			selection: { start: newOffset, end: newOffset },
+		};
+	}
+
+	let newText = "";
+	let totalAddedIndent = 0;
+	let totalOffsetUntilStartLine = 0;
+
+	lines.forEach((line, index) => {
+		let processedLine = line;
+
+		if (index < startLineIndex) {
+			totalOffsetUntilStartLine += line.length + 1;
+		}
+
+		if (index >= startLineIndex && index <= endLineIndex && line.length > 0) {
+			processedLine = TAB + line;
+			totalAddedIndent += TAB_LENGTH;
+		}
+
+		newText += processedLine + (index < lines.length - 1 ? "\n" : "");
+	});
+
+	let newStart: number;
+
+	if (start === totalOffsetUntilStartLine) {
+		newStart = start;
+	} else {
+		newStart = start + TAB_LENGTH;
+	}
+
+	const newEnd = end + totalAddedIndent;
+
+	return {
+		text: newText,
+		selection: { start: newStart, end: newEnd },
+	};
+};
+
+export const dedentText = (
+	text: string,
+	start: number,
+	end: number,
+): IndentResult => {
+	const { startLineIndex, endLineIndex } = getLineIndices(text, start, end);
+	const lines = text.split("\n");
+	let newText = "";
+	let newStartOffsetChange = 0;
+	let newEndOffsetChange = 0;
+
+	let currentLineStartOffset = 0;
+
+	lines.forEach((line, index) => {
+		let processedLine = line;
+		let removedIndent = 0;
+
+		if (index >= startLineIndex && index <= endLineIndex) {
+			if (line.startsWith(TAB)) {
+				processedLine = line.substring(TAB_LENGTH);
+				removedIndent = TAB_LENGTH;
+			} else {
+				const match = line.match(/^ +/);
+				if (match) {
+					removedIndent = Math.min(SPACE_LENGTH, match[0].length);
+					processedLine = line.substring(removedIndent);
+				}
+			}
+
+			if (removedIndent > 0) {
+				if (index === startLineIndex) {
+					if (
+						start > currentLineStartOffset &&
+						start < currentLineStartOffset + removedIndent
+					) {
+						newStartOffsetChange = currentLineStartOffset - start;
+					} else if (start >= currentLineStartOffset + removedIndent) {
+						newStartOffsetChange = -removedIndent;
+					}
+				}
+
+				newEndOffsetChange -= removedIndent;
+			}
+		}
+
+		newText += processedLine + (index < lines.length - 1 ? "\n" : "");
+
+		currentLineStartOffset += processedLine.length + 1;
+	});
+
+	const newTextSelection = {
+		start: Math.max(0, start + newStartOffsetChange),
+		end: Math.max(0, end + newEndOffsetChange),
+	};
+
+	return {
+		text: newText,
+		selection: newTextSelection,
+	};
+};
