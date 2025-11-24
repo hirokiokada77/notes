@@ -13,7 +13,7 @@ import {
 	updateActiveNoteTextSelection,
 } from "../notesSlice";
 import { selectStringResources } from "../stringResourcesSlice";
-import { dedentText, type IndentResult, insertTab } from "../utils";
+import { dedentText, deleteLine, type IndentResult, insertTab } from "../utils";
 
 export function NoteInputField() {
 	const dispatch = useAppDispatch();
@@ -78,6 +78,24 @@ export function NoteInputField() {
 			) {
 				event.preventDefault();
 				dispatch(redo());
+			}
+
+			if ((event.ctrlKey || event.metaKey) && event.key === "x") {
+				const textarea = noteInputFieldRef.current;
+
+				if (textarea && event.target === textarea) {
+					const start = textarea.selectionStart;
+					const end = textarea.selectionEnd;
+					const currentText = activeNoteText ?? "";
+
+					if (start === end && currentText.length > 0) {
+						event.preventDefault();
+
+						const result = deleteLine(currentText, start);
+						dispatch(updateActiveNoteText(result.text, result.selection));
+						navigator.clipboard.writeText(result.deletedLine);
+					}
+				}
 			}
 
 			if (event.key === "Tab") {

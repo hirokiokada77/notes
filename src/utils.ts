@@ -413,3 +413,56 @@ export const dedentText = (
 		selection: newTextSelection,
 	};
 };
+
+export interface LineDeletionResult {
+	text: string;
+	selection: TextSelection;
+	deletedLine: string;
+}
+
+export const deleteLine = (
+	text: string,
+	position: number,
+): LineDeletionResult => {
+	const { startLineIndex } = getLineIndices(text, position, position);
+	const lines = text.split("\n");
+	let newText = "";
+	let newStart = 0;
+	let newEnd = 0;
+	let deletedLine = "";
+
+	if (startLineIndex === lines.length - 1) {
+		let previousLineStartOffset = 0;
+
+		lines.slice(0, lines.length - 1).forEach((line, index) => {
+			newText += line + (index < lines.length - 2 ? "\n" : "");
+			previousLineStartOffset += line.length + 1;
+		});
+
+		newStart = previousLineStartOffset;
+		newEnd = previousLineStartOffset;
+		deletedLine = `${lines[lines.length - 1]}\n`;
+	} else {
+		let currentLineStartOffset = 0;
+
+		lines.forEach((line, index) => {
+			if (startLineIndex === index) {
+				newStart = currentLineStartOffset;
+				newEnd = currentLineStartOffset;
+				deletedLine = `${line}\n`;
+			} else {
+				newText += line + (index < lines.length - 1 ? "\n" : "");
+				currentLineStartOffset += line.length + 1;
+			}
+		});
+	}
+
+	return {
+		text: newText,
+		selection: {
+			start: newStart,
+			end: newEnd,
+		},
+		deletedLine,
+	};
+};
