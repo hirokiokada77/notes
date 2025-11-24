@@ -6,16 +6,20 @@ import {
 } from "react-redux";
 import { selectLocale } from "./localeSlice";
 import type { AppDispatch, RootState } from "./store";
+import { selectStringResources } from "./stringResourcesSlice";
 import { updateTime } from "./timeSlice";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export const useTitle = (title: string) => {
+export const useTitle = (pageTitle: string | null) => {
+	const stringResources = useSelector(selectStringResources);
+	const appName = stringResources["common/appName"];
+
 	useEffect(() => {
-		document.title = title;
-	}, [title]);
+		document.title = pageTitle ? `${appName} – ${pageTitle}` : appName;
+	}, [appName, pageTitle]);
 };
 
 export const useLocale = () => {

@@ -9,20 +9,14 @@ import {
 	selectActiveNoteTitle,
 	setActiveNote,
 } from "../notesSlice";
-import { selectStringResources } from "../stringResourcesSlice";
 import type { Note } from "../utils";
 
 export const Home = () => {
 	const dispatch = useAppDispatch();
 	const activeNote = useAppSelector(selectActiveNote);
 	const activeNoteTitle = useAppSelector(selectActiveNoteTitle);
-	const resourceStrings = useAppSelector(selectStringResources);
 	const initialized = useRef(false);
-	useTitle(
-		activeNoteTitle
-			? `${resourceStrings["common/appName"]} – ${activeNoteTitle}`
-			: resourceStrings["common/appName"],
-	);
+	useTitle(activeNoteTitle);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: initialization
 	useEffect(() => {
